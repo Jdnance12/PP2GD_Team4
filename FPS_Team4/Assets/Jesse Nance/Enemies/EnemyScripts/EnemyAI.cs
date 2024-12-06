@@ -29,6 +29,7 @@ public class EnemyAI : MonoBehaviour, IDamage
     void Start()
     {
         colorOrigin = model.material.color;
+        GameManager.instance.drone.GetComponent<SpotlightDetection>().OnPlayerDetected += MoveToDroneLocation;
     }
 
     // Update is called once per frame
@@ -70,6 +71,11 @@ public class EnemyAI : MonoBehaviour, IDamage
         transform.rotation = Quaternion.Lerp(transform.rotation, rot, Time.deltaTime * faceTargetSpeed);
     }
 
+    void MoveToDroneLocation(Vector3 dronePosition)
+    {
+        navAgent.SetDestination(dronePosition);
+    }
+
     private void OnTriggerEnter(Collider other)
     {
         if(other.CompareTag("Player"))
@@ -106,8 +112,9 @@ public class EnemyAI : MonoBehaviour, IDamage
         model.material.color = colorOrigin;
     }
 
-    public void OnPlayerDetected()
+    public void OnPlayerDetected(Vector3 targetPosition)
     {
-        navAgent.SetDestination(GameManager.instance.drone.transform.position);
+        targetPosition = new Vector3 (GameManager.instance.drone.transform.position.x, 0, GameManager.instance.drone.transform.position.y);
+        navAgent.SetDestination(targetPosition);
     }
 }
