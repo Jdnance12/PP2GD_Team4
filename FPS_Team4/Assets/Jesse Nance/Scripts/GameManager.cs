@@ -10,6 +10,7 @@ public class GameManager : MonoBehaviour
 
     public GameObject player;
     public GameObject drone;
+    public GameObject inspectionPointPrefab;
     public PlayerController playerScript;
 
     // Start is called before the first frame update

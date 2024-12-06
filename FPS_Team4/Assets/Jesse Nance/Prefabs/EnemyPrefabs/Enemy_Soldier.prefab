@@ -327,10 +327,14 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   HP: 10
   FOV: 90
-  faceTargetSpeed: 5
+  faceTargetSpeed: 2
   navAgent: {fileID: 3353077731662314923}
   model: {fileID: 3353077730194251582}
   headPos: {fileID: 3353077730346194178}
+  shootPos: {fileID: 3353077730668523292}
+  bullet: {fileID: 6204158305650084918, guid: 79033c9b8e26cc947a64522be7157891, type: 3}
+  shootRate: 2
+  stunTimer: 5
 --- !u!195 &3353077731662314923
 NavMeshAgent:
   m_ObjectHideFlags: 0

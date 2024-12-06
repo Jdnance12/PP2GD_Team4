@@ -311,7 +311,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   spotlight: {fileID: 7893234070563955686}
   player: {fileID: 0}
-  faceTargetSpeed: 5
+  isCoolingDown: 0
+  faceTargetSpeed: 3
+  detectionCooldown: 0.25
+  cooldownDelay: 0.25
 --- !u!195 &7893234071592071135
 NavMeshAgent:
   m_ObjectHideFlags: 0

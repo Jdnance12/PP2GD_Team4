@@ -8,8 +8,11 @@ public class DroneAI : MonoBehaviour
 {
     public Light spotlight;
     public GameObject player;
+
     public bool PlayerIsDetected {  get; private set; }
     public bool isCoolingDown;
+
+    //Vector3 playerLastKnownLocation;
 
     public float faceTargetSpeed;
     public float detectionCooldown;
@@ -33,6 +36,7 @@ public class DroneAI : MonoBehaviour
         if(PlayerIsDetected && !isCoolingDown)
         {
             FaceTarget();
+            CreateInspectionPoint();
         }
     }
 
@@ -55,6 +59,7 @@ public class DroneAI : MonoBehaviour
                 if(hit.collider.CompareTag("Player"))
                 {
                     PlayerIsDetected = true;
+                    //playerLastKnownLocation = player.transform.position;
                     OnPlayerDetected?.Invoke(transform.position);
 
                     return;
@@ -80,5 +85,27 @@ public class DroneAI : MonoBehaviour
         isCoolingDown = true;
         yield return new WaitForSeconds(detectionCooldown);
         isCoolingDown = false;
+    }
+
+    void CreateInspectionPoint()
+    {
+        if(GameManager.instance.inspectionPointPrefab != null)
+        {
+            //GameObject inspectionPoint = Instantiate(GameManager.instance.inspectionPointPrefab, playerLastKnownLocation, Quaternion.identity);
+        }
+    }
+
+    void NotifyNearbyEnemies(Vector3 inspectionPointPos)
+    {
+        float radius = 15f;
+        Collider[] colliders = Physics.OverlapSphere(inspectionPointPos, radius);
+        foreach (Collider collider in colliders)
+        {
+            EnemyAI enemyAI = collider.GetComponent<EnemyAI>();
+            if(enemyAI != null)
+            {
+                enemyAI.OnPlayerDetected(inspectionPointPos);
+            }
+        }
     }
 }
