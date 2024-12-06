@@ -4,13 +4,16 @@ using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.AI;
 
-public class SpotlightDetection : MonoBehaviour
+public class DroneAI : MonoBehaviour
 {
     public Light spotlight;
     public GameObject player;
     public bool PlayerIsDetected {  get; private set; }
+    public bool isCoolingDown;
 
     public float faceTargetSpeed;
+    public float detectionCooldown;
+    public float cooldownDelay;
 
     public delegate void PlayerDetectedHandler(Vector3 dronePosition);
     public event PlayerDetectedHandler OnPlayerDetected;
@@ -27,7 +30,7 @@ public class SpotlightDetection : MonoBehaviour
     {
         DetectPlayer();
 
-        if(PlayerIsDetected)
+        if(PlayerIsDetected && !isCoolingDown)
         {
             FaceTarget();
         }
@@ -36,9 +39,9 @@ public class SpotlightDetection : MonoBehaviour
     void DetectPlayer()
     {
        if(player == null)
-        {
+       {
             return;
-        }
+       }
 
         Vector3 directionToPlayer = player.transform.position - transform.position;
         float distanceToPlayer = directionToPlayer.magnitude;
@@ -53,6 +56,7 @@ public class SpotlightDetection : MonoBehaviour
                 {
                     PlayerIsDetected = true;
                     OnPlayerDetected?.Invoke(transform.position);
+
                     return;
                 }
             }
@@ -65,5 +69,20 @@ public class SpotlightDetection : MonoBehaviour
         Vector3 playerDir = player.transform.position - transform.position;
         Quaternion rot = Quaternion.LookRotation(new Vector3(playerDir.x, 0, playerDir.z));
         transform.rotation = Quaternion.Lerp(transform.rotation, rot, Time.deltaTime * faceTargetSpeed);
+
+        StartCoroutine(DelayCooldown());
+    }
+
+    IEnumerator DelayCooldown()
+    {
+        yield return new WaitForSeconds(cooldownDelay);
+        StartCoroutine(FaceTargetCooldown());
+    }
+
+    IEnumerator FaceTargetCooldown()
+    {
+        isCoolingDown = true;
+        yield return new WaitForSeconds(detectionCooldown);
+        isCoolingDown = false;
     }
 }

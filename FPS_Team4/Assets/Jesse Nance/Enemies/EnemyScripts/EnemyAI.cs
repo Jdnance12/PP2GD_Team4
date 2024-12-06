@@ -14,7 +14,6 @@ public class EnemyAI : MonoBehaviour, IDamage
     [SerializeField] NavMeshAgent navAgent;
     [SerializeField] Renderer model;
     [SerializeField] Transform headPos;
-    [SerializeField] SpotlightDetection sptlightDetection;
 
     Color colorOrigin;
 
@@ -29,16 +28,18 @@ public class EnemyAI : MonoBehaviour, IDamage
     void Start()
     {
         colorOrigin = model.material.color;
-        GameManager.instance.drone.GetComponent<SpotlightDetection>().OnPlayerDetected += MoveToDroneLocation;
     }
 
     // Update is called once per frame
     void Update()
     {
-        if(playerInRange && CanSeePlayer())
-        {
 
-        }
+    }
+
+    public void OnPlayerDetected(Vector3 targetPosition)
+    {
+        targetPosition = new Vector3(GameManager.instance.drone.transform.position.x, 0, GameManager.instance.drone.transform.position.y);
+        navAgent.SetDestination(targetPosition);
     }
 
     bool CanSeePlayer()
@@ -69,11 +70,6 @@ public class EnemyAI : MonoBehaviour, IDamage
     {
         Quaternion rot = Quaternion.LookRotation(new Vector3(playerDir.x, 0, playerDir.z));
         transform.rotation = Quaternion.Lerp(transform.rotation, rot, Time.deltaTime * faceTargetSpeed);
-    }
-
-    void MoveToDroneLocation(Vector3 dronePosition)
-    {
-        navAgent.SetDestination(dronePosition);
     }
 
     private void OnTriggerEnter(Collider other)
@@ -110,11 +106,5 @@ public class EnemyAI : MonoBehaviour, IDamage
         model.material.color = Color.blue;
         yield return new WaitForSeconds(0.5f);
         model.material.color = colorOrigin;
-    }
-
-    public void OnPlayerDetected(Vector3 targetPosition)
-    {
-        targetPosition = new Vector3 (GameManager.instance.drone.transform.position.x, 0, GameManager.instance.drone.transform.position.y);
-        navAgent.SetDestination(targetPosition);
     }
 }
