@@ -76,11 +76,7 @@ public class DroneAI : MonoBehaviour
     IEnumerator DelayCooldown()
     {
         yield return new WaitForSeconds(cooldownDelay);
-        StartCoroutine(FaceTargetCooldown());
-    }
 
-    IEnumerator FaceTargetCooldown()
-    {
         isCoolingDown = true;
         yield return new WaitForSeconds(detectionCooldown);
         isCoolingDown = false;
