@@ -8,6 +8,7 @@ public class GameManager : MonoBehaviour
     public static GameManager instance; // Singleton reference
 
     public GameObject drone; // Drone reference
+    public GameObject inspectionPointPrefab;
 
     [SerializeField] GameObject menuActive; // Current active menu
     [SerializeField] GameObject menuPause; // Pause menu object
