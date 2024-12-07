@@ -2,6 +2,8 @@ using UnityEngine; // Unity engine base
 using System.Collections; // Collection management
 using System.Collections.Generic; // Advanced collections
 using TMPro; // TextMeshPro for UI
+using UnityEditor.UI;
+using UnityEngine.UI;
 
 public class GameManager : MonoBehaviour
 {
@@ -16,6 +18,9 @@ public class GameManager : MonoBehaviour
     [SerializeField] TMP_Text activeThreatsText; // Active threats display
     [SerializeField] TMP_Text nodesCollectedText; // Node count display
     [SerializeField] GameObject computer; // Reference to the computer object
+
+    public Image playerHPBar;
+    public GameObject playerDamageScreen;
 
     public GameObject player; // Player object reference
     public playerController playerScript; // Player script reference

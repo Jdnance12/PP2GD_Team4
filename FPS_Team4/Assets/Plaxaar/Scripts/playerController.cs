@@ -28,6 +28,7 @@ public class playerController : MonoBehaviour, IDamage
     Vector3 playerVel;
 
     int jumpCount;
+    int HPOrig;
 
     bool isSprinting;
     bool isShooting;
@@ -37,7 +38,8 @@ public class playerController : MonoBehaviour, IDamage
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-
+        HPOrig = HP;
+        updatePlayerUI();
     }
 
     // Update is called once per frame
@@ -159,11 +161,27 @@ public class playerController : MonoBehaviour, IDamage
     public void takeDamage(int amount)
     {
         HP -= amount;
+        updatePlayerUI();
+        flashScreenDamage();
 
         if (HP < 0)
         {
             // Hey I'm dead!
             GameManager.instance.youLose();
         }
+    }
+
+    IEnumerator flashScreenDamage()
+    {
+        GameManager.instance.playerDamageScreen.SetActive(true);
+
+        yield return new WaitForSeconds(0.1f);
+
+        GameManager.instance.playerDamageScreen.SetActive(false);
+    }
+
+    public void updatePlayerUI()
+    {
+        GameManager.instance.playerHPBar.fillAmount = (float)HP / HPOrig;
     }
 }
