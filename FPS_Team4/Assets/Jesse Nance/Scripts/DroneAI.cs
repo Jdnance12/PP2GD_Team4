@@ -42,25 +42,21 @@ public class DroneAI : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (isStunned == false)
+        if (!isStunned)
         {
             DetectPlayer();
-        }
-        
 
-        if(isStunned == false && PlayerIsDetected)
-        {
-            FaceTarget();
-            CreateInspectionPoint();
+            if (PlayerIsDetected)
+            {
+                FaceTarget();
+                CreateInspectionPoint();
+            }
         }
     }
 
-    void DetectPlayer()
+    bool DetectPlayer()
     {
-       if(player == null)
-       {
-            return;
-       }
+        if (isStunned) return false;
 
         Vector3 directionToPlayer = player.transform.position - transform.position;
         float distanceToPlayer = directionToPlayer.magnitude;
@@ -77,11 +73,12 @@ public class DroneAI : MonoBehaviour
                     //playerLastKnownLocation = player.transform.position;
                     OnPlayerDetected?.Invoke(transform.position);
 
-                    return;
+                    return true;
                 }
             }
         }
         PlayerIsDetected = false;
+        return false;
     }
 
     void FaceTarget()
