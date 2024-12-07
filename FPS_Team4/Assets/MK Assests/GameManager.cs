@@ -13,16 +13,20 @@ public class GameManager : MonoBehaviour
     [SerializeField] GameObject menuActive; // Current active menu
     [SerializeField] GameObject menuPause; // Pause menu object
     [SerializeField] GameObject menuWin, menuLose; // Win/Lose menus
-    [SerializeField] TMP_Text activeThreatsText; // Goal count display
+    [SerializeField] TMP_Text activeThreatsText; // Active threats display
+    [SerializeField] TMP_Text nodesCollectedText; // Node count display
+    [SerializeField] GameObject computer; // Reference to the computer object
 
     public GameObject player; // Player object reference
     public playerController playerScript; // Player script reference
-  
 
     public bool isPaused; // Pause state flag
 
     float timeScaleOriginal; // Original time scale
-    int goalCount; // Track current goal count
+    int totalNodes; // Total nodes in the level
+    int collectedNodes; // Number of collected nodes
+    int activeThreats; // Total active threats drones + soldiers
+    bool allNodesCollected = false; // Flag to check if all nodes are collected
 
     void Awake() // Initial setup
     {
@@ -30,18 +34,17 @@ public class GameManager : MonoBehaviour
         timeScaleOriginal = Time.timeScale; // Save original time scale
         player = GameObject.FindWithTag("Player"); // Find player by tag
         playerScript = player.GetComponent<playerController>(); // Get player script
-        
 
-        DroneAI[] drones = FindObjectsOfType<DroneAI>(); // Find all drones
-        foreach (DroneAI drone in drones) // Loop over drones
-        {
-            drone.OnPlayerDetected += HandlePlayerDetected; // Subscribe to detection event
-        }
+        totalNodes = GameObject.FindGameObjectsWithTag("Node").Length; // Find all nodes
+        collectedNodes = 0; // Initialize collected nodes
+        activeThreats = 0; // Initialize active threats
+        UpdateThreatDisplay(); // Initialize UI for threats
+        UpdateNodeCollection(); // Initialize UI for nodes
     }
 
     void Update() // Runs every frame
     {
-        if (Input.GetButtonDown("Cancel")) // Check pause input
+        if (Input.GetButtonDown("Cancel")) // Check for pause/unpause input
         {
             if (menuActive == null) // No active menu
             {
@@ -54,6 +57,83 @@ public class GameManager : MonoBehaviour
                 stateUnpause(); // Unpause game
             }
         }
+    }
+
+    public void RegisterThreat() // Called by enemies when they spawn
+    {
+        activeThreats++; // Increment active threats
+        UpdateThreatDisplay();
+    }
+
+    public void UnregisterThreat() // Called by enemies when they die or deactivate
+    {
+        activeThreats = Mathf.Max(0, activeThreats - 1); // Decrement threats (never below 0)
+        UpdateThreatDisplay();
+    }
+
+    public void OnStunBegin() // Called when an enemy or drone is stunned
+    {
+        activeThreats = Mathf.Max(0, activeThreats - 1); // Decrement active threats
+        UpdateThreatDisplay();
+    }
+
+    public void OnStunEnd() // Called when an enemy or drone recovers from stun
+    {
+        activeThreats++; // Increment active threats
+        UpdateThreatDisplay();
+    }
+
+    public void NodeCollected() // Called when a node is collected
+    {
+        collectedNodes++; // Increment collected nodes
+        UpdateNodeCollection();
+
+        if (collectedNodes >= totalNodes) // Check if all nodes are collected
+        {
+            allNodesCollected = true; // Flag that all nodes are collected
+            ActivateComputer(); // Enable computer interaction
+        }
+    }
+
+    void UpdateThreatDisplay() // Update the active threats UI
+    {
+        activeThreatsText.text = $"{activeThreats:D3}"; // Update UI
+    }
+
+    void UpdateNodeCollection() // Update node collection UI
+    {
+        nodesCollectedText.text = $"{collectedNodes}/{totalNodes}"; // Update UI
+    }
+
+    void ActivateComputer() // Enable computer interaction
+    {
+        if (computer != null)
+        {
+            computer.GetComponent<Computer>().EnableInteraction(); // Allow interaction with the computer
+        }
+        else
+        {
+            Debug.LogWarning("Computer object is not assigned in the GameManager!");
+        }
+    }
+
+    public void TryWinGame() // Called when interacting with the computer
+    {
+        if (allNodesCollected) // Ensure all nodes are collected
+        {
+            WinGame(); // Trigger win condition
+        }
+        else
+        {
+            Debug.Log("Cannot interact with the computer until all nodes are collected.");
+        }
+    }
+
+    void WinGame() // Handle win state
+    {
+        statePause(); // Pause game
+        menuActive = menuWin; // Set win menu
+        menuActive.SetActive(true); // Show menu
     }
 
     public void statePause() // Pause game logic
@@ -82,29 +162,10 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    public void updateGameGoal(int amount) // Update goal logic
-    {
-        goalCount += amount; // Adjust goal count
-        activeThreatsText.text = goalCount.ToString("F0"); // Update UI text
-
-        if (goalCount <= 0) // Check if goal met
-        {
-            statePause(); // Pause game
-            menuActive = menuWin; // Set win menu
-            menuActive.SetActive(true); // Show menu
-        }
-    }
-
     public void youLose() // Handle lose state
     {
         statePause(); // Pause game
         menuActive = menuLose; // Set lose menu
         menuActive.SetActive(true); // Show menu
     }
-
-    public void HandlePlayerDetected(Vector3 dronePosition) // Drone detects player
-    {
-        Debug.Log($"Detected at {dronePosition}"); // Log detection
-    }
-
 }

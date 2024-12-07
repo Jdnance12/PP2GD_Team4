@@ -34,6 +34,8 @@ public class EnemyAI : MonoBehaviour, IDamage
     void Start()
     {
         colorOrigin = model.material.color;
+
+        GameManager.instance.RegisterThreat(); // Notify GameManager that enemy is active
     }
 
     // Update is called once per frame
@@ -138,9 +140,13 @@ public class EnemyAI : MonoBehaviour, IDamage
         navAgent.isStopped = true;
         isShooting = false;
 
+        GameManager.instance.OnStunBegin(); // Notify GameManager of stun
+
         yield return new WaitForSeconds(stunDuration);
 
         navAgent.isStopped = false;
         isStunned = false;
+
+        GameManager.instance.OnStunEnd(); // Notify GameManager of stun end
     }
 }

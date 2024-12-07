@@ -11,6 +11,7 @@ public class DroneAI : MonoBehaviour
 
     public bool PlayerIsDetected {  get; private set; }
     public bool isCoolingDown;
+    bool isStunned; // Stun for actie threat count
 
     //Vector3 playerLastKnownLocation;
 
@@ -26,6 +27,8 @@ public class DroneAI : MonoBehaviour
     {
         player = GameManager.instance.player;
         PlayerIsDetected = false;
+
+        GameManager.instance.RegisterThreat(); // Notify GameManager that drone is active
     }
 
     // Update is called once per frame
@@ -108,4 +111,17 @@ public class DroneAI : MonoBehaviour
             }
         }
     }
+
+    public IEnumerator Stun(float stunDuration)
+    {
+        isStunned = true; // Mark as stunned
+        PlayerIsDetected = false; // Disable detection
+        GameManager.instance.OnStunBegin(); // Notify GameManager of stun
+
+        yield return new WaitForSeconds(stunDuration);
+
+        isStunned = false; // Recover from stun
+        GameManager.instance.OnStunEnd(); // Notify GameManager of stun end
+    }
+
 }
