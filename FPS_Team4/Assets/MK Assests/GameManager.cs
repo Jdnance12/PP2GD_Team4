@@ -2,7 +2,6 @@ using UnityEngine; // Unity engine base
 using System.Collections; // Collection management
 using System.Collections.Generic; // Advanced collections
 using TMPro; // TextMeshPro for UI
-using UnityEditor.UI;
 using UnityEngine.UI;
 
 public class GameManager : MonoBehaviour
