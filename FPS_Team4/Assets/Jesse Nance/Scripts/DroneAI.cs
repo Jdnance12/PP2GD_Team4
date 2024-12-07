@@ -7,7 +7,9 @@ using UnityEngine.AI;
 public class DroneAI : MonoBehaviour
 {
     public Light spotlight;
+    public GameObject lightPos;
     public GameObject player;
+    public Renderer model;
 
     public bool PlayerIsDetected {  get; private set; }
     public bool isCoolingDown;
@@ -15,16 +17,22 @@ public class DroneAI : MonoBehaviour
 
     //Vector3 playerLastKnownLocation;
 
+    public int HP;
     public float faceTargetSpeed;
     public float detectionCooldown;
     public float cooldownDelay;
+    public float stunTimer;
 
     public delegate void PlayerDetectedHandler(Vector3 dronePosition);
     public event PlayerDetectedHandler OnPlayerDetected;
 
+    Color colorOrigin;
+
     // Start is called before the first frame update
     void Start()
     {
+        colorOrigin = model.material.color;
+
         player = GameManager.instance.player;
         PlayerIsDetected = false;
 
@@ -34,9 +42,13 @@ public class DroneAI : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        DetectPlayer();
+        if (isStunned == false)
+        {
+            DetectPlayer();
+        }
+        
 
-        if(PlayerIsDetected && !isCoolingDown)
+        if(isStunned == false && PlayerIsDetected)
         {
             FaceTarget();
             CreateInspectionPoint();
@@ -78,7 +90,7 @@ public class DroneAI : MonoBehaviour
         Quaternion rot = Quaternion.LookRotation(new Vector3(playerDir.x, 0, playerDir.z));
         transform.rotation = Quaternion.Lerp(transform.rotation, rot, Time.deltaTime * faceTargetSpeed);
 
-        StartCoroutine(DelayCooldown());
+        
     }
 
     IEnumerator DelayCooldown()
@@ -112,15 +124,32 @@ public class DroneAI : MonoBehaviour
         }
     }
 
+    public void takeDamage(int amount)
+    {
+        HP -= amount;
+        StartCoroutine(TurnBlue());
+
+        StartCoroutine(Stun(stunTimer));
+    }
+
+    IEnumerator TurnBlue()
+    {
+        model.material.color = Color.blue;
+        yield return new WaitForSeconds(stunTimer);
+        model.material.color = colorOrigin;
+    }
+
     public IEnumerator Stun(float stunDuration)
     {
         isStunned = true; // Mark as stunned
         PlayerIsDetected = false; // Disable detection
+        lightPos.SetActive(false);
         GameManager.instance.OnStunBegin(); // Notify GameManager of stun
 
         yield return new WaitForSeconds(stunDuration);
 
         isStunned = false; // Recover from stun
+        lightPos.SetActive(true);
         GameManager.instance.OnStunEnd(); // Notify GameManager of stun end
     }
 
