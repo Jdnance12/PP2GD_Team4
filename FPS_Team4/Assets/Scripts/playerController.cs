@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class playerController : MonoBehaviour
+public class playerController : MonoBehaviour, IDamage
 {
     [Header("Components")]
     [SerializeField] CharacterController controller;
@@ -10,6 +10,7 @@ public class playerController : MonoBehaviour
     [SerializeField] Transform playerCamera;
 
     [Header("Stats")]
+    [SerializeField][Range(1, 10)] int HP;
     [SerializeField] [Range(1, 5)] float speed;
     [SerializeField] [Range(2, 5)] float sprintMod;
     [SerializeField] float crouchHeight;
@@ -144,7 +145,7 @@ public class playerController : MonoBehaviour
         if (Physics.Raycast(Camera.main.transform.position, Camera.main.transform.forward, out hit, shootDist, ~ignoreMask))
         {
             Debug.Log(hit.collider.name);
-            iDamage dmg = hit.collider.GetComponent<iDamage>();
+            IDamage dmg = hit.collider.GetComponent<IDamage>();
             if (dmg != null)
             {
                 dmg.takeDamage(shootDamage);
@@ -153,5 +154,16 @@ public class playerController : MonoBehaviour
         yield return new WaitForSeconds(shootRate);
 
         isShooting = false;
+    }
+
+    public void takeDamage(int amount)
+    {
+        HP -= amount;
+
+        if (HP < 0)
+        {
+            // Hey I'm dead!
+            GameManager.instance.youLose();
+        }
     }
 }

@@ -29,7 +29,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8238270796298760163}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 4.900413, y: 1, z: -48.837532}
+  m_LocalPosition: {x: 0, y: 1, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -54,6 +54,7 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 0
   playerCamera: {fileID: 8238270797040993582}
+  HP: 0
   speed: 5
   sprintMod: 2
   crouchHeight: 0
@@ -155,9 +156,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8238270797040993582}
-  - component: {fileID: 8238270797040993581}
   - component: {fileID: 8238270797040993583}
   - component: {fileID: 8238270797040993576}
+  - component: {fileID: 7494962425724263902}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -180,22 +181,6 @@ Transform:
   m_Father: {fileID: 8238270796298760165}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &8238270797040993581
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8238270797040993577}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e698acbbcbda3e94aaab2dcde12e71ab, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  sensitivity: 652
-  lockVertMin: -90
-  LockVertMax: 90
-  invertY: 0
 --- !u!20 &8238270797040993583
 Camera:
   m_ObjectHideFlags: 0
@@ -247,3 +232,19 @@ AudioListener:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8238270797040993577}
   m_Enabled: 1
+--- !u!114 &7494962425724263902
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8238270797040993577}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 28acd23048c79b54586b55f7c11881d3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  sens: 400
+  lockVertMin: -90
+  lockVertMax: 90
+  invertY: 0
