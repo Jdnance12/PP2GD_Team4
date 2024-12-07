@@ -105,18 +105,6 @@ public class GameManager : MonoBehaviour
     public void HandlePlayerDetected(Vector3 dronePosition) // Drone detects player
     {
         Debug.Log($"Detected at {dronePosition}"); // Log detection
-        youLose(); // Trigger lose state
     }
 
-    public void PlayerShoots() // Notify player shot
-    {
-        Debug.Log("Player shot"); // Log action
-        updateGameGoal(-1); // Example goal adjustment
-    }
-
-    public void PlayerDied() // Notify player death
-    {
-        Debug.Log("Player died"); // Log death
-        youLose(); // Trigger lose state
-    }
 }
