@@ -17,8 +17,7 @@ public class Player_Controller : MonoBehaviour
     [SerializeField][Range(5, 20)] int jumpSpeed;
     [SerializeField][Range(15, 40)] int gravity;
     [SerializeField][Range(1, 5)] int crouchSpeed;
-    public Vector3 crouchScale = new Vector3(1, 0.5f, 1);
-    private Vector3 normalScale;
+    [SerializeField] float crouchHeight = 0.5f;
 
     [Header("----- Weapon Stats -----")]
     [SerializeField] int shootDamage;
@@ -41,7 +40,6 @@ public class Player_Controller : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        normalScale = transform.localScale;
 
         HPOrig = HP;
         updatePlayerUI();
@@ -74,6 +72,8 @@ public class Player_Controller : MonoBehaviour
         //Jump
         jump();
         playerController.Move(playerVel * Time.deltaTime);
+
+        ToggleCrouch();
 
         //Gravity
         playerVel.y -= gravity * Time.deltaTime;
@@ -116,7 +116,11 @@ public class Player_Controller : MonoBehaviour
 
             if(isCrouching)
             {
-
+                
+            }
+            else
+            {
+                
             }
         }
     }

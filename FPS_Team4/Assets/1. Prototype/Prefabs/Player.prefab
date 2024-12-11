@@ -300,7 +300,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2182529231832565235}
-  - component: {fileID: 2182529231832565232}
+  - component: {fileID: 5800925234510714404}
   - component: {fileID: 2182529231832565233}
   m_Layer: 3
   m_Name: Player
@@ -317,15 +317,17 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2182529231832565198}
   m_LocalRotation: {x: -0, y: 0.98623174, z: -0, w: -0.1653692}
-  m_LocalPosition: {x: 6.75, y: 41, z: -23.25}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 4834457276067726373}
+  - {fileID: 2203407157739823103}
+  - {fileID: 7722135661428810968}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 199.037, z: 0}
---- !u!114 &2182529231832565232
+--- !u!114 &5800925234510714404
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -334,22 +336,22 @@ MonoBehaviour:
   m_GameObject: {fileID: 2182529231832565198}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7a92ceffc22241f40ab6b1611b1e50cb, type: 3}
+  m_Script: {fileID: 11500000, guid: 6afc5d67bb36630468cfa73ca8061bda, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  playerController: {fileID: 2182529231832565233}
+  controller: {fileID: 2182529231832565233}
   ignoreMask:
     serializedVersion: 2
     m_Bits: 8
-  cameraTransform: {fileID: 4834457276067726373}
+  playerCamera: {fileID: 4834457276067726373}
   HP: 10
   speed: 5
   sprintMod: 2
-  jumpMax: 2
-  jumpSpeed: 7
-  gravity: 20
-  crouchSpeed: 2
-  crouchScale: {x: 1, y: 0.5, z: 1}
+  crouchHeight: 1
+  crouchMod: 2
+  jumpMax: 1
+  jumpSpeed: 5
+  gravity: 15
   shootDamage: 0
   shootDist: 0
   shootRate: 0
@@ -468,6 +470,37 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!1 &4072846346202875969
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2203407157739823103}
+  m_Layer: 3
+  m_Name: Cam Standing Pos
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &2203407157739823103
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4072846346202875969}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 1, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 2182529231832565235}
+  m_RootOrder: 1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &4834457276067726370
 GameObject:
   m_ObjectHideFlags: 0
@@ -495,7 +528,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4834457276067726370}
   m_LocalRotation: {x: -0, y: -0.7111537, z: -0, w: 0.70303655}
-  m_LocalPosition: {x: -0.23998404, y: 1, z: -0.0027549863}
+  m_LocalPosition: {x: 0, y: 1, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -573,3 +606,34 @@ MonoBehaviour:
   lockVertMin: -90
   lockVertMax: 90
   invertY: 0
+--- !u!1 &8620142596823408698
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 7722135661428810968}
+  m_Layer: 3
+  m_Name: Cam Crouch Pos
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &7722135661428810968
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8620142596823408698}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0.5, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 2182529231832565235}
+  m_RootOrder: 2
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
