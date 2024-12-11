@@ -1,6 +1,6 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!1 &9010464360498036853
+--- !u!1 &4216975754063344349
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -8,47 +8,47 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 9010464360498036852}
-  - component: {fileID: 9010464360498036857}
-  - component: {fileID: 9010464360498036854}
-  - component: {fileID: 9010464360498036855}
+  - component: {fileID: 420825750125355426}
+  - component: {fileID: 3702235776836564439}
+  - component: {fileID: 4376505885650696640}
+  - component: {fileID: 1964404091868772289}
   m_Layer: 0
-  m_Name: Base
+  m_Name: Catwalk
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!4 &9010464360498036852
+--- !u!4 &420825750125355426
 Transform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 9010464360498036853}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 2.0213, y: 1, z: 1}
+  m_GameObject: {fileID: 4216975754063344349}
+  m_LocalRotation: {x: -0.0000007006914, y: -0.0000002533197, z: -0.000000047416172, w: 1}
+  m_LocalPosition: {x: -63.25, y: 9.5, z: -77}
+  m_LocalScale: {x: 10, y: 0.5, z: 4}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 9010464360505626490}
+  m_Father: {fileID: 2188056233720023011}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!33 &9010464360498036857
+--- !u!33 &3702235776836564439
 MeshFilter:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 9010464360498036853}
+  m_GameObject: {fileID: 4216975754063344349}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
---- !u!23 &9010464360498036854
+--- !u!23 &4376505885650696640
 MeshRenderer:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 9010464360498036853}
+  m_GameObject: {fileID: 4216975754063344349}
   m_Enabled: 1
   m_CastShadows: 1
   m_ReceiveShadows: 1
@@ -62,7 +62,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 1467903f55cc2ca489d8aa9bdd33a4ae, type: 2}
+  - {fileID: 10303, guid: 0000000000000000f000000000000000, type: 0}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -84,20 +84,20 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!65 &9010464360498036855
+--- !u!65 &1964404091868772289
 BoxCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 9010464360498036853}
+  m_GameObject: {fileID: 4216975754063344349}
   m_Material: {fileID: 0}
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
---- !u!1 &9010464361374656986
+--- !u!1 &5984979172628034001
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -105,46 +105,47 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 9010464361374656989}
-  - component: {fileID: 9010464361374656991}
-  - component: {fileID: 9010464361374656988}
+  - component: {fileID: 5487962643308342882}
+  - component: {fileID: 5851622459567252385}
+  - component: {fileID: 5266755031662307269}
+  - component: {fileID: 7467794743339161102}
   m_Layer: 0
-  m_Name: Screen
+  m_Name: Broken Catwalk Piece
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!4 &9010464361374656989
+--- !u!4 &5487962643308342882
 Transform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 9010464361374656986}
-  m_LocalRotation: {x: -0.15258057, y: -0, z: -0, w: 0.9882911}
-  m_LocalPosition: {x: 0, y: 0.69, z: -0.17}
-  m_LocalScale: {x: 2.0213, y: 0.18752, z: 1}
+  m_GameObject: {fileID: 5984979172628034001}
+  m_LocalRotation: {x: -0.11303935, y: 0.06526231, z: 0.4957217, w: 0.85861695}
+  m_LocalPosition: {x: -69.75, y: 6.75, z: -76.5}
+  m_LocalScale: {x: 5, y: 0.5, z: 4}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 9010464360505626490}
+  m_Father: {fileID: 2188056233720023011}
   m_RootOrder: 1
-  m_LocalEulerAnglesHint: {x: -17.553, y: 0, z: 0}
---- !u!33 &9010464361374656991
+  m_LocalEulerAnglesHint: {x: -15, y: 0, z: 60}
+--- !u!33 &5851622459567252385
 MeshFilter:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 9010464361374656986}
+  m_GameObject: {fileID: 5984979172628034001}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
---- !u!23 &9010464361374656988
+--- !u!23 &5266755031662307269
 MeshRenderer:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 9010464361374656986}
+  m_GameObject: {fileID: 5984979172628034001}
   m_Enabled: 1
   m_CastShadows: 1
   m_ReceiveShadows: 1
@@ -158,7 +159,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 1467903f55cc2ca489d8aa9bdd33a4ae, type: 2}
+  - {fileID: 10303, guid: 0000000000000000f000000000000000, type: 0}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -180,7 +181,20 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!1 &9010464361576257938
+--- !u!65 &7467794743339161102
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5984979172628034001}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 1, y: 1, z: 1}
+  m_Center: {x: 0, y: 0, z: 0}
+--- !u!1 &7178962543069170708
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -188,57 +202,28 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 9010464360505626490}
-  - component: {fileID: 6172681658836770433}
-  - component: {fileID: 9010464360505626493}
+  - component: {fileID: 2188056233720023011}
   m_Layer: 0
-  m_Name: Computer
-  m_TagString: Computer
+  m_Name: Broken Catwalk Side 2
+  m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!4 &9010464360505626490
+--- !u!4 &2188056233720023011
 Transform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 9010464361576257938}
-  m_LocalRotation: {x: -0, y: 0.7071068, z: -0, w: 0.7071068}
-  m_LocalPosition: {x: 17, y: 40.5, z: -0.36098766}
+  m_GameObject: {fileID: 7178962543069170708}
+  m_LocalRotation: {x: -0, y: -1, z: -0, w: 0.0000029504295}
+  m_LocalPosition: {x: -148.20798, y: 0, z: -153.99957}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 9010464360498036852}
-  - {fileID: 9010464361374656989}
+  - {fileID: 420825750125355426}
+  - {fileID: 5487962643308342882}
   m_Father: {fileID: 0}
   m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 0, y: 90, z: 0}
---- !u!114 &6172681658836770433
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 9010464361576257938}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b16e105c1c43a05459e89f0b97cadfd8, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  interactionKey: t
-  interactionPrompt: {fileID: 0}
---- !u!65 &9010464360505626493
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 9010464361576257938}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 1
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Size: {x: 3, y: 1, z: 3}
-  m_Center: {x: 0, y: 0, z: -1}
+  m_LocalEulerAnglesHint: {x: 0, y: -180, z: 0}

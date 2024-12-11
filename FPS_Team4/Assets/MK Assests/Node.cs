@@ -1,11 +1,11 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using TMPro; // Import TextMeshPro namespace
 
 public class Node : MonoBehaviour
 {
     [SerializeField] string interactionKey = "t"; // Key to collect the node
-    [SerializeField] float interactionRange = 2.0f; // Range within which the player can interact with the node
 
     bool isPlayerNearby; // Tracks if the player is in range
 
@@ -33,6 +33,7 @@ public class Node : MonoBehaviour
         if (other.CompareTag("Player"))
         {
             isPlayerNearby = true; // Player is in range
+            GameManager.instance.ShowNodeInteractionUI(); // Notify GameManager to show the UI
         }
     }
 
@@ -42,6 +43,7 @@ public class Node : MonoBehaviour
         if (other.CompareTag("Player"))
         {
             isPlayerNearby = false; // Player is out of range
+            GameManager.instance.HideNodeInteractionUI(); // Notify GameManager to hide the UI
         }
     }
 }

@@ -14,9 +14,47 @@ public class GameManager : MonoBehaviour
     [SerializeField] GameObject menuActive; // Current active menu
     [SerializeField] GameObject menuPause; // Pause menu object
     [SerializeField] GameObject menuWin, menuLose; // Win/Lose menus
+
     [SerializeField] TMP_Text activeThreatsText; // Active threats display
+    public TMP_Text ActiveThreatsText
+    {
+        get => activeThreatsText;
+        set
+        {
+            activeThreatsText = value;
+            UpdateThreatDisplay(); // Automatically update UI when changed
+        }
+    }
+
     [SerializeField] TMP_Text nodesCollectedText; // Node count display
-    [SerializeField] GameObject computer; // Reference to the computer object
+    public TMP_Text NodesCollectedText
+    {
+        get => nodesCollectedText;
+        set
+        {
+            nodesCollectedText = value;
+            UpdateNodeCollection(); // Automatically update UI when changed
+        }
+    }
+
+    [SerializeField] TMP_Text nodeInteractionText; // UI for node interaction prompt
+    public TMP_Text NodeInteractionText
+    {
+        get => nodeInteractionText;
+        set
+        {
+            nodeInteractionText = value;
+            if (nodeInteractionText != null)
+            {
+                nodeInteractionText.gameObject.SetActive(false); // Ensure it's hidden initially
+            }
+        }
+    }
+
+    [SerializeField] TMP_Text interactWithComputerYesText; // UI for successful interaction
+    [SerializeField] TMP_Text interactWithComputerNoText; // UI for missing nodes
+
+    public GameObject computer; // Reference to the computer object
 
     public Image playerHPBar;
     public GameObject playerDamageScreen;
@@ -30,7 +68,9 @@ public class GameManager : MonoBehaviour
     int totalNodes; // Total nodes in the level
     int collectedNodes; // Number of collected nodes
     int activeThreats; // Total active threats drones + soldiers
-    bool allNodesCollected = false; // Flag to check if all nodes are collected
+    public bool allNodesCollected = false; // Flag to check if all nodes are collected
+
+    public bool AllNodesCollected => allNodesCollected; // Public property
 
     void Awake() // Initial setup
     {
@@ -42,6 +82,23 @@ public class GameManager : MonoBehaviour
         totalNodes = GameObject.FindGameObjectsWithTag("Node").Length; // Find all nodes
         collectedNodes = 0; // Initialize collected nodes
         activeThreats = 0; // Initialize active threats
+
+        // Ensure UI elements are initially set to the correct state
+        if (interactWithComputerYesText != null)
+        {
+            interactWithComputerYesText.gameObject.SetActive(false); // Hide by default
+        }
+
+        if (interactWithComputerNoText != null)
+        {
+            interactWithComputerNoText.gameObject.SetActive(false); // Hide by default
+        }
+
+        if (nodeInteractionText != null)
+        {
+            nodeInteractionText.gameObject.SetActive(false); // Ensure node interaction UI is hidden
+        }
+
         UpdateThreatDisplay(); // Initialize UI for threats
         UpdateNodeCollection(); // Initialize UI for nodes
     }
@@ -92,6 +149,9 @@ public class GameManager : MonoBehaviour
         collectedNodes++; // Increment collected nodes
         UpdateNodeCollection();
 
+        // Hide node interaction UI when the node is collected
+        HideNodeInteractionUI();
+
         if (collectedNodes >= totalNodes) // Check if all nodes are collected
         {
             allNodesCollected = true; // Flag that all nodes are collected
@@ -101,12 +161,18 @@ public class GameManager : MonoBehaviour
 
     void UpdateThreatDisplay() // Update the active threats UI
     {
-        activeThreatsText.text = $"{activeThreats:D3}"; // Update UI
+        if (activeThreatsText != null)
+        {
+            activeThreatsText.text = $"{activeThreats:D3}"; // Update UI
+        }
     }
 
     void UpdateNodeCollection() // Update node collection UI
     {
-        nodesCollectedText.text = $"{collectedNodes}/{totalNodes}"; // Update UI
+        if (nodesCollectedText != null)
+        {
+            nodesCollectedText.text = $"{collectedNodes}/{totalNodes}"; // Update UI
+        }
     }
 
     void ActivateComputer() // Enable computer interaction
@@ -171,5 +237,61 @@ public class GameManager : MonoBehaviour
         statePause(); // Pause game
         menuActive = menuLose; // Set lose menu
         menuActive.SetActive(true); // Show menu
+    }
+
+     public void UpdateComputerUI()
+    {
+        if (allNodesCollected)
+        {
+            if (interactWithComputerYesText != null)
+            {
+                interactWithComputerYesText.gameObject.SetActive(true); // Show "Yes" UI
+            }
+            if (interactWithComputerNoText != null)
+            {
+                interactWithComputerNoText.gameObject.SetActive(false); // Hide "No" UI
+            }
+        }
+        else
+        {
+            if (interactWithComputerYesText != null)
+            {
+                interactWithComputerYesText.gameObject.SetActive(false); // Hide "Yes" UI
+            }
+            if (interactWithComputerNoText != null)
+            {
+                interactWithComputerNoText.gameObject.SetActive(true); // Show "No" UI
+            }
+        }
+    }
+
+    public void HideComputerUI()
+    {
+        if (interactWithComputerYesText != null)
+        {
+            interactWithComputerYesText.gameObject.SetActive(false); // Hide "Yes" UI
+        }
+        if (interactWithComputerNoText != null)
+        {
+            interactWithComputerNoText.gameObject.SetActive(false); // Hide "No" UI
+        }
+    }
+
+
+    // Added Methods for Node UI
+    public void ShowNodeInteractionUI()
+    {
+        if (nodeInteractionText != null)
+        {
+            nodeInteractionText.gameObject.SetActive(true); // Show node interaction UI
+        }
+    }
+
+    public void HideNodeInteractionUI()
+    {
+        if (nodeInteractionText != null)
+        {
+            nodeInteractionText.gameObject.SetActive(false); // Hide node interaction UI
+        }
     }
 }
