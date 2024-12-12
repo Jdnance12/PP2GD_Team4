@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics;
 using UnityEngine;
 
 public class playerController : MonoBehaviour, IDamage
@@ -11,18 +12,21 @@ public class playerController : MonoBehaviour, IDamage
 
     [Header("Stats")]
     [SerializeField][Range(1, 10)] int HP;
-    [SerializeField] [Range(1, 5)] float speed;
-    [SerializeField] [Range(2, 5)] float sprintMod;
+    [SerializeField][Range(1, 5)] float speed;
+    [SerializeField][Range(2, 5)] float sprintMod;
     [SerializeField] float crouchHeight;
-    [SerializeField] [Range(2, 5)] float crouchMod;
-    [SerializeField] [Range(1, 3)] float jumpMax;
-    [SerializeField] [Range(5, 20)] float jumpSpeed;
-    [SerializeField] [Range(15, 40)] float gravity;
+    [SerializeField][Range(2, 5)] float crouchMod;
+    [SerializeField][Range(1, 3)] float jumpMax;
+    [SerializeField][Range(5, 20)] float jumpSpeed;
+    [SerializeField][Range(15, 40)] float gravity;
 
     [Header("Gun Stats")]
     [SerializeField] int shootDamage;
     [SerializeField] int shootDist;
     [SerializeField] float shootRate;
+
+    [Header("Temp Variables")]
+    [SerializeField] bool canDoubleJump;
 
     Vector3 moveDir;
     Vector3 playerVel;
@@ -86,6 +90,11 @@ public class playerController : MonoBehaviour, IDamage
 
     void jump()
     {
+        if (canDoubleJump)
+            jumpMax = 2;
+        else
+            jumpMax = 1;
+
         if (Input.GetButtonDown("Jump") && jumpCount < jumpMax && !isCrouching)
         {
             isJumping = true;
@@ -183,5 +192,10 @@ public class playerController : MonoBehaviour, IDamage
     public void updatePlayerUI()
     {
         GameManager.instance.playerHPBar.fillAmount = (float)HP / HPOrig;
+    }
+
+    public void toggleDoubleJump()
+    {
+        canDoubleJump = true; // Gives player double jump
     }
 }
