@@ -6,13 +6,12 @@ using UnityEngine.AI;
 
 public class DroneAI : MonoBehaviour
 {
-    public Light spotlight;
-    public GameObject lightPos;
     public GameObject player;
     public Renderer model;
     public NavMeshAgent agent;
 
     [SerializeField] int faceTargetSpeed;
+    [SerializeField] PlayerDetection playerDetection;
 
     Vector3 playerDir;
     float angleToPlayer;
@@ -23,7 +22,8 @@ public class DroneAI : MonoBehaviour
     public bool playerIsDetected;
 
     Color colorOrigin;
-    Color spotlightOriginColor;
+
+    public List<GameObject> detectedEnemies = new List<GameObject>();
 
     // Start is called before the first frame update
     void Start()
@@ -31,38 +31,17 @@ public class DroneAI : MonoBehaviour
         player = GameManager.instance.player;
 
         colorOrigin = model.material.color;
-        spotlightOriginColor = spotlight.color;
         agent = GetComponent<NavMeshAgent>();
     }
 
     // Update is called once per frame
     void Update()
     {
+        playerIsDetected = playerDetection.playerIsDetected;
+
         if (playerIsDetected)
         {
             DroneMovement();
-        }
-        else
-        {
-            spotlight.color = spotlightOriginColor;
-        }
-    }
-
-    private void OnTriggerEnter(Collider other)
-    {
-        if (other.CompareTag("Player"))
-        {
-            playerIsDetected = true;
-            spotlight.color = Color.red;
-        }
-    }
-
-    private void OnTriggerExit(Collider other)
-    {
-        if (other.CompareTag("Player"))
-        {
-            playerIsDetected = false;
-            spotlight.color = spotlightOriginColor;
         }
     }
 
@@ -90,6 +69,18 @@ public class DroneAI : MonoBehaviour
         Quaternion rot = Quaternion.LookRotation(new Vector3(playerDir.x, 0, playerDir.z));
         transform.rotation = Quaternion.Lerp(transform.rotation, rot, Time.deltaTime * faceTargetSpeed);
     }
+
+    void AlertEnemies()
+    {
+        foreach (GameObject enemy in detectedEnemies)
+        {
+            EnemyAI enemyAI = enemy.GetComponent<EnemyAI>();
+            if ((enemyAI != null))
+            {
+                enemyAI.MoveToPosition(transform.position);
+            }
+        }
+    }
     IEnumerator TurnBlue()
     {
         model.material.color = Color.blue;
@@ -115,5 +106,26 @@ public class DroneAI : MonoBehaviour
         StartCoroutine(TurnBlue());
 
         StartCoroutine(Stun(stunTimer));
+    }
+
+    void OnTriggerEnter(Collider other)
+    {
+        if(other.CompareTag("Enemy"))
+        {
+            detectedEnemies.Add(other.gameObject);
+        }
+    }
+
+    void OnTriggerStay(Collider other)
+    {
+        if(other.CompareTag("Enemy"))
+        {
+            detectedEnemies.Add(other.gameObject);
+        }
+    }
+
+    private void OnTriggerExit(Collider other)
+    {
+        detectedEnemies.Remove(other.gameObject);
     }
 }
