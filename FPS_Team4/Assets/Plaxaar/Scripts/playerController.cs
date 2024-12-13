@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class playerController : MonoBehaviour, IDamage
+public class playerController : MonoBehaviour, IDamage, IRecharge
 {
     [Header("Components")]
     [SerializeField] CharacterController controller;
@@ -10,7 +10,8 @@ public class playerController : MonoBehaviour, IDamage
     [SerializeField] Transform playerCamera;
 
     [Header("Stats")]
-    [SerializeField][Range(1, 10)] int HP;
+    public int maxHP = 20;
+    [SerializeField] [Range(1, 10)] int HP;
     [SerializeField] [Range(1, 5)] float speed;
     [SerializeField] [Range(2, 5)] float sprintMod;
     [SerializeField] float crouchHeight;
@@ -183,5 +184,19 @@ public class playerController : MonoBehaviour, IDamage
     public void updatePlayerUI()
     {
         GameManager.instance.playerHPBar.fillAmount = (float)HP / HPOrig;
+    }
+
+    public void restoreHP(int amount)
+    {
+        if ((HP + amount) <= maxHP)
+        {
+            HP += amount;
+            updatePlayerUI();
+        }
+        else if ((HP + amount) > maxHP)
+        {
+            HP = maxHP;
+            updatePlayerUI();
+        }
     }
 }

@@ -27,7 +27,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7013099482755246934}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 1, z: 0.24}
+  m_LocalPosition: {x: 0, y: 1, z: -0.010000005}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -155,6 +155,7 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 8
   playerCamera: {fileID: 7013099482755246929}
+  maxHP: 20
   HP: 3
   speed: 5
   sprintMod: 2
@@ -162,7 +163,7 @@ MonoBehaviour:
   crouchMod: 2
   jumpMax: 2
   jumpSpeed: 5
-  gravity: 15
+  gravity: 20
   shootDamage: 1
   shootDist: 20
   shootRate: 0.5
