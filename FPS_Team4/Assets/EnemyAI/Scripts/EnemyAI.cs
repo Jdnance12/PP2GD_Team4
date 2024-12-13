@@ -11,10 +11,8 @@ public class EnemyAI : MonoBehaviour, IDamage
     [SerializeField] int HP;
     [SerializeField] int FOV;
     [SerializeField] int faceTargetSpeed;
-
     [SerializeField] NavMeshAgent navAgent;
-    [SerializeField] Renderer modelBody;
-    [SerializeField] Renderer modelArm;
+    [SerializeField] Renderer model;
     [SerializeField] Transform headPos;
     Vector3 playerDir;
     float angleToPlayer;
@@ -25,8 +23,7 @@ public class EnemyAI : MonoBehaviour, IDamage
     [SerializeField] float shootRate;
     [SerializeField] float stunTimer;
 
-    Color colorBodyOrigin;
-    Color colorArmOrigin;
+    Color colorOrigin;
 
     //Bools
     bool playerInRange;
@@ -36,8 +33,7 @@ public class EnemyAI : MonoBehaviour, IDamage
     // Start is called before the first frame update
     void Start()
     {
-        colorBodyOrigin = modelBody.material.color;
-        colorArmOrigin = modelBody.material.color;
+        colorOrigin = model.material.color;
 
         GameManager.instance.RegisterThreat(); // Notify GameManager that enemy is active
     }
@@ -51,12 +47,12 @@ public class EnemyAI : MonoBehaviour, IDamage
         }
     }
 
-    public void MoveToPosition(Vector3 position)
+    public void OnPlayerDetected(Vector3 targetPosition)
     {
-        if(navAgent != null)
-        {
-            navAgent.SetDestination(position);
-        }
+        if (isStunned) return;
+
+        targetPosition = new Vector3(GameManager.instance.drone.transform.position.x, 0, GameManager.instance.drone.transform.position.y);
+        navAgent.SetDestination(targetPosition);
     }
 
     bool CanSeePlayer()
@@ -123,11 +119,9 @@ public class EnemyAI : MonoBehaviour, IDamage
     //Flashes the Enemy Blue when EMP hits them.
     IEnumerator TurnBlue()
     {
-        modelBody.material.color = Color.blue;
-        modelArm.material.color = Color.blue;
+        model.material.color = Color.blue;
         yield return new WaitForSeconds(stunTimer);
-        modelBody.material.color = colorBodyOrigin;
-        modelArm.material.color = colorArmOrigin;
+        model.material.color = colorOrigin;
     }
 
     IEnumerator shoot()
