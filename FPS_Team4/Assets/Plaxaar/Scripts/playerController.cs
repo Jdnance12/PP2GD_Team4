@@ -1,8 +1,7 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
-public class playerController : MonoBehaviour, IDamage, IRecharge
+public class playerController : MonoBehaviour, IDamage
 {
     [Header("Components")]
     [SerializeField] CharacterController controller;
@@ -10,31 +9,38 @@ public class playerController : MonoBehaviour, IDamage, IRecharge
     [SerializeField] Transform playerCamera;
 
     [Header("Stats")]
-    public int maxHP = 20;
-    [SerializeField] [Range(1, 10)] int HP;
-    [SerializeField] [Range(1, 5)] float speed;
-    [SerializeField] [Range(2, 5)] float sprintMod;
+    [SerializeField][Range(1, 10)] int HP;
+    [SerializeField][Range(1, 5)] float speed;
+    [SerializeField][Range(2, 5)] float sprintMod;
     [SerializeField] float crouchHeight;
-    [SerializeField] [Range(2, 5)] float crouchMod;
-    [SerializeField] [Range(1, 3)] float jumpMax;
-    [SerializeField] [Range(5, 20)] float jumpSpeed;
-    [SerializeField] [Range(15, 40)] float gravity;
+    [SerializeField][Range(2, 5)] float crouchMod;
+    [SerializeField][Range(1, 3)] float jumpMax;
+    [SerializeField][Range(5, 20)] float jumpSpeed;
+    [SerializeField][Range(15, 40)] float gravity;
+    [SerializeField][Range(5, 10)] int fallDmgHeight;
 
     [Header("Gun Stats")]
     [SerializeField] int shootDamage;
     [SerializeField] int shootDist;
     [SerializeField] float shootRate;
 
+    [Header("Temp Variables")]
+    [SerializeField] bool canDoubleJump;
+    
+    //Local variables
+
     Vector3 moveDir;
     Vector3 playerVel;
 
     int jumpCount;
     int HPOrig;
+    float lastGroundedHeight;
 
     bool isSprinting;
     bool isShooting;
     bool isCrouching;
     bool isJumping;
+    [SerializeField] bool wasGrounded;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -58,6 +64,7 @@ public class playerController : MonoBehaviour, IDamage, IRecharge
             isJumping = false;
             jumpCount = 0;
             playerVel = Vector3.zero;
+            checkFallDamage();
         }
 
         jump();
@@ -85,11 +92,74 @@ public class playerController : MonoBehaviour, IDamage, IRecharge
         }
     }
 
+    void checkFallDamage()
+    {
+        if (!wasGrounded && controller.isGrounded)
+        {
+            float fallDistance = lastGroundedHeight - transform.position.y;
+
+            //Check if fall distance is higher than min fall height
+            if (fallDistance > fallDmgHeight)
+            {
+                int damage;
+                //Scales Damage linearly
+                if (fallDistance > 15)
+                {
+                    damage = int.MaxValue;
+                }
+                else
+                {
+                    damage = Mathf.CeilToInt(fallDistance / fallDmgHeight);
+                }
+
+                ////Scales Damage on 3 different scales. Still needs fine tuning and fixing.
+                //switch (fallDistance / fallDmgHeight)
+                //{
+                //    case 1:
+                //        takeDamage(fallDmgHeight);
+                //        Debug.Log("Light fall damage taken");
+                //        break;
+                //    case 2:
+                //        takeDamage(fallDmgHeight * 2);
+                //        Debug.Log("Moderate fall damage taken");
+                //        break;
+                //    case 3:
+                //        takeDamage(fallDmgHeight * 3);
+                //        Debug.Log("Heavy fall damage taken");
+                //        break;
+                //    default:
+                //        if (fallDistance / fallDmgHeight > 3)
+                //        {
+                //            Debug.Log("Full HP fall damage taken");
+                //            takeDamage(HP);
+                //        }
+                //        break;
+                //}
+
+                takeDamage(damage);
+            }
+        }
+
+        wasGrounded = controller.isGrounded;
+
+        if (controller.isGrounded)
+        {
+            lastGroundedHeight = transform.position.y;
+        }
+
+    }
+
     void jump()
     {
+        if (canDoubleJump)
+            jumpMax = 2;
+        else
+            jumpMax = 1;
+
         if (Input.GetButtonDown("Jump") && jumpCount < jumpMax && !isCrouching)
         {
             isJumping = true;
+            wasGrounded = false;
             jumpCount++;
             playerVel.y = jumpSpeed;
         }
@@ -186,17 +256,8 @@ public class playerController : MonoBehaviour, IDamage, IRecharge
         GameManager.instance.playerHPBar.fillAmount = (float)HP / HPOrig;
     }
 
-    public void restoreHP(int amount)
+    public void toggleDoubleJump()
     {
-        if ((HP + amount) <= maxHP)
-        {
-            HP += amount;
-            updatePlayerUI();
-        }
-        else if ((HP + amount) > maxHP)
-        {
-            HP = maxHP;
-            updatePlayerUI();
-        }
+        canDoubleJump = true; // Gives player double jump
     }
 }
