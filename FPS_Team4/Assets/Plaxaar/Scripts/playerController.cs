@@ -1,7 +1,7 @@
 using System.Collections;
 using UnityEngine;
 
-public class playerController : MonoBehaviour, IDamage
+public class playerController : MonoBehaviour, IDamage, IRecharge
 {
     [Header("Components")]
     [SerializeField] CharacterController controller;
@@ -9,6 +9,7 @@ public class playerController : MonoBehaviour, IDamage
     [SerializeField] Transform playerCamera;
 
     [Header("Stats")]
+    public int maxHP = 20;
     [SerializeField][Range(1, 10)] int HP;
     [SerializeField][Range(1, 5)] float speed;
     [SerializeField][Range(2, 5)] float sprintMod;
@@ -259,5 +260,19 @@ public class playerController : MonoBehaviour, IDamage
     public void toggleDoubleJump()
     {
         canDoubleJump = true; // Gives player double jump
+    }
+
+    public void restoreHP(int amount)
+    {
+        if ((HP + amount) <= maxHP)
+        {
+            HP += amount;
+            updatePlayerUI();
+        }
+        else if ((HP + amount) > maxHP)
+        {
+            HP = maxHP;
+            updatePlayerUI();
+        }
     }
 }
