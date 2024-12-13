@@ -17,6 +17,7 @@ public class playerController : MonoBehaviour, IDamage
     [SerializeField][Range(1, 3)] float jumpMax;
     [SerializeField][Range(5, 20)] float jumpSpeed;
     [SerializeField][Range(15, 40)] float gravity;
+    [SerializeField][Range(5, 10)] int fallDmgHeight;
 
     [Header("Gun Stats")]
     [SerializeField] int shootDamage;
@@ -25,17 +26,21 @@ public class playerController : MonoBehaviour, IDamage
 
     [Header("Temp Variables")]
     [SerializeField] bool canDoubleJump;
+    
+    //Local variables
 
     Vector3 moveDir;
     Vector3 playerVel;
 
     int jumpCount;
     int HPOrig;
+    float lastGroundedHeight;
 
     bool isSprinting;
     bool isShooting;
     bool isCrouching;
     bool isJumping;
+    [SerializeField] bool wasGrounded;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -59,6 +64,7 @@ public class playerController : MonoBehaviour, IDamage
             isJumping = false;
             jumpCount = 0;
             playerVel = Vector3.zero;
+            checkFallDamage();
         }
 
         jump();
@@ -86,6 +92,63 @@ public class playerController : MonoBehaviour, IDamage
         }
     }
 
+    void checkFallDamage()
+    {
+        if (!wasGrounded && controller.isGrounded)
+        {
+            float fallDistance = lastGroundedHeight - transform.position.y;
+
+            //Check if fall distance is higher than min fall height
+            if (fallDistance > fallDmgHeight)
+            {
+                int damage;
+                //Scales Damage linearly
+                if (fallDistance > 15)
+                {
+                    damage = int.MaxValue;
+                }
+                else
+                {
+                    damage = Mathf.CeilToInt(fallDistance / fallDmgHeight);
+                }
+
+                ////Scales Damage on 3 different scales. Still needs fine tuning and fixing.
+                //switch (fallDistance / fallDmgHeight)
+                //{
+                //    case 1:
+                //        takeDamage(fallDmgHeight);
+                //        Debug.Log("Light fall damage taken");
+                //        break;
+                //    case 2:
+                //        takeDamage(fallDmgHeight * 2);
+                //        Debug.Log("Moderate fall damage taken");
+                //        break;
+                //    case 3:
+                //        takeDamage(fallDmgHeight * 3);
+                //        Debug.Log("Heavy fall damage taken");
+                //        break;
+                //    default:
+                //        if (fallDistance / fallDmgHeight > 3)
+                //        {
+                //            Debug.Log("Full HP fall damage taken");
+                //            takeDamage(HP);
+                //        }
+                //        break;
+                //}
+
+                takeDamage(damage);
+            }
+        }
+
+        wasGrounded = controller.isGrounded;
+
+        if (controller.isGrounded)
+        {
+            lastGroundedHeight = transform.position.y;
+        }
+
+    }
+
     void jump()
     {
         if (canDoubleJump)
@@ -96,6 +159,7 @@ public class playerController : MonoBehaviour, IDamage
         if (Input.GetButtonDown("Jump") && jumpCount < jumpMax && !isCrouching)
         {
             isJumping = true;
+            wasGrounded = false;
             jumpCount++;
             playerVel.y = jumpSpeed;
         }
