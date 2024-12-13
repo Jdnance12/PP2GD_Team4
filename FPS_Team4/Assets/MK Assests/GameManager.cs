@@ -294,4 +294,9 @@ public class GameManager : MonoBehaviour
             nodeInteractionText.gameObject.SetActive(false); // Hide node interaction UI
         }
     }
+
+    public void GetDoubleJump()
+    {
+        playerScript.toggleDoubleJump(); // Gives player double jump skill - sets double jump to true
+    }
 }
