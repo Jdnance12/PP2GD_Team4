@@ -6,129 +6,81 @@ using UnityEngine.AI;
 
 public class DroneAI : MonoBehaviour
 {
-    public Light spotlight;
-    public GameObject lightPos;
     public GameObject player;
     public Renderer model;
+    public NavMeshAgent agent;
 
-    public bool PlayerIsDetected {  get; private set; }
-    public bool isCoolingDown;
-    bool isStunned; // Stun for actie threat count
+    [SerializeField] int faceTargetSpeed;
+    [SerializeField] PlayerDetection playerDetection;
 
-    //Vector3 playerLastKnownLocation;
+    Vector3 playerDir;
+    float angleToPlayer;
 
-    public int HP;
-    public float faceTargetSpeed;
-    public float detectionCooldown;
-    public float cooldownDelay;
-    public float stunTimer;
+    [SerializeField] float stunTimer;
 
-    public delegate void PlayerDetectedHandler(Vector3 dronePosition);
-    public event PlayerDetectedHandler OnPlayerDetected;
+    public bool isStunned;
+    public bool playerIsDetected;
 
     Color colorOrigin;
+
+    public List<GameObject> detectedEnemies = new List<GameObject>();
 
     // Start is called before the first frame update
     void Start()
     {
-        colorOrigin = model.material.color;
-
         player = GameManager.instance.player;
-        PlayerIsDetected = false;
 
-        GameManager.instance.RegisterThreat(); // Notify GameManager that drone is active
+        colorOrigin = model.material.color;
+        agent = GetComponent<NavMeshAgent>();
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (!isStunned)
-        {
-            DetectPlayer();
+        playerIsDetected = playerDetection.playerIsDetected;
 
-            if (PlayerIsDetected)
-            {
-                FaceTarget();
-                CreateInspectionPoint();
-            }
+        if (playerIsDetected)
+        {
+            DroneMovement();
         }
     }
 
-    bool DetectPlayer()
+    bool DroneMovement()
     {
         if (isStunned) return false;
 
-        Vector3 directionToPlayer = player.transform.position - transform.position;
-        float distanceToPlayer = directionToPlayer.magnitude;
-        float angle = Vector3.Angle(spotlight.transform.forward, directionToPlayer);
-
-        if(distanceToPlayer < spotlight.range && angle < spotlight.spotAngle / 2f)
+        if (playerIsDetected)
         {
-            RaycastHit hit;
-            if(Physics.Raycast(spotlight.transform.position, directionToPlayer, out hit))
-            {
-                if(hit.collider.CompareTag("Player"))
-                {
-                    PlayerIsDetected = true;
-                    //playerLastKnownLocation = player.transform.position;
-                    OnPlayerDetected?.Invoke(transform.position);
+            playerDir = player.transform.position - transform.position;
+            angleToPlayer = Vector3.Angle(playerDir, transform.forward);
 
-                    return true;
-                }
-            }
+            Debug.DrawRay(transform.position, playerDir);
+
+            FaceTarget();
+            agent.isStopped = false;
+            agent.SetDestination(player.transform.position);
+            return true;
         }
-        PlayerIsDetected = false;
         return false;
     }
 
     void FaceTarget()
     {
-        Vector3 playerDir = player.transform.position - transform.position;
         Quaternion rot = Quaternion.LookRotation(new Vector3(playerDir.x, 0, playerDir.z));
         transform.rotation = Quaternion.Lerp(transform.rotation, rot, Time.deltaTime * faceTargetSpeed);
-
-        
     }
 
-    IEnumerator DelayCooldown()
+    void AlertEnemies()
     {
-        yield return new WaitForSeconds(cooldownDelay);
-
-        isCoolingDown = true;
-        yield return new WaitForSeconds(detectionCooldown);
-        isCoolingDown = false;
-    }
-
-    void CreateInspectionPoint()
-    {
-        if(GameManager.instance.inspectionPointPrefab != null)
+        foreach (GameObject enemy in detectedEnemies)
         {
-            //GameObject inspectionPoint = Instantiate(GameManager.instance.inspectionPointPrefab, playerLastKnownLocation, Quaternion.identity);
-        }
-    }
-
-    void NotifyNearbyEnemies(Vector3 inspectionPointPos)
-    {
-        float radius = 15f;
-        Collider[] colliders = Physics.OverlapSphere(inspectionPointPos, radius);
-        foreach (Collider collider in colliders)
-        {
-            EnemyAI enemyAI = collider.GetComponent<EnemyAI>();
-            if(enemyAI != null)
+            EnemyAI enemyAI = enemy.GetComponent<EnemyAI>();
+            if ((enemyAI != null))
             {
-                enemyAI.OnPlayerDetected(inspectionPointPos);
+                enemyAI.MoveToPosition(transform.position);
             }
         }
     }
-
-    public void takeDamage(int amount)
-    {
-        HP -= amount;
-        StartCoroutine(TurnBlue());
-
-        StartCoroutine(Stun(stunTimer));
-    }
-
     IEnumerator TurnBlue()
     {
         model.material.color = Color.blue;
@@ -136,18 +88,44 @@ public class DroneAI : MonoBehaviour
         model.material.color = colorOrigin;
     }
 
-    public IEnumerator Stun(float stunDuration)
+    IEnumerator Stun(float stunDuration)
     {
-        isStunned = true; // Mark as stunned
-        PlayerIsDetected = false; // Disable detection
-        lightPos.SetActive(false);
+        isStunned = true;
+
         GameManager.instance.OnStunBegin(); // Notify GameManager of stun
 
         yield return new WaitForSeconds(stunDuration);
 
-        isStunned = false; // Recover from stun
-        lightPos.SetActive(true);
+        isStunned = false;
+
         GameManager.instance.OnStunEnd(); // Notify GameManager of stun end
     }
+    public void takeDamage(int amount)
+    {
+        //HP -= amount;
+        StartCoroutine(TurnBlue());
 
+        StartCoroutine(Stun(stunTimer));
+    }
+
+    void OnTriggerEnter(Collider other)
+    {
+        if(other.CompareTag("Enemy"))
+        {
+            detectedEnemies.Add(other.gameObject);
+        }
+    }
+
+    void OnTriggerStay(Collider other)
+    {
+        if(other.CompareTag("Enemy"))
+        {
+            detectedEnemies.Add(other.gameObject);
+        }
+    }
+
+    private void OnTriggerExit(Collider other)
+    {
+        detectedEnemies.Remove(other.gameObject);
+    }
 }
