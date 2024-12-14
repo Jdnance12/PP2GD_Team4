@@ -320,7 +320,7 @@ public class GameManager : MonoBehaviour
     //     // Trigger the player taking damage
     //     if (playerScript != null) // Ensure the player script reference is valid
     //     {
-    //         int damageToTake = Mathf.CeilToInt(playerScript.HP * 0.9f); // Calculate 90% of the player current HP, rounded up
+    //         (NEEDS TO BE REMOVED AND INSURE THE PLAYER IS AT THE CORRECT HEIGHT AT START) int damageToTake = Mathf.CeilToInt(playerScript.HP * 0.9f); // Calculate 90% of the player current HP, rounded up
 
     //         Debug.Log($"Player Current HP: {playerScript.HP}, Damage to Take: {damageToTake}"); // Debug for clarity
 

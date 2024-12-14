@@ -10,7 +10,7 @@ public class playerController : MonoBehaviour, IDamage, IRecharge
 
     [Header("Stats")]
     public int maxHP = 20;
-    [SerializeField][Range(1, 10)] int HP;
+    [SerializeField][Range(1, 10)] public int HP;
     [SerializeField][Range(1, 5)] float speed;
     [SerializeField][Range(2, 5)] float sprintMod;
     [SerializeField] float crouchHeight;
@@ -36,6 +36,7 @@ public class playerController : MonoBehaviour, IDamage, IRecharge
     int jumpCount;
     int HPOrig;
     float lastGroundedHeight;
+    private bool hasLanded = false; // Tracks if the player has landed for first sceen
 
     bool isSprinting;
     bool isShooting;
@@ -49,6 +50,7 @@ public class playerController : MonoBehaviour, IDamage, IRecharge
         HPOrig = HP;
         lastGroundedHeight = transform.position.y; // Initialize to starting height
         updatePlayerUI();
+        // StartCoroutine(CheckGroundedState()); // Start monitoring grounded state
     }
 
     // Update is called once per frame
@@ -237,15 +239,26 @@ public class playerController : MonoBehaviour, IDamage, IRecharge
         isShooting = false;
     }
 
-    public void takeDamage(int amount)
+    public void takeDamage(int amount) // THIS IS SO THE PLAYER REPORTS DAMAGE TO THE GAME MANAGER AND UPDATES THE UI
     {
-        HP -= amount;
-        updatePlayerUI();
-        flashScreenDamage();
+        Debug.Log($"Player takes {amount} damage. Current HP: {HP}, Max HP: {maxHP}");
 
-        if (HP <= 0)
+        HP -= amount;
+
+        if (HP < 0) // Safety net to stop HP at zero
         {
-            // Hey I'm dead!
+            HP = 0;
+        }
+
+        if (GameManager.instance != null) // Notify the GameManager to update the health bar UI
+        {
+            GameManager.instance.UpdatePlayerHealth(HP, maxHP);
+        }
+
+        StartCoroutine(flashScreenDamage()); // Flash the red damage screen
+
+        if (HP <= 0) // Check for death
+        {
             GameManager.instance.youLose();
         }
     }
@@ -282,4 +295,19 @@ public class playerController : MonoBehaviour, IDamage, IRecharge
             updatePlayerUI();
         }
     }
+
+    // private IEnumerator CheckGroundedState()
+    // {
+    //     while (!hasLanded)
+    //     {
+    //         if (controller.isGrounded)  // If the player is grounded
+    //         {
+    //         hasLanded = true; // Mark as landed
+    //         GameManager.instance.OnPlayerLanded(); // Notify GameManager
+    //         yield break; // Exit the coroutine
+    //         }
+
+    //     yield return null; // Wait for the next frame before checking again
+    //     }
+    // }
 }
