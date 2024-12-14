@@ -18,7 +18,7 @@ public class playerController : MonoBehaviour, IDamage, IRecharge
     [SerializeField][Range(1, 3)] float jumpMax;
     [SerializeField][Range(5, 20)] float jumpSpeed;
     [SerializeField][Range(15, 40)] float gravity;
-    [SerializeField][Range(5, 10)] int fallDmgHeight;
+    [SerializeField][Range(1, 5)] int fallDmgHeight;
 
     [Header("Gun Stats")]
     [SerializeField] int shootDamage;
@@ -47,6 +47,7 @@ public class playerController : MonoBehaviour, IDamage, IRecharge
     void Start()
     {
         HPOrig = HP;
+        lastGroundedHeight = transform.position.y; // Initialize to starting height
         updatePlayerUI();
     }
 
@@ -98,6 +99,12 @@ public class playerController : MonoBehaviour, IDamage, IRecharge
         if (!wasGrounded && controller.isGrounded)
         {
             float fallDistance = lastGroundedHeight - transform.position.y;
+            
+            if (Mathf.Abs(fallDistance) < Mathf.Epsilon)
+            {
+                fallDistance = 0.0f; // Treat near-zero as zero
+            }
+
 
             //Check if fall distance is higher than min fall height
             if (fallDistance > fallDmgHeight)
@@ -236,7 +243,7 @@ public class playerController : MonoBehaviour, IDamage, IRecharge
         updatePlayerUI();
         flashScreenDamage();
 
-        if (HP < 0)
+        if (HP <= 0)
         {
             // Hey I'm dead!
             GameManager.instance.youLose();

@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.18028352, g: 0.22571376, b: 0.3069224, a: 1}
+  m_IndirectSpecularColor: {r: 0.18028378, g: 0.22571412, b: 0.30692285, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -3948,6 +3948,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: UI
       objectReference: {fileID: 0}
+    - target: {fileID: 6448634047212898061, guid: f46cca398c538b34fac07f4aad78c675, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: f46cca398c538b34fac07f4aad78c675, type: 3}
 --- !u!1001 &626741209
@@ -7544,6 +7548,14 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 4226623740422580331, guid: d50fe2043e6933a4f8a14bc93bb950e7, type: 3}
+      propertyPath: HP
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 4226623740422580331, guid: d50fe2043e6933a4f8a14bc93bb950e7, type: 3}
+      propertyPath: fallDmgHeight
+      value: 2
+      objectReference: {fileID: 0}
     - target: {fileID: 7013099483657191834, guid: d50fe2043e6933a4f8a14bc93bb950e7, type: 3}
       propertyPath: m_RootOrder
       value: 2
