@@ -6,14 +6,16 @@ using UnityEngine.UI;
 
 public class GameManager : MonoBehaviour
 {
+    [SerializeField] private GameObject startScreen; // Reference to StartScreen UI
     public static GameManager instance; // Singleton reference
 
     public GameObject drone; // Drone reference
     public GameObject inspectionPointPrefab;
-
     [SerializeField] GameObject menuActive; // Current active menu
     [SerializeField] GameObject menuPause; // Pause menu object
     [SerializeField] GameObject menuWin, menuLose; // Win/Lose menus
+    [SerializeField] private GameObject welcomeScreen; // Welcome screen UI
+
 
     [SerializeField] TMP_Text activeThreatsText; // Active threats display
     public TMP_Text ActiveThreatsText
@@ -78,7 +80,8 @@ public class GameManager : MonoBehaviour
         timeScaleOriginal = Time.timeScale; // Save original time scale
         player = GameObject.FindWithTag("Player"); // Find player by tag
         playerScript = player.GetComponent<playerController>(); // Get player script
-
+        playerHPBar.color = Color.green;
+        
         totalNodes = GameObject.FindGameObjectsWithTag("Node").Length; // Find all nodes
         collectedNodes = 0; // Initialize collected nodes
         activeThreats = 0; // Initialize active threats
@@ -101,6 +104,16 @@ public class GameManager : MonoBehaviour
 
         UpdateThreatDisplay(); // Initialize UI for threats
         UpdateNodeCollection(); // Initialize UI for nodes
+
+        //Automatically find the StartScreen GameObject in the scene
+        if (startScreen == null)
+        {
+            startScreen = GameObject.Find("StartScreen"); // Search for StartScreen by name
+            if (startScreen == null)
+            {
+                Debug.LogError("StartScreen not found in the scene! Please ensure it exists.");
+            }
+        }
     }
 
     void Update() // Runs every frame
@@ -294,4 +307,72 @@ public class GameManager : MonoBehaviour
             nodeInteractionText.gameObject.SetActive(false); // Hide node interaction UI
         }
     }
+
+    // public void OnPlayerLanded() // Called when the player lands
+    // {
+    //     if (startScreen != null) // Check if start screen exists
+    //     {
+    //         startScreen.SetActive(true); // Show the start screen
+    //         menuActive = startScreen;   // Set menuActive to track the start screen
+    //         statePause();               // Pause the game
+    //     }
+
+    //     // Trigger the player taking damage
+    //     if (playerScript != null) // Ensure the player script reference is valid
+    //     {
+    //         int damageToTake = Mathf.CeilToInt(playerScript.HP * 0.9f); // Calculate 90% of the player current HP, rounded up
+
+    //         Debug.Log($"Player Current HP: {playerScript.HP}, Damage to Take: {damageToTake}"); // Debug for clarity
+
+    //         playerScript.takeDamage(damageToTake);   // Apply the damage
+    //     }
+    //     else
+    //     {
+    //         Debug.LogError("Player script reference is missing in GameManager!");
+    //     }
+    // }
+
+    public void UpdatePlayerHealth(int currentHP, int maxHP)
+    {
+        if (playerHPBar != null)
+        {
+            // Calculate health percentage
+            float healthPercentage = (float)currentHP / maxHP;
+
+            // Update the health bar fill amount
+            playerHPBar.fillAmount = healthPercentage;
+
+            // Change the color based on health percentage
+            if (healthPercentage > 0.75f)
+            {
+                playerHPBar.color = Color.green; // Healthy
+            }
+            else if (healthPercentage > 0.5f)
+            {
+                playerHPBar.color = Color.yellow; // Moderate
+            }
+            else if (healthPercentage > 0.25f)
+            {
+                playerHPBar.color = new Color(1f, 0.5f, 0f); // Orange
+            }
+            else
+            {
+                playerHPBar.color = Color.red; // Critical
+                StartCoroutine(FlashRedHealthBar()); // Start flashing
+            }
+        }
+    }
+
+    // Flashing effect for critical health
+    private IEnumerator FlashRedHealthBar()
+    {
+        while (playerHPBar.fillAmount <= 0.25f)
+        {
+            playerHPBar.color = new Color(1f, 0f, 0f, 0.5f); // Red with transparency
+            yield return new WaitForSeconds(0.3f);
+            playerHPBar.color = Color.red; // Solid red
+            yield return new WaitForSeconds(0.3f);
+        }
+    }
+
 }
