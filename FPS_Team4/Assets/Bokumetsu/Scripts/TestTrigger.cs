@@ -12,8 +12,8 @@ public class TestTrigger : MonoBehaviour
     {
         Debug.Log("Test Trigger exited by: " + other.tag + " | Object: " + other.name);
     }
-    private void OnTriggerStay(Collider other)
-    {
-        Debug.Log("Test Trigger stay detected by: " + other.tag + " | Object: " + other.name);
-    }
+    //private void OnTriggerStay(Collider other)
+    //{
+    //    Debug.Log("Test Trigger stay detected by: " + other.tag + " | Object: " + other.name);
+    //}
 }
