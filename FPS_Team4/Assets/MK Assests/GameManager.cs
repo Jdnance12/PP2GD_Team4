@@ -3,6 +3,7 @@ using System.Collections; // Collection management
 using System.Collections.Generic; // Advanced collections
 using TMPro; // TextMeshPro for UI
 using UnityEngine.UI;
+using UnityEngine.InputSystem; // Used for input actions
 
 public class GameManager : MonoBehaviour
 {
@@ -14,6 +15,7 @@ public class GameManager : MonoBehaviour
     [SerializeField] GameObject menuActive; // Current active menu
     [SerializeField] GameObject menuPause; // Pause menu object
     [SerializeField] GameObject menuWin, menuLose; // Win/Lose menus
+    [SerializeField] GameObject weaponMenu;
     [SerializeField] private GameObject welcomeScreen; // Welcome screen UI
 
 
@@ -252,6 +254,25 @@ public class GameManager : MonoBehaviour
         menuActive.SetActive(true); // Show menu
     }
 
+    public void WeaponMenuActive(InputAction.CallbackContext context)
+    {
+        // Dont use statePause() here because it stops the playerscript listener
+        isPaused = true; // Set pause state
+        Time.timeScale = 0; // Freeze time
+        Cursor.visible = true; // Show cursor
+        Cursor.lockState = CursorLockMode.Confined; // Confine cursor
+
+        menuActive = weaponMenu;
+        menuActive.SetActive(true);
+
+
+    }
+
+    public void WeaponMenuNotActive(InputAction.CallbackContext context)
+    {
+        stateUnpause();
+    }
+
      public void UpdateComputerUI()
     {
         if (allNodesCollected)
@@ -308,29 +329,30 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    // public void OnPlayerLanded() // Called when the player lands
-    // {
-    //     if (startScreen != null) // Check if start screen exists
-    //     {
-    //         startScreen.SetActive(true); // Show the start screen
-    //         menuActive = startScreen;   // Set menuActive to track the start screen
-    //         statePause();               // Pause the game
-    //     }
+    public void OnPlayerLanded() // Called when the player lands
+    {
+        if (startScreen != null) // Check if start screen exists
+        {
+            startScreen.SetActive(true); // Show the start screen
+            menuActive = startScreen;   // Set menuActive to track the start screen
+            statePause();               // Pause the game
+        }
 
-    //     // Trigger the player taking damage
-    //     if (playerScript != null) // Ensure the player script reference is valid
-    //     {
-    //         (NEEDS TO BE REMOVED AND INSURE THE PLAYER IS AT THE CORRECT HEIGHT AT START) int damageToTake = Mathf.CeilToInt(playerScript.HP * 0.9f); // Calculate 90% of the player current HP, rounded up
+        // Trigger the player taking damage
+        if (playerScript != null) // Ensure the player script reference is valid
+        {
+            //(NEEDS TO BE REMOVED AND INSURE THE PLAYER IS AT THE CORRECT HEIGHT AT START)
+            int damageToTake = Mathf.CeilToInt(playerScript.HP * 0.9f); // Calculate 90% of the player current HP, rounded up
 
-    //         Debug.Log($"Player Current HP: {playerScript.HP}, Damage to Take: {damageToTake}"); // Debug for clarity
+            Debug.Log($"Player Current HP: {playerScript.HP}, Damage to Take: {damageToTake}"); // Debug for clarity
 
-    //         playerScript.takeDamage(damageToTake);   // Apply the damage
-    //     }
-    //     else
-    //     {
-    //         Debug.LogError("Player script reference is missing in GameManager!");
-    //     }
-    // }
+            playerScript.takeDamage(damageToTake);   // Apply the damage
+        }
+        else
+        {
+            Debug.LogError("Player script reference is missing in GameManager!");
+        }
+    }
 
     public void UpdatePlayerHealth(int currentHP, int maxHP)
     {

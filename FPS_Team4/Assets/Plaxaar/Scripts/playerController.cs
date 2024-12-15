@@ -1,5 +1,6 @@
 using System.Collections;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 public class playerController : MonoBehaviour, IDamage, IRecharge
 {
@@ -19,6 +20,10 @@ public class playerController : MonoBehaviour, IDamage, IRecharge
     [SerializeField][Range(5, 20)] float jumpSpeed;
     [SerializeField][Range(15, 40)] float gravity;
     [SerializeField][Range(1, 5)] int fallDmgHeight;
+    [SerializeField] private float zoomSpeed = 5f;
+
+    [Header("Input Actions")]
+    public InputActionReference weaponMenuAction;
 
     [Header("Gun Stats")]
     [SerializeField] int shootDamage;
@@ -36,12 +41,14 @@ public class playerController : MonoBehaviour, IDamage, IRecharge
     int jumpCount;
     int HPOrig;
     float lastGroundedHeight;
+    float targetFOV = 60f;
     private bool hasLanded = false; // Tracks if the player has landed for first sceen
 
     bool isSprinting;
     bool isShooting;
     bool isCrouching;
     bool isJumping;
+    private bool firstDrop = true;
     [SerializeField] bool wasGrounded;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
@@ -82,23 +89,56 @@ public class playerController : MonoBehaviour, IDamage, IRecharge
         controller.Move(playerVel * Time.deltaTime);
         playerVel.y -= gravity * Time.deltaTime;
 
+        // Controls
         if (Input.GetButton("Fire1") && !isShooting)
         {
             StartCoroutine(shoot());
         }
         if (Input.GetButtonDown("Fire2"))
         {
-            playerCamera.GetComponent<Camera>().fieldOfView = 30f;
+            zoom(30f);
         }
         if (Input.GetButtonUp("Fire2"))
         {
-            playerCamera.GetComponent<Camera>().fieldOfView = 60f;
+            zoom(60f);
         }
+    }
+
+    void OnEnable()
+    {
+        weaponMenuAction.action.performed += OnWeaponMenuPerformed; // When Q is held for 0.25s
+        weaponMenuAction.action.canceled += OnWeaponMenuCanceled;   // When Q is released
+        weaponMenuAction.action.Enable();
+    }
+
+    void OnDisable()
+    {
+        weaponMenuAction.action.performed -= OnWeaponMenuPerformed;
+        weaponMenuAction.action.canceled -= OnWeaponMenuCanceled;
+        weaponMenuAction.action.Disable();
+    }
+
+    // Called when button hold is performed
+    private void OnWeaponMenuPerformed(InputAction.CallbackContext context)
+    {
+        GameManager.instance.WeaponMenuActive(context);
+    }
+
+    // Called when button is released
+    private void OnWeaponMenuCanceled(InputAction.CallbackContext context)
+    {
+        GameManager.instance.WeaponMenuNotActive(context);
+    }
+
+    void zoom(float target)
+    {
+        Camera playerCam = playerCamera.GetComponent<Camera>();
+        playerCam.fieldOfView = Mathf.Lerp(playerCam.fieldOfView, target, zoomSpeed * Time.deltaTime);
     }
 
     void checkFallDamage()
     {
-        if (!wasGrounded && controller.isGrounded)
+        if (!wasGrounded && controller.isGrounded && !firstDrop)
         {
             float fallDistance = lastGroundedHeight - transform.position.y;
             
@@ -122,32 +162,12 @@ public class playerController : MonoBehaviour, IDamage, IRecharge
                     damage = Mathf.CeilToInt(fallDistance / fallDmgHeight);
                 }
 
-                ////Scales Damage on 3 different scales. Still needs fine tuning and fixing.
-                //switch (fallDistance / fallDmgHeight)
-                //{
-                //    case 1:
-                //        takeDamage(fallDmgHeight);
-                //        Debug.Log("Light fall damage taken");
-                //        break;
-                //    case 2:
-                //        takeDamage(fallDmgHeight * 2);
-                //        Debug.Log("Moderate fall damage taken");
-                //        break;
-                //    case 3:
-                //        takeDamage(fallDmgHeight * 3);
-                //        Debug.Log("Heavy fall damage taken");
-                //        break;
-                //    default:
-                //        if (fallDistance / fallDmgHeight > 3)
-                //        {
-                //            Debug.Log("Full HP fall damage taken");
-                //            takeDamage(HP);
-                //        }
-                //        break;
-                //}
-
                 takeDamage(damage);
             }
+        }
+        else
+        {
+            firstDrop = false;
         }
 
         wasGrounded = controller.isGrounded;

@@ -1,0 +1,34 @@
+{
+    "name": "Menu",
+    "maps": [
+        {
+            "name": "WeaponMenu",
+            "id": "0c364a1b-8da6-480b-8f87-5e2e09f6c693",
+            "actions": [
+                {
+                    "name": "Open Menu",
+                    "type": "Button",
+                    "id": "255e9d8a-0c97-48cc-a3ac-0b3b5a528f81",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "Hold(duration=0.25,pressPoint=0.25)",
+                    "initialStateCheck": false
+                }
+            ],
+            "bindings": [
+                {
+                    "name": "",
+                    "id": "12c0822b-03f2-407d-b6dd-fd70e804b750",
+                    "path": "<Keyboard>/q",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Open Menu",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                }
+            ]
+        }
+    ],
+    "controlSchemes": []
+}
