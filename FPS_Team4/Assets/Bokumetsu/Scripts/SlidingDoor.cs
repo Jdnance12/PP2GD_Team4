@@ -82,7 +82,7 @@ public class SlidingDoor : MonoBehaviour
             // if door is broken
             else
             {
-                tryDoorCount++;
+                tryDoorCount = 1;
             }
         }
     }
