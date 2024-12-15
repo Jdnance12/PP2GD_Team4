@@ -7,7 +7,9 @@ using UnityEngine.InputSystem; // Used for input actions
 
 public class GameManager : MonoBehaviour
 {
-    [SerializeField] private GameObject startScreen; // Reference to StartScreen UI
+    [SerializeField] private GameObject checkpointUI; // Drag in the CheckpointUI from the hierarchy
+    [SerializeField] public GameObject startScreen; // Reference to StartScreen UI
+    private bool startScreenShown = false; // Prevent re-showing startScreen
     public static GameManager instance; // Singleton reference
 
     public GameObject drone; // Drone reference
@@ -76,10 +78,25 @@ public class GameManager : MonoBehaviour
     public bool allNodesCollected = false; // Flag to check if all nodes are collected
 
     public bool AllNodesCollected => allNodesCollected; // Public property
+    public bool isCheckpointLoaded = false; // Track checkpoint loaded state
+
 
     void Awake() // Initial setup
     {
         instance = this; // Set singleton instance
+
+        // Ensure Checkpoint Buttons are off initially
+        buttonFunctions buttonScript = FindObjectOfType<buttonFunctions>();
+        if (buttonScript != null)
+        {
+            Debug.Log("Disabling all checkpoint buttons in Awake.");
+            buttonScript.DisableAllCheckpointButtons();
+        }
+        else
+        {
+            Debug.LogWarning("buttonFunctions not found in Awake!");
+        }
+
         timeScaleOriginal = Time.timeScale; // Save original time scale
         player = GameObject.FindWithTag("Player"); // Find player by tag
         playerScript = player.GetComponent<playerController>(); // Get player script
@@ -117,6 +134,7 @@ public class GameManager : MonoBehaviour
                 Debug.LogError("StartScreen not found in the scene! Please ensure it exists.");
             }
         }
+
     }
 
     void Update() // Runs every frame
@@ -222,31 +240,53 @@ public class GameManager : MonoBehaviour
         menuActive.SetActive(true); // Show menu
     }
 
-    public void statePause() // Pause game logic
+    public void statePause()
     {
-        isPaused = true; // Set pause state
-        Time.timeScale = 0; // Freeze time
-        Cursor.visible = true; // Show cursor
-        Cursor.lockState = CursorLockMode.Confined; // Confine cursor
-
-        playerScript.enabled = false; // Disable player controls
+        Debug.Log("Game paused.");
+        isPaused = true;
+        Time.timeScale = 0;
+        Cursor.visible = true;
+        Cursor.lockState = CursorLockMode.Confined;
+        playerScript.enabled = false;
     }
 
-    public void stateUnpause() // Unpause game logic
+    public void stateUnpause()
     {
-        isPaused = false; // Clear pause state
-        Time.timeScale = timeScaleOriginal; // Restore time scale
-        Cursor.visible = false; // Hide cursor
-        Cursor.lockState = CursorLockMode.Locked; // Lock cursor
+        Debug.Log("Game unpaused.");
+        isPaused = false;
+        Time.timeScale = timeScaleOriginal;
+        Cursor.visible = false;
+        Cursor.lockState = CursorLockMode.Locked;
+        playerScript.enabled = true;
 
-        playerScript.enabled = true; // Enable player controls
-
-        if (menuActive != null) // Check active menu
+        if (menuActive != null)
         {
-            menuActive.SetActive(false); // Hide menu
-            menuActive = null; // Clear active menu
+            menuActive.SetActive(false);
+            menuActive = null;
         }
     }
+
+    public void ResumeFromCheckpoint()
+    {
+        // Ensure player is at the saved checkpoint position
+        LoadGame(); // Reload the players saved position to ensure consistency
+
+        // Resume gameplay
+        isPaused = false;
+        Time.timeScale = timeScaleOriginal;
+        Cursor.visible = false;
+        Cursor.lockState = CursorLockMode.Locked;
+
+        if (menuActive != null)
+        {
+            menuActive.SetActive(false); // Hide active menu
+            menuActive = null;
+        }
+
+        isCheckpointLoaded = false; // Reset checkpoint-loaded flag
+        Debug.Log("Game resumed from Checkpoint Loaded state.");
+    }
+
 
     public void youLose() // Handle lose state
     {
@@ -336,30 +376,25 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    //public void OnPlayerLanded() // Called when the player lands
-    //{
-    //    if (startScreen != null) // Check if start screen exists
-    //    {
-    //        startScreen.SetActive(true); // Show the start screen
-    //        menuActive = startScreen;   // Set menuActive to track the start screen
-    //        statePause();               // Pause the game
-    //    }
+    public void OnPlayerLanded()
+    {
+        // Show startScreen only once
+        if (!startScreenShown && startScreen != null)
+        {
+            startScreen.SetActive(true); // Show Start Screen
+            menuActive = startScreen;    // Set as active menu
+            statePause();                // Pause the game
+            startScreenShown = true;     // Ensure it doesn't show again
+        }
 
-    //    // Trigger the player taking damage
-    //    if (playerScript != null) // Ensure the player script reference is valid
-    //    {
-    //        //(NEEDS TO BE REMOVED AND INSURE THE PLAYER IS AT THE CORRECT HEIGHT AT START)
-    //        int damageToTake = Mathf.CeilToInt(playerScript.HP * 0.9f); // Calculate 90% of the player current HP, rounded up
-
-    //        Debug.Log($"Player Current HP: {playerScript.HP}, Damage to Take: {damageToTake}"); // Debug for clarity
-
-    //        playerScript.takeDamage(damageToTake);   // Apply the damage
-    //    }
-    //    else
-    //    {
-    //        Debug.LogError("Player script reference is missing in GameManager!");
-    //    }
-    //}
+        // Ensure Checkpoint Instructions UI is hidden
+        GameObject checkpointInstructions = GameObject.Find("CheckpointInstructions");
+        if (checkpointInstructions != null && checkpointInstructions.activeSelf)
+        {
+            checkpointInstructions.SetActive(false); // Turn off Checkpoint Instructions UI
+            Debug.Log("Checkpoint Instructions turned off from GameManager.");
+        }
+    }
 
     public void UpdatePlayerHealth(int currentHP, int maxHP)
     {
@@ -392,6 +427,29 @@ public class GameManager : MonoBehaviour
         }
     }
 
+        public void RefreshPlayerHPUI()
+    {
+        if (playerScript != null && playerHPBar != null)
+        {
+            float healthPercentage = (float)playerScript.HP / playerScript.maxHP;
+
+            // Update the health bar fill amount
+            playerHPBar.fillAmount = healthPercentage;
+
+            // Update health bar color based on health percentage
+            if (healthPercentage > 0.75f)
+                playerHPBar.color = Color.green;
+            else if (healthPercentage > 0.5f)
+                playerHPBar.color = Color.yellow;
+            else if (healthPercentage > 0.25f)
+                playerHPBar.color = new Color(1f, 0.5f, 0f); // Orange
+            else
+                playerHPBar.color = Color.red;
+
+            Debug.Log($"HP UI Refreshed: Current HP = {playerScript.HP}, Max HP = {playerScript.maxHP}");
+        }
+    }
+
     // Flashing effect for critical health
     private IEnumerator FlashRedHealthBar()
     {
@@ -401,6 +459,85 @@ public class GameManager : MonoBehaviour
             yield return new WaitForSeconds(0.3f);
             playerHPBar.color = Color.red; // Solid red
             yield return new WaitForSeconds(0.3f);
+        }
+    }
+
+    public void ShowCheckpointUI()
+    {
+        if (checkpointUI != null)
+        {
+            StartCoroutine(FlashCheckpointUI());
+        }
+    }
+
+    private IEnumerator FlashCheckpointUI()
+    {
+        checkpointUI.SetActive(true); // Show the UI
+        yield return new WaitForSeconds(2f); // Keep it visible for 2 seconds
+        checkpointUI.SetActive(false); // Hide the UI
+    }
+
+    public void SaveGame(Transform playerTransform)
+    {
+        Debug.Log("SaveGame called. Writing player position and stats to PlayerPrefs.");
+
+        // Save the player's position
+        PlayerPrefs.SetFloat("Player_X", playerTransform.position.x);
+        PlayerPrefs.SetFloat("Player_Y", playerTransform.position.y);
+        PlayerPrefs.SetFloat("Player_Z", playerTransform.position.z);
+
+        // Save player stats
+        playerController playerScript = player.GetComponent<playerController>();
+        PlayerPrefs.SetInt("Player_HP", playerScript.HP);
+        PlayerPrefs.SetInt("Player_MaxHP", playerScript.maxHP);
+        PlayerPrefs.SetInt("Player_DoubleJump", playerScript.canDoubleJump ? 1 : 0);
+
+        PlayerPrefs.Save();
+        Debug.Log("Game Saved! PlayerPrefs updated.");
+
+        // Refresh the checkpoint button state
+        buttonFunctions buttonScript = FindObjectOfType<buttonFunctions>();
+        if (buttonScript != null)
+        {
+            Debug.Log("Calling UpdateCheckpointButtonState from SaveGame.");
+            buttonScript.UpdateCheckpointButtonState();
+        }
+    }
+
+    public void LoadGame()
+    {
+        if (PlayerPrefs.HasKey("Checkpoint_X"))
+        {
+            Vector3 checkpointPosition = new Vector3(
+                PlayerPrefs.GetFloat("Checkpoint_X"),
+                PlayerPrefs.GetFloat("Checkpoint_Y"),
+                PlayerPrefs.GetFloat("Checkpoint_Z")
+            );
+
+            checkpointPosition.y += 1f; // Drop the player 1 unit above the checkpoint
+
+            playerScript.enabled = false; // Temporarily disable player control
+            player.transform.position = checkpointPosition; // Set position
+
+            Physics.SyncTransforms(); // Force physics update
+
+            // Restore player stats
+            playerScript.HP = PlayerPrefs.GetInt("Player_HP");
+            playerScript.maxHP = PlayerPrefs.GetInt("Player_MaxHP");
+            playerScript.canDoubleJump = PlayerPrefs.GetInt("Player_DoubleJump") == 1;
+
+            // Refresh HP UI
+            RefreshPlayerHPUI();
+
+            Debug.Log($"Game Loaded: Player position set to {checkpointPosition}");
+
+            // Keep paused; countdown UI will handle timing
+            isCheckpointLoaded = true;
+            Debug.Log("Game paused for checkpoint countdown.");
+        }
+        else
+        {
+            Debug.LogWarning("No save data found for checkpoint.");
         }
     }
 

@@ -31,7 +31,7 @@ public class playerController : MonoBehaviour, IDamage, IRecharge
     [SerializeField] float shootRate;
 
     [Header("Temp Variables")]
-    [SerializeField] bool canDoubleJump;
+    [SerializeField] public bool canDoubleJump;
     
     //Local variables
 
@@ -58,7 +58,6 @@ public class playerController : MonoBehaviour, IDamage, IRecharge
         HPOrig = HP;
         lastGroundedHeight = transform.position.y; // Initialize to starting height
         updatePlayerUI();
-        // StartCoroutine(CheckGroundedState()); // Start monitoring grounded state
     }
 
     // Update is called once per frame
@@ -317,18 +316,4 @@ public class playerController : MonoBehaviour, IDamage, IRecharge
         }
     }
 
-    // private IEnumerator CheckGroundedState()
-    // {
-    //     while (!hasLanded)
-    //     {
-    //         if (controller.isGrounded)  // If the player is grounded
-    //         {
-    //         hasLanded = true; // Mark as landed
-    //         GameManager.instance.OnPlayerLanded(); // Notify GameManager
-    //         yield break; // Exit the coroutine
-    //         }
-
-    //     yield return null; // Wait for the next frame before checking again
-    //     }
-    // }
 }

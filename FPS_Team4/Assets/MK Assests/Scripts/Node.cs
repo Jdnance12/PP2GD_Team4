@@ -23,7 +23,7 @@ public class Node : MonoBehaviour
         // Notify the GameManager that this node has been collected
         GameManager.instance.NodeCollected();
 
-        // Destroy the node or disable it (based on your design)
+        // Destroy the node or disable it
         Destroy(gameObject);
     }
 
