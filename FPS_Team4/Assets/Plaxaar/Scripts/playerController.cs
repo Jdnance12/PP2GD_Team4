@@ -54,6 +54,7 @@ public class playerController : MonoBehaviour, IDamage, IRecharge
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
+
         HPOrig = HP;
         lastGroundedHeight = transform.position.y; // Initialize to starting height
         updatePlayerUI();
@@ -75,7 +76,7 @@ public class playerController : MonoBehaviour, IDamage, IRecharge
             isJumping = false;
             jumpCount = 0;
             playerVel = Vector3.zero;
-            checkFallDamage();
+            //checkFallDamage();
         }
 
         jump();
@@ -136,48 +137,48 @@ public class playerController : MonoBehaviour, IDamage, IRecharge
         playerCam.fieldOfView = Mathf.Lerp(playerCam.fieldOfView, target, zoomSpeed * Time.deltaTime);
     }
 
-    void checkFallDamage()
-    {
-        if (!wasGrounded && controller.isGrounded && !firstDrop)
-        {
-            float fallDistance = lastGroundedHeight - transform.position.y;
+    //void checkFallDamage()
+    //{
+    //    if (!wasGrounded && controller.isGrounded && !firstDrop)
+    //    {
+    //        float fallDistance = lastGroundedHeight - transform.position.y;
             
-            if (Mathf.Abs(fallDistance) < Mathf.Epsilon)
-            {
-                fallDistance = 0.0f; // Treat near-zero as zero
-            }
+    //        if (Mathf.Abs(fallDistance) < Mathf.Epsilon)
+    //        {
+    //            fallDistance = 0.0f; // Treat near-zero as zero
+    //        }
 
 
-            //Check if fall distance is higher than min fall height
-            if (fallDistance > fallDmgHeight)
-            {
-                int damage;
-                //Scales Damage linearly
-                if (fallDistance > 15)
-                {
-                    damage = int.MaxValue;
-                }
-                else
-                {
-                    damage = Mathf.CeilToInt(fallDistance / fallDmgHeight);
-                }
+    //        //Check if fall distance is higher than min fall height
+    //        if (fallDistance > fallDmgHeight)
+    //        {
+    //            int damage;
+    //            //Scales Damage linearly
+    //            if (fallDistance > 15)
+    //            {
+    //                damage = int.MaxValue;
+    //            }
+    //            else
+    //            {
+    //                damage = Mathf.CeilToInt(fallDistance / fallDmgHeight);
+    //            }
 
-                takeDamage(damage);
-            }
-        }
-        else
-        {
-            firstDrop = false;
-        }
+    //            takeDamage(damage);
+    //        }
+    //    }
+    //    else
+    //    {
+    //        firstDrop = false;
+    //    }
 
-        wasGrounded = controller.isGrounded;
+    //    wasGrounded = controller.isGrounded;
 
-        if (controller.isGrounded)
-        {
-            lastGroundedHeight = transform.position.y;
-        }
+    //    if (controller.isGrounded)
+    //    {
+    //        lastGroundedHeight = transform.position.y;
+    //    }
 
-    }
+    //}
 
     void jump()
     {

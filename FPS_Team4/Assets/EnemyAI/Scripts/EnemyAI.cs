@@ -37,6 +37,7 @@ public class EnemyAI : MonoBehaviour, IDamage
     [SerializeField] GameObject bullet;
     [SerializeField] float shootRate;
     [SerializeField] float stunTimer;
+    [SerializeField] float hurtTimer;
 
     [Header("----- Bools -----")]
     bool playerVisible;
@@ -142,36 +143,6 @@ public class EnemyAI : MonoBehaviour, IDamage
         playerVisible = false;
     }
 
-    //bool CanSeePlayer()
-    //{
-    //    if (isStunned || !playerInRange) return false;
-
-    //    playerDir = GameManager.instance.player.transform.position - headPos.position;
-    //    angleToPlayer = Vector3.Angle(playerDir, transform.forward);
-
-    //    Debug.DrawRay(transform.position, playerDir);
-
-    //    RaycastHit hit;
-    //    if(Physics.Raycast(headPos.position, playerDir, out hit))
-    //    {
-    //       if(hit.collider.CompareTag("Player") && angleToPlayer <= FOV)
-    //        {
-    //            navAgent.SetDestination(GameManager.instance.player.transform.position);
-    //            if(navAgent.remainingDistance < navAgent.stoppingDistance)
-    //            {
-    //                FaceTarget();
-    //            }
-    //            if(!isShooting)
-    //            {
-    //                StartCoroutine(shoot());
-    //            }
-    //            return true;
-    //        }
-    //    }
-    //    return false;
-
-    //}
-
     void FaceTarget()
     {
         Quaternion rot = Quaternion.LookRotation(new Vector3(playerDir.x, 0, playerDir.z));
@@ -235,9 +206,24 @@ public class EnemyAI : MonoBehaviour, IDamage
     public void takeDamage(int amount)
     {
         HP -= amount;
-        StartCoroutine(TurnBlue());
+        StartCoroutine(TurnYellow());
 
-        StartCoroutine(Stun(stunTimer));
+        if (HP <= 0)
+        {
+            //I'm dead
+            Destroy(gameObject);
+        }
+
+        //StartCoroutine(Stun(stunTimer));
+    }
+
+    IEnumerator TurnYellow()
+    {
+        modelBody.material.color = Color.yellow;
+        modelArm.material.color = Color.yellow;
+        yield return new WaitForSeconds(hurtTimer);
+        modelBody.material.color = colorBodyOrigin;
+        modelArm.material.color = colorArmOrigin;
     }
 
     //Flashes the Enemy Blue when EMP hits them.

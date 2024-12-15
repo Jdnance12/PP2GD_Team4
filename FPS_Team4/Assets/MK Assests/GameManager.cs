@@ -16,6 +16,7 @@ public class GameManager : MonoBehaviour
     [SerializeField] GameObject menuPause; // Pause menu object
     [SerializeField] GameObject menuWin, menuLose; // Win/Lose menus
     [SerializeField] GameObject weaponMenu;
+    [SerializeField] GameObject dialogueScreen;
     [SerializeField] private GameObject welcomeScreen; // Welcome screen UI
 
 
@@ -265,7 +266,13 @@ public class GameManager : MonoBehaviour
         menuActive = weaponMenu;
         menuActive.SetActive(true);
 
+    }
 
+    public void DialogueScreen()
+    {
+        statePause();
+        menuActive = dialogueScreen;
+        menuActive.SetActive(true);       
     }
 
     public void WeaponMenuNotActive(InputAction.CallbackContext context)
@@ -329,30 +336,30 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    public void OnPlayerLanded() // Called when the player lands
-    {
-        if (startScreen != null) // Check if start screen exists
-        {
-            startScreen.SetActive(true); // Show the start screen
-            menuActive = startScreen;   // Set menuActive to track the start screen
-            statePause();               // Pause the game
-        }
+    //public void OnPlayerLanded() // Called when the player lands
+    //{
+    //    if (startScreen != null) // Check if start screen exists
+    //    {
+    //        startScreen.SetActive(true); // Show the start screen
+    //        menuActive = startScreen;   // Set menuActive to track the start screen
+    //        statePause();               // Pause the game
+    //    }
 
-        // Trigger the player taking damage
-        if (playerScript != null) // Ensure the player script reference is valid
-        {
-            //(NEEDS TO BE REMOVED AND INSURE THE PLAYER IS AT THE CORRECT HEIGHT AT START)
-            int damageToTake = Mathf.CeilToInt(playerScript.HP * 0.9f); // Calculate 90% of the player current HP, rounded up
+    //    // Trigger the player taking damage
+    //    if (playerScript != null) // Ensure the player script reference is valid
+    //    {
+    //        //(NEEDS TO BE REMOVED AND INSURE THE PLAYER IS AT THE CORRECT HEIGHT AT START)
+    //        int damageToTake = Mathf.CeilToInt(playerScript.HP * 0.9f); // Calculate 90% of the player current HP, rounded up
 
-            Debug.Log($"Player Current HP: {playerScript.HP}, Damage to Take: {damageToTake}"); // Debug for clarity
+    //        Debug.Log($"Player Current HP: {playerScript.HP}, Damage to Take: {damageToTake}"); // Debug for clarity
 
-            playerScript.takeDamage(damageToTake);   // Apply the damage
-        }
-        else
-        {
-            Debug.LogError("Player script reference is missing in GameManager!");
-        }
-    }
+    //        playerScript.takeDamage(damageToTake);   // Apply the damage
+    //    }
+    //    else
+    //    {
+    //        Debug.LogError("Player script reference is missing in GameManager!");
+    //    }
+    //}
 
     public void UpdatePlayerHealth(int currentHP, int maxHP)
     {
