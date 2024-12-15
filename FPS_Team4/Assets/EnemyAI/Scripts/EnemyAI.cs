@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.AI;
@@ -7,31 +8,42 @@ using UnityEngine.UIElements;
 
 public class EnemyAI : MonoBehaviour, IDamage
 {
-    //For Movement and Detection
+    [Header("----- Components -----")]
     [SerializeField] int HP;
     [SerializeField] int FOV;
     [SerializeField] int faceTargetSpeed;
-
-    [SerializeField] NavMeshAgent navAgent;
     [SerializeField] Renderer modelBody;
     [SerializeField] Renderer modelArm;
     [SerializeField] Transform headPos;
+
+    [Header("----- Movement -----")]
+    [SerializeField] NavMeshAgent navAgent;
+    [SerializeField] List<Transform> waypoints = new List<Transform>();
+    public int currentWayPointIndex;
+
+    Coroutine co;
+
+    
+    
     Vector3 playerDir;
+    Vector3 startingPosition;
     float angleToPlayer;
 
-    //For shooting
+    Color colorBodyOrigin;
+    Color colorArmOrigin;
+
+    [Header("----- Weapon Stats -----")]
     [SerializeField] Transform shootPos;
     [SerializeField] GameObject bullet;
     [SerializeField] float shootRate;
     [SerializeField] float stunTimer;
 
-    Color colorBodyOrigin;
-    Color colorArmOrigin;
-
-    //Bools
+    [Header("----- Bools -----")]
+    bool playerVisible;
     bool playerInRange;
     bool isShooting;
     bool isStunned;
+    bool isRoaming;
 
     // Start is called before the first frame update
     void Start()
@@ -45,33 +57,12 @@ public class EnemyAI : MonoBehaviour, IDamage
     // Update is called once per frame
     void Update()
     {
-        if ((!isStunned && playerInRange && CanSeePlayer()))
+
+        if(!isStunned && !isRoaming)
         {
+            CanSeePlayer();
 
-        }
-    }
-
-    public void MoveToPosition(Vector3 position)
-    {
-        if(navAgent != null)
-        {
-            navAgent.SetDestination(position);
-        }
-    }
-
-    bool CanSeePlayer()
-    {
-        if (isStunned) return false;
-
-        playerDir = GameManager.instance.player.transform.position - headPos.position;
-        angleToPlayer = Vector3.Angle(playerDir, transform.forward);
-
-        Debug.DrawRay(transform.position, playerDir);
-
-        RaycastHit hit;
-        if(Physics.Raycast(headPos.position, playerDir, out hit))
-        {
-           if(hit.collider.CompareTag("Player") && angleToPlayer <= FOV)
+            if(playerVisible)
             {
                 navAgent.SetDestination(GameManager.instance.player.transform.position);
                 if(navAgent.remainingDistance < navAgent.stoppingDistance)
@@ -82,12 +73,104 @@ public class EnemyAI : MonoBehaviour, IDamage
                 {
                     StartCoroutine(shoot());
                 }
-                return true;
+            }
+
+            else
+            {
+                if (!playerInRange)
+                {
+                    if (!navAgent.pathPending && navAgent.remainingDistance <= navAgent.stoppingDistance)
+                    {
+                        currentWayPointIndex = (currentWayPointIndex + 1) % waypoints.Count;
+                        MoveToNextWaypoint();
+                    }
+                }               
             }
         }
-        return false;
-        
+
+        //if(!isStunned && !playerInRange && !CanSeePlayer())
+        //{
+        //    if (!navAgent.pathPending && navAgent.remainingDistance <= navAgent.stoppingDistance)
+        //    {
+        //        currentWayPointIndex = (currentWayPointIndex + 1) % waypoints.Count;
+        //        MoveToNextWaypoint();
+        //    }
+        //}
     }
+
+    void MoveToNextWaypoint()
+    {
+        if (waypoints == null || waypoints.Count == 0)
+        {
+            return;
+        }
+
+        navAgent.SetDestination(waypoints[currentWayPointIndex].position);
+    }
+
+    public void MoveToPosition(Vector3 position)
+    {
+        
+        //if(navAgent != null)
+        //{
+        //    navAgent.SetDestination(position);
+        //}
+    }
+
+    void CanSeePlayer()
+    {
+        if(isStunned || !playerInRange)
+        {
+            playerVisible = false;
+            return;
+        }
+
+        playerDir = GameManager.instance.player.transform.position - headPos.position;
+        angleToPlayer = Vector3.Angle(playerDir, transform.forward);
+
+        Debug.DrawRay(transform.position, playerDir);
+
+        RaycastHit hit;
+        if(Physics.Raycast(headPos.position, playerDir, out hit))
+        {
+            if(hit.collider.CompareTag("Player") && angleToPlayer <= FOV)
+            {
+                playerVisible = true;
+                return;
+            }
+        }
+        playerVisible = false;
+    }
+
+    //bool CanSeePlayer()
+    //{
+    //    if (isStunned || !playerInRange) return false;
+
+    //    playerDir = GameManager.instance.player.transform.position - headPos.position;
+    //    angleToPlayer = Vector3.Angle(playerDir, transform.forward);
+
+    //    Debug.DrawRay(transform.position, playerDir);
+
+    //    RaycastHit hit;
+    //    if(Physics.Raycast(headPos.position, playerDir, out hit))
+    //    {
+    //       if(hit.collider.CompareTag("Player") && angleToPlayer <= FOV)
+    //        {
+    //            navAgent.SetDestination(GameManager.instance.player.transform.position);
+    //            if(navAgent.remainingDistance < navAgent.stoppingDistance)
+    //            {
+    //                FaceTarget();
+    //            }
+    //            if(!isShooting)
+    //            {
+    //                StartCoroutine(shoot());
+    //            }
+    //            return true;
+    //        }
+    //    }
+    //    return false;
+
+    //}
 
     void FaceTarget()
     {
@@ -108,6 +191,43 @@ public class EnemyAI : MonoBehaviour, IDamage
         if (other.CompareTag("Player"))
         {
             playerInRange = false;
+            StopCoroutine("SearchForPlayer");
+            StartCoroutine("SearchForPlayer");            
+        }
+    }
+
+    IEnumerator SearchForPlayer()
+    {
+        float searchDuration = 5f; // Amount of time the enemy will be searching.
+        float searchTimer = 0f;
+        float searchRadius = 10f;
+
+        while(searchTimer< searchDuration)
+        {
+            searchTimer += Time.deltaTime;
+            CanSeePlayer();
+            if(playerVisible)
+            {
+                yield break;
+            }
+
+            Vector3 randomDirection = Random.insideUnitCircle * searchRadius;
+            randomDirection += transform.position;
+
+            NavMeshHit hit;
+            if(NavMesh.SamplePosition(randomDirection, out hit, searchRadius, 1))
+            {
+                Vector3 finalPosition = hit.position;
+                navAgent.SetDestination(finalPosition);
+            }
+            
+            yield return new WaitForSeconds(1f);
+        }
+
+        if(!playerVisible)
+        {
+            currentWayPointIndex = (currentWayPointIndex + 1) % waypoints.Count;
+            MoveToNextWaypoint();
         }
     }
 
