@@ -54,24 +54,27 @@ public class buttonFunctions : MonoBehaviour
     }
     public void Resume()
     {
-        if (!canResume) return; // Prevent immediate re-interaction
+        if (!canResume) return; // Prevent immediate interaction
 
         canResume = false; // Block further resumes temporarily
         StartCoroutine(ResumeCooldown());
 
-        // Ensure Pause Menu is hidden
-        if (pauseMenu != null)
+        if (pauseMenu != null) // Ensure Pause Menu is hidden
         {
             pauseMenu.SetActive(false); // Deactivate Pause Menu
         }
 
-        // Clear active menu state
-        GameManager.instance.menuActive = null;
+        if (GameManager.instance.dialogueScreen != null && GameManager.instance.dialogueScreen.activeSelf) // Hide Dialogue Screen if active
+        {
+            GameManager.instance.dialogueScreen.SetActive(false);
+            Debug.Log("Dialogue Screen hidden.");
+        }
 
-        // Unpause the game
-        GameManager.instance.stateUnpause();
+        GameManager.instance.menuActive = null; // Clear active menu state
 
-        Debug.Log("Game resumed. Pause Menu hidden.");
+        GameManager.instance.stateUnpause(); // Unpause the game
+
+        Debug.Log("Game resumed. Pause Menu and Dialogue Screen hidden.");
     }
 
     private IEnumerator ResumeCooldown()
