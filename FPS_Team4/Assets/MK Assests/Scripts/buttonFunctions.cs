@@ -143,7 +143,14 @@ public class buttonFunctions : MonoBehaviour
                 pauseMenu.SetActive(false);
             }
 
-            GameManager.instance.LoadGame();
+            if (GameManager.instance != null)
+            {
+                GameManager.instance.LoadGame();
+            }
+            else
+            {
+                Debug.LogError("GameManager instance is null. Cannot load checkpoint.");
+            }
 
             // Start countdown coroutine
             StartCoroutine(ShowCountdown());
@@ -199,9 +206,12 @@ public class buttonFunctions : MonoBehaviour
         // Move the player to the checkpoint immediately
         if (GameManager.instance != null)
         {
-            GameManager.instance.LoadGame(); // Moves the player
+            GameManager.instance.LoadGame();
         }
-
+        else
+        {
+            Debug.LogError("GameManager instance is null. Cannot load checkpoint.");
+        }
         // Hide Pause Menu during countdown
         if (pauseMenu != null)
         {
@@ -245,7 +255,7 @@ public class buttonFunctions : MonoBehaviour
         countdownUI.SetActive(false);
 
         // Resume the game
-        Time.timeScale = 0; // Game remains paused for the player to resume manually
+        GameManager.instance.statePause(); // Game remains paused for the player to resume manually
 
         // Show the Pause Menu
         if (pauseMenu != null)

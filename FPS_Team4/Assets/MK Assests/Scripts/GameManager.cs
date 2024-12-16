@@ -506,7 +506,7 @@ public class GameManager : MonoBehaviour
 
     public void LoadGame()
     {
-        if (PlayerPrefs.HasKey("Checkpoint_X"))
+        if (PlayerPrefs.HasKey("Checkpoint_X") && PlayerPrefs.HasKey("Checkpoint_Y") && PlayerPrefs.HasKey("Checkpoint_Z"))
         {
             Vector3 checkpointPosition = new Vector3(
                 PlayerPrefs.GetFloat("Checkpoint_X"),
@@ -531,7 +531,7 @@ public class GameManager : MonoBehaviour
 
             Debug.Log($"Game Loaded: Player position set to {checkpointPosition}");
 
-            // Keep paused; countdown UI will handle timing
+            // Keep paused countdown UI will handle timing
             isCheckpointLoaded = true;
             Debug.Log("Game paused for checkpoint countdown.");
         }
@@ -541,4 +541,19 @@ public class GameManager : MonoBehaviour
         }
     }
 
+    // START COMMENT OUT (Alternative first drop method for testing)
+    // public void OnFirstDrop()
+    // {
+    //     // Calculate 90% of the player max health rounded up
+    //     int damage = Mathf.CeilToInt(playerScript.maxHP * 0.9f);
+
+    //     // Subtract the damage from the player current health and ensure it cant drop below 0
+    //     playerScript.HP = Mathf.Max(playerScript.HP - damage, 0);
+
+    //     // Update the player health bar
+    //     UpdatePlayerHealth(playerScript.HP, playerScript.maxHP);
+
+    //     Debug.Log($"First drop damage applied. Player health reduced by {damage} to {playerScript.HP}/{playerScript.maxHP}.");
+    // }
+    // END COMMENT OUT FOR TESTING
 }

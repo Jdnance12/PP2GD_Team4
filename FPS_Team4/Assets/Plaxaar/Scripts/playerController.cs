@@ -57,7 +57,7 @@ public class playerController : MonoBehaviour, IDamage, IRecharge
 
         HPOrig = HP;
         lastGroundedHeight = transform.position.y; // Initialize to starting height
-        updatePlayerUI();
+        GameManager.instance.UpdatePlayerHealth(HP, maxHP); //REQUIRED TO UPDATE THE UI THROUGH THE GAME MANAGER FOR DYNAMIC UI
     }
 
     // Update is called once per frame
@@ -292,10 +292,10 @@ public class playerController : MonoBehaviour, IDamage, IRecharge
         GameManager.instance.playerDamageScreen.SetActive(false);
     }
 
-    public void updatePlayerUI()
-    {
-        GameManager.instance.playerHPBar.fillAmount = (float)HP / HPOrig;
-    }
+    // public void updatePlayerUI() (REPLACED BY GameManager.instance.UpdatePlayerHealth(HP, maxHP);)
+    // {
+    //     GameManager.instance.playerHPBar.fillAmount = (float)HP / HPOrig;
+    // }
 
     public void toggleDoubleJump()
     {
@@ -307,12 +307,12 @@ public class playerController : MonoBehaviour, IDamage, IRecharge
         if ((HP + amount) <= maxHP)
         {
             HP += amount;
-            updatePlayerUI();
+            GameManager.instance.UpdatePlayerHealth(HP, maxHP); //REQUIRED TO UPDATE THE UI THROUGH THE GAME MANAGER FOR DYNAMIC UI
         }
         else if ((HP + amount) > maxHP)
         {
             HP = maxHP;
-            updatePlayerUI();
+            GameManager.instance.UpdatePlayerHealth(HP, maxHP); //REQUIRED TO UPDATE THE UI THROUGH THE GAME MANAGER FOR DYNAMIC UI
         }
     }
 
