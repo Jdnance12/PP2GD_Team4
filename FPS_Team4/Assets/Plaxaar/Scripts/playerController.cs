@@ -31,7 +31,7 @@ public class playerController : MonoBehaviour, IDamage, IRecharge
     [SerializeField] float shootRate;
 
     [Header("Temp Variables")]
-    [SerializeField] bool canDoubleJump;
+    [SerializeField] public bool canDoubleJump;
     
     //Local variables
 

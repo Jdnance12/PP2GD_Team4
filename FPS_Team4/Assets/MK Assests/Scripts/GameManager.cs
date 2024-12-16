@@ -14,12 +14,12 @@ public class GameManager : MonoBehaviour
 
     public GameObject drone; // Drone reference
     public GameObject inspectionPointPrefab;
-    [SerializeField] GameObject menuActive; // Current active menu
-    [SerializeField] GameObject menuPause; // Pause menu object
-    [SerializeField] GameObject menuWin, menuLose; // Win/Lose menus
-    [SerializeField] GameObject weaponMenu;
-    [SerializeField] GameObject dialogueScreen;
-    [SerializeField] private GameObject welcomeScreen; // Welcome screen UI
+    [SerializeField] public GameObject menuActive; // Current active menu
+    [SerializeField] public GameObject menuPause; // Pause menu object
+    [SerializeField] public GameObject menuWin, menuLose; // Win/Lose menus
+    [SerializeField] public GameObject weaponMenu;
+    [SerializeField] public GameObject dialogueScreen;
+    [SerializeField] public GameObject welcomeScreen; // Welcome screen UI
 
 
     [SerializeField] TMP_Text activeThreatsText; // Active threats display
