@@ -24671,6 +24671,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Enemy_Soldier_FirstEnemy
       objectReference: {fileID: 0}
+    - target: {fileID: 163741142201410840, guid: 1c1d8e46d2ea40e4f99dc2899b64209a, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 163741142201410852, guid: 1c1d8e46d2ea40e4f99dc2899b64209a, type: 3}
       propertyPath: uiBodyText
       value: 
@@ -25443,6 +25447,7 @@ GameObject:
   m_Component:
   - component: {fileID: 7619531090042439822}
   - component: {fileID: 7009996506628972286}
+  - component: {fileID: 7619531090042439824}
   - component: {fileID: 7619531090042439823}
   - component: {fileID: 1729820194269590205}
   m_Layer: 0
@@ -25857,6 +25862,14 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 505400394, guid: f46cca398c538b34fac07f4aad78c675, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: Resume
+      objectReference: {fileID: 0}
+    - target: {fileID: 569670002, guid: f46cca398c538b34fac07f4aad78c675, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 569670006, guid: f46cca398c538b34fac07f4aad78c675, type: 3}
       propertyPath: slidingDoor
       value: 
@@ -25982,7 +25995,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6107853748762992743}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: a43b9bac3f057924d9558b94dd737378, type: 3}
   m_Name: 
@@ -25990,6 +26003,22 @@ MonoBehaviour:
   uiParent: {fileID: 2132304622}
   slidingDoor: {fileID: 7009996506628972286}
   showPopupOnce: 1
+--- !u!114 &7619531090042439824
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6107853748762992743}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 72be62e9397dc504f94af74425bf5882, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  headerText: '!Infomation!'
+  contentText: You can open doors by approaching them!
+  backgroundColor: {r: 0.5, g: 0.8, b: 1, a: 1}
+  showOnce: 1
 --- !u!4 &7667455774418399542
 Transform:
   m_ObjectHideFlags: 0
