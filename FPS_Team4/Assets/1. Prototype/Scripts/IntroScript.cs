@@ -9,6 +9,7 @@ public class IntroScript : MonoBehaviour
     public GameObject firstEnemy;
     private SphereCollider enemySphereCollider;
     public CharacterController playerChrController;
+    private bool dialogueTriggered = false; // Flag to prevent retriggering dialogue
 
     public int damageAmmount;
 
@@ -30,10 +31,14 @@ public class IntroScript : MonoBehaviour
 
     void OnTriggerStay(Collider other)
     {
+        if (dialogueTriggered) return; // Exit if dialogue already triggered
+
         if (other.CompareTag("Player"))
         {
             if (playerIsGrounded)
             {
+                dialogueTriggered = true; // Mark dialogue as triggered
+
                 // Pause the game and show the Dialogue Screen
                 GameManager.instance.statePause();
                 GameManager.instance.DialogueScreen();

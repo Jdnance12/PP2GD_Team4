@@ -310,10 +310,18 @@ public class GameManager : MonoBehaviour
 
     public void DialogueScreen()
     {
-        statePause();
-        menuActive = dialogueScreen;
-        menuActive.SetActive(true);       
+        if (dialogueScreen == null) //IF dialogueScreen is not assigned
+        {
+            Debug.LogError("DialogueScreen is NULL. Ensure it is assigned in the Inspector.");
+            return; // Prevent further execution
+        }
+
+        statePause(); // Pause the game
+        menuActive = dialogueScreen; 
+        dialogueScreen.SetActive(true); // Activate the dialogue screen
+        Debug.Log("DialogueScreen activated successfully.");
     }
+
 
     public void WeaponMenuNotActive(InputAction.CallbackContext context)
     {
