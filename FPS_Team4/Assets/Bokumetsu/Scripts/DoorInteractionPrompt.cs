@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
+using TMPro;
 using UnityEngine;
 
 public class DoorInteractionPrompt : MonoBehaviour
@@ -21,7 +22,6 @@ public class DoorInteractionPrompt : MonoBehaviour
         timeScaleOriginal = Time.timeScale; // Save original time scale
     }
 
-    // Update is called once per frame
     private void OnTriggerEnter(Collider other)
     {
         if (other.CompareTag("Player") && !wasTriggered)
@@ -29,7 +29,7 @@ public class DoorInteractionPrompt : MonoBehaviour
             if (showPopupOnce)
             {
                 Debug.Log("Trigger entered by Player. Calling ShowPopup().");
-                ShowPopup();
+                StartCoroutine(ActivateDoorsPrompt());
 
                 // open the door using the slidingdoor script
                 if(slidingDoor != null)
@@ -50,6 +50,12 @@ public class DoorInteractionPrompt : MonoBehaviour
         }
     }
 
+    private IEnumerator ActivateDoorsPrompt()
+    {
+        yield return new WaitForSeconds(0.1f); // Small delay before activation
+        ShowPopup();
+    }
+
     public void ShowPopup()
     {
         Debug.Log("ShowPopup called. Activating UI Parent.");
@@ -61,7 +67,19 @@ public class DoorInteractionPrompt : MonoBehaviour
             Debug.Log("Child " + child.name + " active status before setting: " + child.gameObject.activeSelf);
             child.gameObject.SetActive(true); // Ensure child elements are explicitly set to active
             Debug.Log("Child " + child.name + " active status after setting: " + child.gameObject.activeSelf);
-            
+
+            // Check if TextMeshPro component has a valid font asset
+            TextMeshProUGUI textMesh = child.GetComponent<TextMeshProUGUI>();
+            if (textMesh != null)
+            {
+                Debug.Log("TextMeshPro component found on: " + child.name + ". Font asset: " + textMesh.font);
+                if (textMesh.font == null)
+                {
+                    Debug.LogError("TextMeshPro component on " + child.name + " has no font asset assigned.");
+                } 
+            }
+
+
             // Check grandchildren (Button Text)
             foreach (Transform grandchild in child.transform)
             { 
