@@ -23537,11 +23537,6 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 0102b752d0a005a4b8218dee7eddcf52, type: 3}
---- !u!1 &2132304622 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 569670002, guid: f46cca398c538b34fac07f4aad78c675, type: 3}
-  m_PrefabInstance: {fileID: 7426956918502463094}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &2132370430
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -25447,8 +25442,6 @@ GameObject:
   m_Component:
   - component: {fileID: 7619531090042439822}
   - component: {fileID: 7009996506628972286}
-  - component: {fileID: 7619531090042439824}
-  - component: {fileID: 7619531090042439823}
   - component: {fileID: 1729820194269590205}
   m_Layer: 0
   m_Name: SlidingDoorParent
@@ -25867,6 +25860,10 @@ PrefabInstance:
       value: Resume
       objectReference: {fileID: 0}
     - target: {fileID: 569670002, guid: f46cca398c538b34fac07f4aad78c675, type: 3}
+      propertyPath: m_Name
+      value: Doors Prompt (unused)
+      objectReference: {fileID: 0}
+    - target: {fileID: 569670002, guid: f46cca398c538b34fac07f4aad78c675, type: 3}
       propertyPath: m_IsActive
       value: 0
       objectReference: {fileID: 0}
@@ -25962,7 +25959,8 @@ PrefabInstance:
       propertyPath: m_Name
       value: UI
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 569670006, guid: f46cca398c538b34fac07f4aad78c675, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: f46cca398c538b34fac07f4aad78c675, type: 3}
 --- !u!33 &7495447686453955839
 MeshFilter:
@@ -25988,37 +25986,6 @@ Transform:
   m_Father: {fileID: 7977630073476938400}
   m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &7619531090042439823
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6107853748762992743}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a43b9bac3f057924d9558b94dd737378, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  uiParent: {fileID: 2132304622}
-  slidingDoor: {fileID: 7009996506628972286}
-  showPopupOnce: 1
---- !u!114 &7619531090042439824
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6107853748762992743}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 72be62e9397dc504f94af74425bf5882, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  headerText: '!Infomation!'
-  contentText: You can open doors by approaching them!
-  backgroundColor: {r: 0.5, g: 0.8, b: 1, a: 1}
-  showOnce: 1
 --- !u!4 &7667455774418399542
 Transform:
   m_ObjectHideFlags: 0
