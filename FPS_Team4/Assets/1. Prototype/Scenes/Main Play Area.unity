@@ -17283,7 +17283,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 569670002, guid: f46cca398c538b34fac07f4aad78c675, type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 569670006, guid: f46cca398c538b34fac07f4aad78c675, type: 3}
       propertyPath: slidingDoor
@@ -21094,7 +21094,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &1947440174
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -24477,6 +24477,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 578533130844305188, guid: 82e76b92fe29f2043b66bd2fc1ae2753, type: 3}
+      propertyPath: weaponMenuAction
+      value: 
+      objectReference: {fileID: -1569695063644576309, guid: 8c7ff434df4520b429c6ad8be8dfff6d, type: 3}
     - target: {fileID: 578533130844305191, guid: 82e76b92fe29f2043b66bd2fc1ae2753, type: 3}
       propertyPath: m_Name
       value: Player
@@ -26011,7 +26015,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   uiParent: {fileID: 569670002}
-  slidingDoor: {fileID: 0}
+  slidingDoor: {fileID: 7009996506628972286}
   showPopupOnce: 1
 --- !u!4 &7667455774418399542
 Transform:

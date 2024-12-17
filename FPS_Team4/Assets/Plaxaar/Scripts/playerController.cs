@@ -51,6 +51,8 @@ public class playerController : MonoBehaviour, IDamage, IRecharge
     private bool firstDrop = true;
     [SerializeField] bool wasGrounded;
 
+    public bool hasWeapon = false; // track if the player has a weapon
+
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
@@ -58,6 +60,18 @@ public class playerController : MonoBehaviour, IDamage, IRecharge
         HPOrig = HP;
         lastGroundedHeight = transform.position.y; // Initialize to starting height
         GameManager.instance.UpdatePlayerHealth(HP, maxHP); //REQUIRED TO UPDATE THE UI THROUGH THE GAME MANAGER FOR DYNAMIC UI
+
+        Debug.Log("Start method called in playerController.");
+
+        if (hasWeapon && weaponMenuAction != null && weaponMenuAction.action != null)
+        {
+            Debug.Log("weaponMenuAction is initialized in Start.");
+            weaponMenuAction.action.Enable();
+        }
+        else
+        {
+            Debug.Log("WeaponMenuAction or weaponMenuAction.action is null in Start or player has no weapon.");
+        }
     }
 
     // Update is called once per frame
@@ -104,19 +118,39 @@ public class playerController : MonoBehaviour, IDamage, IRecharge
         }
     }
 
-    void OnEnable()
-    {
-        weaponMenuAction.action.performed += OnWeaponMenuPerformed; // When Q is held for 0.25s
-        weaponMenuAction.action.canceled += OnWeaponMenuCanceled;   // When Q is released
-        weaponMenuAction.action.Enable();
-    }
+    //void OnEnable()
+    //{
+    //    Debug.Log("OnEnable called in playerController.");
 
-    void OnDisable()
-    {
-        weaponMenuAction.action.performed -= OnWeaponMenuPerformed;
-        weaponMenuAction.action.canceled -= OnWeaponMenuCanceled;
-        weaponMenuAction.action.Disable();
-    }
+    //    if (hasWeapon && weaponMenuAction != null && weaponMenuAction.action != null)
+    //    {
+    //        weaponMenuAction.action.performed += OnWeaponMenuPerformed; // When Q is held for 0.25s
+    //        weaponMenuAction.action.canceled += OnWeaponMenuCanceled;   // When Q is released
+    //        weaponMenuAction.action.Enable();
+    //        Debug.Log("weaponMenuAction successfully initialized in OnEnable.");
+    //    }
+    //    else
+    //    {
+    //        Debug.LogError("weaponMenuAction or weaponMenuAction.action is null in OnEnable.");
+    //    }
+    //}
+
+    //void OnDisable()
+    //{
+    //    Debug.Log("OnDisable called in playerController.");
+
+    //    if (hasWeapon && weaponMenuAction != null && weaponMenuAction.action != null)
+    //    {
+    //        weaponMenuAction.action.performed -= OnWeaponMenuPerformed;
+    //        weaponMenuAction.action.canceled -= OnWeaponMenuCanceled;
+    //        weaponMenuAction.action.Disable();
+    //        Debug.Log("weaponMenuAction successfully disabled.");
+    //    }
+    //    else
+    //    {
+    //        Debug.LogError("weaponMenuAction or weaponMenuAction.action is null in OnDisable.");
+    //    }
+    //}
 
     // Called when button hold is performed
     private void OnWeaponMenuPerformed(InputAction.CallbackContext context)
