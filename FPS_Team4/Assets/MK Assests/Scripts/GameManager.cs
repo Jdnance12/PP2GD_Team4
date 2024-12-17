@@ -254,10 +254,16 @@ public class GameManager : MonoBehaviour
     {
         Debug.Log("Game unpaused.");
         isPaused = false;
+
         Time.timeScale = timeScaleOriginal;
         Cursor.visible = false;
         Cursor.lockState = CursorLockMode.Locked;
-        playerScript.enabled = true;
+
+        if (playerScript != null) 
+        {
+            playerScript.enabled = true;
+            playerScript.ResetPlayerState(); // Only reset shooting
+        }
 
         if (menuActive != null)
         {
@@ -265,6 +271,7 @@ public class GameManager : MonoBehaviour
             menuActive = null;
         }
     }
+
 
     public void ResumeFromCheckpoint()
     {
@@ -310,18 +317,18 @@ public class GameManager : MonoBehaviour
 
     public void DialogueScreen()
     {
-        if (dialogueScreen == null) //IF dialogueScreen is not assigned
+        if (dialogueScreen == null)
         {
             Debug.LogError("DialogueScreen is NULL. Ensure it is assigned in the Inspector.");
             return; // Prevent further execution
         }
 
-        statePause(); // Pause the game
-        menuActive = dialogueScreen; 
-        dialogueScreen.SetActive(true); // Activate the dialogue screen
+        // Activate and log status
+        statePause();
+        menuActive = dialogueScreen;
+        dialogueScreen.SetActive(true);
         Debug.Log("DialogueScreen activated successfully.");
     }
-
 
     public void WeaponMenuNotActive(InputAction.CallbackContext context)
     {

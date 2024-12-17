@@ -350,4 +350,9 @@ public class playerController : MonoBehaviour, IDamage, IRecharge
         }
     }
 
+        public void ResetPlayerState()
+{
+    Debug.Log("Resetting player shooting state after unpause.");
+    isShooting = false; // Reset shooting flag
+}
 }
