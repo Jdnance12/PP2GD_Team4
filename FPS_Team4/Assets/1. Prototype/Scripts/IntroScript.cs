@@ -20,7 +20,18 @@ public class IntroScript : MonoBehaviour
     {
         player = GameManager.instance.player;
         playerChrController = player.GetComponent<CharacterController>();
-        enemySphereCollider = firstEnemy.GetComponent<SphereCollider>();
+
+        // Find the first enemy by name
+        firstEnemy = GameObject.Find("Enemy_Soldier_FirstEnemy");
+        if (firstEnemy != null)
+        {
+            enemySphereCollider = firstEnemy.GetComponent<SphereCollider>();
+            Debug.Log("First Enemy found and SphereCollider assigned.");
+        }
+        else
+        {
+            Debug.LogError("First Enemy 'Enemy_Soldier_FirstEnemy' not found in the scene!");
+        }
     }
 
     // Update is called once per frame
