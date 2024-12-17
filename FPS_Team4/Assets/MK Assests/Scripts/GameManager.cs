@@ -8,8 +8,8 @@ using UnityEngine.InputSystem; // Used for input actions
 public class GameManager : MonoBehaviour
 {
     [SerializeField] private GameObject checkpointUI; // Drag in the CheckpointUI from the hierarchy
-    [SerializeField] public GameObject startScreen; // Reference to StartScreen UI
-    private bool startScreenShown = false; // Prevent re-showing startScreen
+    //[SerializeField] public GameObject startScreen; // Reference to StartScreen UI
+    //private bool startScreenShown = false; // Prevent re-showing startScreen
     public static GameManager instance; // Singleton reference
 
     public GameObject drone; // Drone reference
@@ -126,14 +126,14 @@ public class GameManager : MonoBehaviour
         UpdateNodeCollection(); // Initialize UI for nodes
 
         //Automatically find the StartScreen GameObject in the scene
-        if (startScreen == null)
-        {
-            startScreen = GameObject.Find("StartScreen"); // Search for StartScreen by name
-            if (startScreen == null)
-            {
-                Debug.LogError("StartScreen not found in the scene! Please ensure it exists.");
-            }
-        }
+        //if (startScreen == null)
+        //{
+        //    startScreen = GameObject.Find("StartScreen"); // Search for StartScreen by name
+        //    if (startScreen == null)
+        //    {
+        //        Debug.LogError("StartScreen not found in the scene! Please ensure it exists.");
+        //    }
+        //}
 
     }
 
@@ -376,25 +376,25 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    public void OnPlayerLanded()
-    {
-        // Show startScreen only once
-        if (!startScreenShown && startScreen != null)
-        {
-            startScreen.SetActive(true); // Show Start Screen
-            menuActive = startScreen;    // Set as active menu
-            statePause();                // Pause the game
-            startScreenShown = true;     // Ensure it doesn't show again
-        }
+    //public void OnPlayerLanded()
+    //{
+    //    // Show startScreen only once
+    //    if (!startScreenShown && startScreen != null)
+    //    {
+    //        startScreen.SetActive(true); // Show Start Screen
+    //        menuActive = startScreen;    // Set as active menu
+    //        statePause();                // Pause the game
+    //        startScreenShown = true;     // Ensure it doesn't show again
+    //    }
 
-        // Ensure Checkpoint Instructions UI is hidden
-        GameObject checkpointInstructions = GameObject.Find("CheckpointInstructions");
-        if (checkpointInstructions != null && checkpointInstructions.activeSelf)
-        {
-            checkpointInstructions.SetActive(false); // Turn off Checkpoint Instructions UI
-            Debug.Log("Checkpoint Instructions turned off from GameManager.");
-        }
-    }
+    //    // Ensure Checkpoint Instructions UI is hidden
+    //    GameObject checkpointInstructions = GameObject.Find("CheckpointInstructions");
+    //    if (checkpointInstructions != null && checkpointInstructions.activeSelf)
+    //    {
+    //        checkpointInstructions.SetActive(false); // Turn off Checkpoint Instructions UI
+    //        Debug.Log("Checkpoint Instructions turned off from GameManager.");
+    //    }
+    //}
 
     public void UpdatePlayerHealth(int currentHP, int maxHP)
     {

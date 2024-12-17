@@ -46,11 +46,11 @@ public class buttonFunctions : MonoBehaviour
     public void Play()
     {
         // Hide Start Screen and show Checkpoint Instructions if needed
-        if (GameManager.instance.startScreen != null)
-        {
-            GameManager.instance.startScreen.SetActive(false);
-        }
-        ShowCheckpointInstructionsOnce();
+        //if (GameManager.instance.startScreen != null)
+        //{
+        //    GameManager.instance.startScreen.SetActive(false);
+        //}
+        //ShowCheckpointInstructionsOnce();
     }
     public void Resume()
     {
@@ -84,16 +84,16 @@ public class buttonFunctions : MonoBehaviour
     }
 
 
-    public void StartScreenResume()
-    {
-        if (GameManager.instance.startScreen != null && GameManager.instance.startScreen.activeSelf)
-        {
-            // Hide Start Screen and show checkpoint instructions
-            GameManager.instance.startScreen.SetActive(false);
-            ShowCheckpointInstructionsOnce();
-            Debug.Log("Start Screen hidden. Checkpoint Instructions shown.");
-        }
-    }
+    //public void StartScreenResume()
+    //{
+    //    if (GameManager.instance.startScreen != null && GameManager.instance.startScreen.activeSelf)
+    //    {
+    //        // Hide Start Screen and show checkpoint instructions
+    //        GameManager.instance.startScreen.SetActive(false);
+    //        ShowCheckpointInstructionsOnce();
+    //        Debug.Log("Start Screen hidden. Checkpoint Instructions shown.");
+    //    }
+    //}
 
     public void CheckpointInstructionsResume()
     {
