@@ -14426,6 +14426,11 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1383495924}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!224 &1384058313 stripped
+RectTransform:
+  m_CorrespondingSourceObject: {fileID: 5870849876940203776, guid: f46cca398c538b34fac07f4aad78c675, type: 3}
+  m_PrefabInstance: {fileID: 7426956918502463094}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1384739270
 GameObject:
   m_ObjectHideFlags: 0
@@ -15197,13 +15202,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 80e2f396aa195d04882db887d7bf956b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  healAmount: 0
   rampUp: {fileID: 312777902088940955}
   rampDown: {fileID: 5527631408072672966}
   enemy: {fileID: 163741142185531432}
-  uiTitleText: {fileID: 0}
-  uiBodyText: {fileID: 0}
-  playerInRange: 0
+  healthStationUI: {fileID: 0}
 --- !u!65 &1450024352
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -16915,6 +16917,141 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1537173507}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!1 &1550404179
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1550404180}
+  - component: {fileID: 1550404182}
+  - component: {fileID: 1550404181}
+  m_Layer: 5
+  m_Name: HealthStationUI
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 0
+--- !u!224 &1550404180
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1550404179}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1384058313}
+  m_RootOrder: 6
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: 0, y: -200}
+  m_SizeDelta: {x: 900, y: 50}
+  m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &1550404181
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1550404179}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Material: {fileID: 0}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_RaycastTarget: 1
+  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
+  m_Maskable: 1
+  m_OnCullStateChanged:
+    m_PersistentCalls:
+      m_Calls: []
+  m_text: Stand on the platform of the Healing Station and press "t" to heal.
+  m_isRightToLeft: 0
+  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_fontSharedMaterials: []
+  m_fontMaterial: {fileID: 0}
+  m_fontMaterials: []
+  m_fontColor32:
+    serializedVersion: 2
+    rgba: 4278255375
+  m_fontColor: {r: 0.05724919, g: 1, b: 0, a: 1}
+  m_enableVertexGradient: 0
+  m_colorMode: 3
+  m_fontColorGradient:
+    topLeft: {r: 1, g: 1, b: 1, a: 1}
+    topRight: {r: 1, g: 1, b: 1, a: 1}
+    bottomLeft: {r: 1, g: 1, b: 1, a: 1}
+    bottomRight: {r: 1, g: 1, b: 1, a: 1}
+  m_fontColorGradientPreset: {fileID: 0}
+  m_spriteAsset: {fileID: 0}
+  m_tintAllSprites: 0
+  m_StyleSheet: {fileID: 0}
+  m_TextStyleHashCode: -1183493901
+  m_overrideHtmlColors: 0
+  m_faceColor:
+    serializedVersion: 2
+    rgba: 4294967295
+  m_fontSize: 50
+  m_fontSizeBase: 50
+  m_fontWeight: 400
+  m_enableAutoSizing: 0
+  m_fontSizeMin: 18
+  m_fontSizeMax: 72
+  m_fontStyle: 0
+  m_HorizontalAlignment: 2
+  m_VerticalAlignment: 512
+  m_textAlignment: 65535
+  m_characterSpacing: 0
+  m_wordSpacing: 0
+  m_lineSpacing: 0
+  m_lineSpacingMax: 0
+  m_paragraphSpacing: 0
+  m_charWidthMaxAdj: 0
+  m_enableWordWrapping: 1
+  m_wordWrappingRatios: 0.4
+  m_overflowMode: 0
+  m_linkedTextComponent: {fileID: 0}
+  parentLinkedComponent: {fileID: 0}
+  m_enableKerning: 1
+  m_enableExtraPadding: 0
+  checkPaddingRequired: 0
+  m_isRichText: 1
+  m_parseCtrlCharacters: 1
+  m_isOrthographic: 1
+  m_isCullingEnabled: 0
+  m_horizontalMapping: 0
+  m_verticalMapping: 0
+  m_uvLineOffset: 0
+  m_geometrySortingOrder: 0
+  m_IsTextObjectScaleStatic: 0
+  m_VertexBufferAutoSizeReduction: 0
+  m_useMaxVisibleDescender: 1
+  m_pageToDisplay: 1
+  m_margin: {x: 0, y: 0, z: 0, w: 0}
+  m_isUsingLegacyAnimationComponent: 0
+  m_isVolumetricText: 0
+  m_hasFontAssetChanged: 0
+  m_baseMaterial: {fileID: 0}
+  m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
+--- !u!222 &1550404182
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1550404179}
+  m_CullTransparentMesh: 1
 --- !u!1 &1559560584
 GameObject:
   m_ObjectHideFlags: 0
@@ -22501,6 +22638,37 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2069171757}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!1 &2071642197
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2071642198}
+  m_Layer: 0
+  m_Name: Area 2
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &2071642198
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2071642197}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 15
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &2071833794
 GameObject:
   m_ObjectHideFlags: 0
@@ -23825,9 +23993,6 @@ MonoBehaviour:
   modelBody: {fileID: 163741143670241922}
   modelArm: {fileID: 163741142075820534}
   navAgent: {fileID: 163741142185531415}
-  itemPrefab: {fileID: 3959941093448320200, guid: 983ce94cb7222724caa47db9b6892a1b, type: 3}
-  uiTitleText: {fileID: 0}
-  uiBodyText: {fileID: 0}
   HP: 5
   hurtTimer: 0.15
   FOV: 75
@@ -23836,6 +24001,7 @@ MonoBehaviour:
   shootPos: {fileID: 163741143070263968}
   bullet: {fileID: 6204158305650084918, guid: 79033c9b8e26cc947a64522be7157891, type: 3}
   shootRate: 0.5
+  itemPrefab: {fileID: 3959941093448320200, guid: 983ce94cb7222724caa47db9b6892a1b, type: 3}
 --- !u!4 &163741143070263968
 Transform:
   m_ObjectHideFlags: 0
@@ -25441,6 +25607,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7619531090042439822}
+  - component: {fileID: 7619531090042439823}
   - component: {fileID: 7009996506628972286}
   - component: {fileID: 1729820194269590205}
   m_Layer: 0
@@ -25855,22 +26022,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 505400394, guid: f46cca398c538b34fac07f4aad78c675, type: 3}
-      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
-      value: Resume
-      objectReference: {fileID: 0}
-    - target: {fileID: 569670002, guid: f46cca398c538b34fac07f4aad78c675, type: 3}
-      propertyPath: m_Name
-      value: Doors Prompt (unused)
-      objectReference: {fileID: 0}
-    - target: {fileID: 569670002, guid: f46cca398c538b34fac07f4aad78c675, type: 3}
-      propertyPath: m_IsActive
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 569670006, guid: f46cca398c538b34fac07f4aad78c675, type: 3}
-      propertyPath: slidingDoor
-      value: 
-      objectReference: {fileID: 7009996506628972286}
     - target: {fileID: 389809019826290235, guid: f46cca398c538b34fac07f4aad78c675, type: 3}
       propertyPath: m_Pivot.x
       value: 0
@@ -25959,8 +26110,7 @@ PrefabInstance:
       propertyPath: m_Name
       value: UI
       objectReference: {fileID: 0}
-    m_RemovedComponents:
-    - {fileID: 569670006, guid: f46cca398c538b34fac07f4aad78c675, type: 3}
+    m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: f46cca398c538b34fac07f4aad78c675, type: 3}
 --- !u!33 &7495447686453955839
 MeshFilter:
@@ -25986,6 +26136,22 @@ Transform:
   m_Father: {fileID: 7977630073476938400}
   m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &7619531090042439823
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6107853748762992743}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 72be62e9397dc504f94af74425bf5882, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  headerText: '**!Information!**'
+  contentText: Functional doors open automatically when approaching them!
+  backgroundColor: {r: 0.5, g: 0.8, b: 1, a: 1}
+  showOnce: 1
 --- !u!4 &7667455774418399542
 Transform:
   m_ObjectHideFlags: 0

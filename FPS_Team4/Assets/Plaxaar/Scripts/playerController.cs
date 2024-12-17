@@ -350,9 +350,25 @@ public class playerController : MonoBehaviour, IDamage, IRecharge
         }
     }
 
-        public void ResetPlayerState()
-{
-    Debug.Log("Resetting player shooting state after unpause.");
-    isShooting = false; // Reset shooting flag
-}
+            public void ResetPlayerState()
+    {
+        Debug.Log("Resetting player shooting state after unpause.");
+        isShooting = false; // Reset shooting flag
+    }
+
+        public void HealToMax()
+    {
+        HP = maxHP; // Set health to maximum
+        Debug.Log($"Player healed to full health: {HP}/{maxHP}");
+
+        // Update health bar UI through the GameManager
+        if (GameManager.instance != null)
+        {
+            GameManager.instance.UpdatePlayerHealth(HP, maxHP);
+        }
+        else
+        {
+            Debug.LogError("GameManager instance is NULL. Cannot update HP UI.");
+        }
+    }
 }
