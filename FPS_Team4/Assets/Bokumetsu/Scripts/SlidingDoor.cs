@@ -10,7 +10,7 @@ public class SlidingDoor : MonoBehaviour
 
     [SerializeField] private float slideSpeed = 1.0f; // Speed of the sliding door
 
-    private bool isOpening = false;
+    public bool isOpening = false;
     [SerializeField] private bool isBroken;
     private int tryDoorCount = 0;
 

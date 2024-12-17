@@ -6344,6 +6344,11 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 559350086}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!1 &569670002 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 569670002, guid: f46cca398c538b34fac07f4aad78c675, type: 3}
+  m_PrefabInstance: {fileID: 1592531868}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &571830229
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -9540,17 +9545,6 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 904827771}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
---- !u!114 &932466220 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 6757950107358928015, guid: f46cca398c538b34fac07f4aad78c675, type: 3}
-  m_PrefabInstance: {fileID: 1592531868}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &936065569
 GameObject:
   m_ObjectHideFlags: 0
@@ -10128,7 +10122,7 @@ MonoBehaviour:
   player: {fileID: 0}
   firstEnemy: {fileID: 0}
   playerChrController: {fileID: 0}
-  uiText: {fileID: 932466220}
+  uiText: {fileID: 6757950106573276947}
   damageAmmount: 2
 --- !u!1 &982515319
 GameObject:
@@ -10872,17 +10866,6 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1011341152}
   m_Mesh: {fileID: 10209, guid: 0000000000000000e000000000000000, type: 0}
---- !u!114 &1028043712 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 1910421594473356563, guid: f46cca398c538b34fac07f4aad78c675, type: 3}
-  m_PrefabInstance: {fileID: 1592531868}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &1036085468
 GameObject:
   m_ObjectHideFlags: 0
@@ -15224,8 +15207,8 @@ MonoBehaviour:
   rampUp: {fileID: 312777902088940955}
   rampDown: {fileID: 5527631408072672966}
   enemy: {fileID: 163741142185531432}
-  uiTitleText: {fileID: 1028043712}
-  uiBodyText: {fileID: 932466220}
+  uiTitleText: {fileID: 1910421592953702031}
+  uiBodyText: {fileID: 6757950106573276947}
   playerInRange: 0
 --- !u!65 &1450024352
 BoxCollider:
@@ -17298,10 +17281,14 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 389809019617309695, guid: f46cca398c538b34fac07f4aad78c675, type: 3}
-      propertyPath: dialogueScreen
+    - target: {fileID: 569670002, guid: f46cca398c538b34fac07f4aad78c675, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 569670006, guid: f46cca398c538b34fac07f4aad78c675, type: 3}
+      propertyPath: slidingDoor
       value: 
-      objectReference: {fileID: 1686907029}
+      objectReference: {fileID: 7009996506628972286}
     - target: {fileID: 389809019826290235, guid: f46cca398c538b34fac07f4aad78c675, type: 3}
       propertyPath: m_Pivot.x
       value: 0
@@ -17389,38 +17376,6 @@ PrefabInstance:
     - target: {fileID: 389809019826290239, guid: f46cca398c538b34fac07f4aad78c675, type: 3}
       propertyPath: m_Name
       value: UI
-      objectReference: {fileID: 0}
-    - target: {fileID: 389809019826290239, guid: f46cca398c538b34fac07f4aad78c675, type: 3}
-      propertyPath: m_NavMeshLayer
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 389809019826290239, guid: f46cca398c538b34fac07f4aad78c675, type: 3}
-      propertyPath: m_StaticEditorFlags
-      value: 2147483647
-      objectReference: {fileID: 0}
-    - target: {fileID: 1265592134180986289, guid: f46cca398c538b34fac07f4aad78c675, type: 3}
-      propertyPath: m_Name
-      value: Title Text
-      objectReference: {fileID: 0}
-    - target: {fileID: 1669017871677397801, guid: f46cca398c538b34fac07f4aad78c675, type: 3}
-      propertyPath: m_Name
-      value: Dialogue
-      objectReference: {fileID: 0}
-    - target: {fileID: 2356487249041496522, guid: f46cca398c538b34fac07f4aad78c675, type: 3}
-      propertyPath: m_Name
-      value: Dialogue Menu
-      objectReference: {fileID: 0}
-    - target: {fileID: 2356487249041496522, guid: f46cca398c538b34fac07f4aad78c675, type: 3}
-      propertyPath: m_IsActive
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 3647341279611968489, guid: f46cca398c538b34fac07f4aad78c675, type: 3}
-      propertyPath: m_Name
-      value: Body Text
-      objectReference: {fileID: 0}
-    - target: {fileID: 4634760670924526798, guid: f46cca398c538b34fac07f4aad78c675, type: 3}
-      propertyPath: m_Name
-      value: Body Text Holder
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: f46cca398c538b34fac07f4aad78c675, type: 3}
@@ -18675,11 +18630,6 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1684850845}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
---- !u!1 &1686907029 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 2356487249041496522, guid: f46cca398c538b34fac07f4aad78c675, type: 3}
-  m_PrefabInstance: {fileID: 1592531868}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1693501090
 GameObject:
   m_ObjectHideFlags: 0
@@ -21158,7 +21108,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   workingDoor: {fileID: 3239196913477675844}
-  brokenDoor: {fileID: 3019007453921086769}
+  brokenDoor: {fileID: 0}
 --- !u!65 &1947440175
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -23987,8 +23937,8 @@ MonoBehaviour:
   modelArm: {fileID: 163741142075820534}
   navAgent: {fileID: 163741142185531415}
   itemPrefab: {fileID: 3959941093448320200, guid: 983ce94cb7222724caa47db9b6892a1b, type: 3}
-  uiTitleText: {fileID: 1028043712}
-  uiBodyText: {fileID: 932466220}
+  uiTitleText: {fileID: 1910421592953702031}
+  uiBodyText: {fileID: 6757950106573276947}
   HP: 5
   hurtTimer: 0.15
   FOV: 75
@@ -24527,33 +24477,9 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 578533130844305188, guid: 82e76b92fe29f2043b66bd2fc1ae2753, type: 3}
-      propertyPath: gravity
-      value: 40
-      objectReference: {fileID: 0}
-    - target: {fileID: 578533130844305188, guid: 82e76b92fe29f2043b66bd2fc1ae2753, type: 3}
-      propertyPath: shootRate
-      value: 0.15
-      objectReference: {fileID: 0}
-    - target: {fileID: 578533130844305188, guid: 82e76b92fe29f2043b66bd2fc1ae2753, type: 3}
-      propertyPath: zoomSpeed
-      value: 10
-      objectReference: {fileID: 0}
-    - target: {fileID: 578533130844305188, guid: 82e76b92fe29f2043b66bd2fc1ae2753, type: 3}
-      propertyPath: shootDamage
-      value: 2
-      objectReference: {fileID: 0}
-    - target: {fileID: 578533130844305188, guid: 82e76b92fe29f2043b66bd2fc1ae2753, type: 3}
-      propertyPath: fallDmgHeight
-      value: 5
-      objectReference: {fileID: 0}
     - target: {fileID: 578533130844305191, guid: 82e76b92fe29f2043b66bd2fc1ae2753, type: 3}
       propertyPath: m_Name
       value: Player
-      objectReference: {fileID: 0}
-    - target: {fileID: 578533130844305191, guid: 82e76b92fe29f2043b66bd2fc1ae2753, type: 3}
-      propertyPath: m_IsActive
-      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 82e76b92fe29f2043b66bd2fc1ae2753, type: 3}
@@ -24578,6 +24504,17 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 1, y: 1, z: 30}
   m_Center: {x: 0, y: 0, z: -9.06}
+--- !u!114 &1910421592953702031 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 1910421594473356563, guid: f46cca398c538b34fac07f4aad78c675, type: 3}
+  m_PrefabInstance: {fileID: 1592531868}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!65 &2096378810405852360
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -24711,7 +24648,7 @@ GameObject:
   m_Component:
   - component: {fileID: 7755312281269378261}
   m_Layer: 0
-  m_Name: BrokenDoorPrefab (1)
+  m_Name: BrokenDoorPrefab (1) (Remove this, its not needed)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -24850,11 +24787,11 @@ PrefabInstance:
     - target: {fileID: 163741142201410852, guid: 1c1d8e46d2ea40e4f99dc2899b64209a, type: 3}
       propertyPath: uiBodyText
       value: 
-      objectReference: {fileID: 932466220}
+      objectReference: {fileID: 6757950106573276947}
     - target: {fileID: 163741142201410852, guid: 1c1d8e46d2ea40e4f99dc2899b64209a, type: 3}
       propertyPath: uiTitleText
       value: 
-      objectReference: {fileID: 1028043712}
+      objectReference: {fileID: 1910421592953702031}
     - target: {fileID: 163741142201410853, guid: 1c1d8e46d2ea40e4f99dc2899b64209a, type: 3}
       propertyPath: m_RootOrder
       value: 13
@@ -25619,6 +25556,7 @@ GameObject:
   m_Component:
   - component: {fileID: 7619531090042439822}
   - component: {fileID: 7009996506628972286}
+  - component: {fileID: 7619531090042439823}
   - component: {fileID: 1729820194269590205}
   m_Layer: 0
   m_Name: SlidingDoorParent
@@ -25746,6 +25684,17 @@ Transform:
   m_Father: {fileID: 7977630073476938400}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &6757950106573276947 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 6757950107358928015, guid: f46cca398c538b34fac07f4aad78c675, type: 3}
+  m_PrefabInstance: {fileID: 1592531868}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!65 &6955372091715135614
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -25793,6 +25742,7 @@ MonoBehaviour:
   openPosition: {x: 1, y: 0, z: 0}
   brokenPosition: {x: 0, y: 0, z: 0}
   slideSpeed: 1
+  isOpening: 0
   isBroken: 0
 --- !u!23 &7011043335110796465
 MeshRenderer:
@@ -25948,6 +25898,7 @@ MonoBehaviour:
   openPosition: {x: 1, y: 0, z: 0}
   brokenPosition: {x: 0.5, y: 0, z: 0}
   slideSpeed: 1
+  isOpening: 0
   isBroken: 1
 --- !u!65 &7318394706633772555
 BoxCollider:
@@ -26047,6 +25998,21 @@ Transform:
   m_Father: {fileID: 7977630073476938400}
   m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &7619531090042439823
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6107853748762992743}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a43b9bac3f057924d9558b94dd737378, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  uiParent: {fileID: 569670002}
+  slidingDoor: {fileID: 0}
+  showPopupOnce: 1
 --- !u!4 &7667455774418399542
 Transform:
   m_ObjectHideFlags: 0

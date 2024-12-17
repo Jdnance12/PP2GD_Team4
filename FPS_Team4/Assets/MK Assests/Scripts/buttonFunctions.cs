@@ -13,6 +13,7 @@ public class buttonFunctions : MonoBehaviour
     [SerializeField] private GameObject nodesCollectionLabel; // Nodes collection label reference
     [SerializeField] private GameObject checkpointInstructions; // Checkpoint instructions UI
     [SerializeField] private GameObject pauseMenu; // Pause menu reference
+    [SerializeField] private GameObject doorInteractionPrompt; // reference to door info (Doors Prompt)
 
     [SerializeField] private TMP_Text loadingText;        // Reference to the "Loading..." text
     [SerializeField] private TextMeshProUGUI countdownText; // Countdown UI text
@@ -40,6 +41,12 @@ public class buttonFunctions : MonoBehaviour
 
         // Call UpdateCheckpointButtonState to check for valid save data
         UpdateCheckpointButtonState();
+
+        //check to make sure things are assigned
+        if(doorInteractionPrompt == null)
+        {
+            Debug.LogError("door prompt is not assigned.");
+        }
     }
 
 
@@ -322,6 +329,21 @@ public class buttonFunctions : MonoBehaviour
         {
             loseMenuCheckpointButton.SetActive(false);
             Debug.Log("LoseMenuCheckpointButton forced to be disabled.");
+        }
+    }
+
+    public void OnDoorInteractionButtonClicked()
+    {
+        // Assuming doorInteractionPromptObject already references the correct GameObject
+        DoorInteractionPrompt doorInteractionPromptComponent = doorInteractionPrompt.GetComponent<DoorInteractionPrompt>();
+
+        if (doorInteractionPromptComponent != null)
+        {
+            doorInteractionPromptComponent.OnButtonClicked();
+        }
+        else
+        {
+            Debug.LogError("DoorInteractionPrompt component not found.");
         }
     }
 
