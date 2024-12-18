@@ -2,6 +2,7 @@ using System.Collections;
 using TMPro;
 using UnityEngine;
 using UnityEngine.AI;
+using UnityEngine.UI;
 
 public class FirstEnemy : MonoBehaviour, IDamage
 {
@@ -24,6 +25,10 @@ public class FirstEnemy : MonoBehaviour, IDamage
 
     Color colorBodyOrigin;
     Color colorArmOrigin;
+
+    public TextMeshProUGUI titleText;
+    public TextMeshProUGUI bodyText;
+    public Image background;
 
     bool playerInRange;
     bool playerVisible;
@@ -114,94 +119,16 @@ public class FirstEnemy : MonoBehaviour, IDamage
 
         if (HP <= 0)
         {
-            Debug.Log("Enemy HP <= 0. Starting death sequence.");
-            StartCoroutine(ShowDialogueAfterDeath());
-        }
-    }
-
-    private IEnumerator ShowDialogueAfterDeath()
-    {
-        Debug.Log("ShowDialogueAfterDeath coroutine started.");
-        yield return new WaitForSecondsRealtime(0.1f);
-
-        Debug.Log("Attempting to display dialogue screen...");
-
-        if (GameManager.instance == null)
-        {
-            Debug.LogError("GameManager instance is NULL.");
-            yield break;
-        }
-
-        if (GameManager.instance.dialogueScreen != null)
-        {
-            Debug.Log("DialogueScreen found. Pausing game...");
             GameManager.instance.statePause();
             GameManager.instance.DialogueScreen();
 
-            UpdateDialogueScreen(
-                "Enemy Defeated!",
-                "Now that the enemy is defeated, head to the nearby heal station. Behind you is a green door.",
-                new Color(0.8f, 0.1f, 0.1f, 1f) // Red background
-            );
+            background.color = Color.blue;
+            titleText.text = "Enemy Defeated!";
+            bodyText.text = "You've defeated your first enemy" +
+                "Now to heal. Look for the green door in this room." +
+                "Beyond it you will find a heal station.";
 
-            yield return new WaitForSecondsRealtime(0.5f); // Allow screen to fully render
-
-            if (GameManager.instance.dialogueScreen.activeSelf)
-            {
-                Debug.Log("Dialogue screen is now active and displayed.");
-            }
-            else
-            {
-                Debug.LogError("Dialogue screen failed to activate.");
-            }
-        }
-        else
-        {
-            Debug.LogError("DialogueScreen is NULL. Check GameManager setup.");
-        }
-
-        Debug.Log("Destroying enemy game object...");
-        Destroy(gameObject);
-    }
-
-    private void UpdateDialogueScreen(string header, string content, Color backgroundColor)
-    {
-        Debug.Log("Updating dialogue screen content...");
-
-        Transform dialogueScreen = GameManager.instance.dialogueScreen.transform;
-
-        TMP_Text menuText = dialogueScreen.Find("Menu Text")?.GetComponent<TMP_Text>();
-        TMP_Text dialogueText = dialogueScreen.Find("Text Area/Dialogue Text")?.GetComponent<TMP_Text>();
-        UnityEngine.UI.Image background = dialogueScreen.GetComponent<UnityEngine.UI.Image>();
-
-        if (menuText != null)
-        {
-            menuText.text = header;
-            Debug.Log("Menu Text updated successfully.");
-        }
-        else
-        {
-            Debug.LogError("Menu Text not found in DialogueScreen!");
-        }
-
-        if (dialogueText != null)
-        {
-            dialogueText.text = content;
-            Debug.Log("Dialogue Text updated successfully.");
-        }
-        else
-        {
-            Debug.LogError("Dialogue Text not found in DialogueScreen!");
-        }
-
-        if (background != null)
-        {
-            background.color = backgroundColor;
-            Debug.Log("Background color updated successfully.");
-        }
-        else
-        {
-            Debug.LogError("Background Image not found in DialogueScreen!");
+            Destroy(gameObject);  
         }
     }
 

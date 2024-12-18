@@ -1,16 +1,15 @@
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class TutorialHealStation : MonoBehaviour
 {
-    [SerializeField] int healAmount;
 
-    [SerializeField] GameObject rampUp;  // Reference to the ramp up
-    [SerializeField] GameObject rampDown; // Reference to the ramp down
-    [SerializeField] GameObject enemy;
-
+    public Image background;
+    public TextMeshProUGUI titleText;
+    public TextMeshProUGUI bodyText;
 
 
     private void OnTriggerEnter(Collider other)
@@ -18,25 +17,10 @@ public class TutorialHealStation : MonoBehaviour
         GameManager.instance.statePause();
         GameManager.instance.DialogueScreen();
 
-        
-    }
+        background.color = Color.blue;
+        titleText.text = "Healing Stations";
+        bodyText.text = "Standing on the white plateform will heal you to full health when you need it.";
 
-    void OnTriggerStay(Collider other)
-    {
-        if (other.CompareTag("Player"))
-        {
-            IRecharge rechargeable = other.GetComponent<IRecharge>();
-            if (rechargeable != null)
-            {
-                rechargeable.restoreHP(healAmount);
-                Debug.Log("Healing station activated. Healing amount: " + healAmount);
-
-                
-            }
-            else
-            {
-                Debug.LogWarning("Player object does not implement IRecharge interface.");
-            }
-        }
+        Destroy(gameObject);
     }
 }

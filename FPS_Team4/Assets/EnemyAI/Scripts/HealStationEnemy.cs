@@ -1,7 +1,9 @@
 using System.Collections;
 using TMPro;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.AI;
+using UnityEngine.UI;
 
 public class HealStationEnemy : MonoBehaviour, IDamage
 {
@@ -30,6 +32,11 @@ public class HealStationEnemy : MonoBehaviour, IDamage
     bool isShooting;
 
     [SerializeField] GameObject itemPrefab;
+    public TextMeshProUGUI titleText;
+    public TextMeshProUGUI bodyText;
+    public Image background;
+
+    Vector3 dropPos;
 
     void Start()
     {
@@ -110,6 +117,8 @@ public class HealStationEnemy : MonoBehaviour, IDamage
 
     public void takeDamage(int amount)
     {
+
+        dropPos = new Vector3(transform.position.x, transform.position.y + 1.5f, transform.position.z);
         Debug.Log($"HealStationEnemy took {amount} damage. Current HP: {HP}");
         HP -= amount;
 
@@ -117,96 +126,16 @@ public class HealStationEnemy : MonoBehaviour, IDamage
 
         if (HP <= 0)
         {
-            Debug.Log("HealStationEnemy HP <= 0. Starting death sequence.");
-            StartCoroutine(ShowDialogueAfterDeath());
-        }
-    }
-
-    private IEnumerator ShowDialogueAfterDeath()
-    {
-        Debug.Log("ShowDialogueAfterDeath coroutine started.");
-        yield return new WaitForSecondsRealtime(0.1f);
-
-        Debug.Log("Attempting to display dialogue screen");
-
-        if (GameManager.instance == null)
-        {
-            Debug.LogError("GameManager instance is NULL.");
-            yield break;
-        }
-
-        if (GameManager.instance.dialogueScreen != null)
-        {
-            Debug.Log("DialogueScreen found. Pausing game");
             GameManager.instance.statePause();
             GameManager.instance.DialogueScreen();
 
-            UpdateDialogueScreen(
-                "Enemy Defeated!",
-                "Look, he dropped something. It might be useful. GET IT!",
-                new Color(0.2f, 0.7f, 0.2f, 1f) // Green background
-            );
+            background.color = Color.green;
+            titleText.text = "Skills";
+            bodyText.text = "Look he dropped something. Grab it. It could be useful!";
 
-            yield return new WaitForSecondsRealtime(0.5f); // Allow screen to fully render
+            Instantiate(itemPrefab, dropPos, Quaternion.identity);
 
-            if (GameManager.instance.dialogueScreen.activeSelf)
-            {
-                Debug.Log("Dialogue screen is now active and displayed.");
-            }
-            else
-            {
-                Debug.LogError("Dialogue screen failed to activate.");
-            }
-
-            DropItem();
-        }
-        else
-        {
-            Debug.LogError("DialogueScreen is NULL. Check GameManager setup.");
-        }
-
-        Debug.Log("Destroying HealStationEnemy game object");
-        Destroy(gameObject);
-    }
-
-    private void UpdateDialogueScreen(string header, string content, Color backgroundColor)
-    {
-        Debug.Log("Updating dialogue screen content");
-
-        Transform dialogueScreen = GameManager.instance.dialogueScreen.transform;
-
-        TMP_Text menuText = dialogueScreen.Find("Menu Text")?.GetComponent<TMP_Text>();
-        TMP_Text dialogueText = dialogueScreen.Find("Text Area/Dialogue Text")?.GetComponent<TMP_Text>();
-        UnityEngine.UI.Image background = dialogueScreen.GetComponent<UnityEngine.UI.Image>();
-
-        if (menuText != null)
-        {
-            menuText.text = header;
-            Debug.Log("Menu Text updated successfully.");
-        }
-        else
-        {
-            Debug.LogError("Menu Text not found in DialogueScreen!");
-        }
-
-        if (dialogueText != null)
-        {
-            dialogueText.text = content;
-            Debug.Log("Dialogue Text updated successfully.");
-        }
-        else
-        {
-            Debug.LogError("Dialogue Text not found in DialogueScreen!");
-        }
-
-        if (background != null)
-        {
-            background.color = backgroundColor;
-            Debug.Log("Background color updated successfully.");
-        }
-        else
-        {
-            Debug.LogError("Background Image not found in DialogueScreen!");
+            Destroy(gameObject);
         }
     }
 
