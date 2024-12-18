@@ -8,6 +8,9 @@ public class AfterHealStation : MonoBehaviour
     [SerializeField] GameObject rampDown; // Reference to the ramp down
     [SerializeField] GameObject enemy;    // Reference to the enemy
 
+    public TextMeshProUGUI titleText;
+    public TextMeshProUGUI descriptionText;
+
     private bool playerInRange = false;   // Tracks if player is in range
     private bool dialogueTriggered = false; // Ensures dialogue only triggers once
 
@@ -40,7 +43,7 @@ public class AfterHealStation : MonoBehaviour
         // Update the dialogue screen with the information
         UpdateDialogueScreen(
             "!Information!",
-            "Stand on the platform of the Healing Station and press \"t\" to heal.",
+            "Stand on the platform of the Healing Station to heal.",
             new Color(0.1f, 0.5f, 0.8f, 1f) // Blue background
         );
     }

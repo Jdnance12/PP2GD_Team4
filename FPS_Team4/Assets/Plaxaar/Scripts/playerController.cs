@@ -12,7 +12,7 @@ public class playerController : MonoBehaviour, IDamage, IRecharge
     [Header("Stats")]
     public int maxHP = 20;
     [SerializeField][Range(1, 10)] public int HP;
-    [SerializeField][Range(1, 5)] float speed;
+    [SerializeField][Range(1, 10)] float speed;
     [SerializeField][Range(2, 5)] float sprintMod;
     [SerializeField] float crouchHeight;
     [SerializeField][Range(2, 5)] float crouchMod;
@@ -80,6 +80,10 @@ public class playerController : MonoBehaviour, IDamage, IRecharge
         Debug.DrawRay(Camera.main.transform.position, Camera.main.transform.forward * shootDist, Color.red);
 
         movement();
+
+        //Updates FOV with lerp
+        Camera playerCam = playerCamera.GetComponent<Camera>();
+        playerCam.fieldOfView = Mathf.Lerp(playerCam.fieldOfView, targetFOV, zoomSpeed * Time.deltaTime);
     }
 
     void movement()
@@ -166,8 +170,7 @@ public class playerController : MonoBehaviour, IDamage, IRecharge
 
     void zoom(float target)
     {
-        Camera playerCam = playerCamera.GetComponent<Camera>();
-        playerCam.fieldOfView = Mathf.Lerp(playerCam.fieldOfView, target, zoomSpeed * Time.deltaTime);
+        targetFOV = target;
     }
 
     //void checkFallDamage()
