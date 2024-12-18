@@ -35,8 +35,8 @@ public class FlickeringLight : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        //if (other.isTrigger)
-        //    return;
+        if (other.isTrigger)
+            return;
 
         Debug.Log("Trigger entered by: " + other.gameObject.name);
         if(!isActivated && other.CompareTag("Player"))
