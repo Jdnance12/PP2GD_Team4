@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class TutorialHealStation : MonoBehaviour
 {
@@ -10,10 +11,14 @@ public class TutorialHealStation : MonoBehaviour
     [SerializeField] GameObject rampDown; // Reference to the ramp down
     [SerializeField] GameObject enemy;
 
+
+
     private void OnTriggerEnter(Collider other)
     {
         GameManager.instance.statePause();
         GameManager.instance.DialogueScreen();
+
+        
     }
 
     void OnTriggerStay(Collider other)
