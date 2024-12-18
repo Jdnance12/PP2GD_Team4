@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.18028378, g: 0.22571412, b: 0.30692285, a: 1}
+  m_IndirectSpecularColor: {r: 0.18028352, g: 0.22571376, b: 0.3069224, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -3592,6 +3592,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
+  - {fileID: 689512197}
   - {fileID: 1719226407}
   - {fileID: 1618908020}
   - {fileID: 1820933602}
@@ -7595,6 +7596,72 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 7
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1001 &689512196
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 333194239}
+    m_Modifications:
+    - target: {fileID: 2338909378125531272, guid: a6379c0fd7055aa469f87c3e05714b21, type: 3}
+      propertyPath: m_IsTrigger
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3530673732861131726, guid: a6379c0fd7055aa469f87c3e05714b21, type: 3}
+      propertyPath: m_RootOrder
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3530673732861131726, guid: a6379c0fd7055aa469f87c3e05714b21, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: -2
+      objectReference: {fileID: 0}
+    - target: {fileID: 3530673732861131726, guid: a6379c0fd7055aa469f87c3e05714b21, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0.55826455
+      objectReference: {fileID: 0}
+    - target: {fileID: 3530673732861131726, guid: a6379c0fd7055aa469f87c3e05714b21, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0.7562218
+      objectReference: {fileID: 0}
+    - target: {fileID: 3530673732861131726, guid: a6379c0fd7055aa469f87c3e05714b21, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3530673732861131726, guid: a6379c0fd7055aa469f87c3e05714b21, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3530673732861131726, guid: a6379c0fd7055aa469f87c3e05714b21, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3530673732861131726, guid: a6379c0fd7055aa469f87c3e05714b21, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3530673732861131726, guid: a6379c0fd7055aa469f87c3e05714b21, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3530673732861131726, guid: a6379c0fd7055aa469f87c3e05714b21, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3530673732861131726, guid: a6379c0fd7055aa469f87c3e05714b21, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3625201532298705505, guid: a6379c0fd7055aa469f87c3e05714b21, type: 3}
+      propertyPath: m_Name
+      value: Healing Station platform
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: a6379c0fd7055aa469f87c3e05714b21, type: 3}
+--- !u!4 &689512197 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 3530673732861131726, guid: a6379c0fd7055aa469f87c3e05714b21, type: 3}
+  m_PrefabInstance: {fileID: 689512196}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &690309854
 GameObject:
   m_ObjectHideFlags: 0
@@ -15205,7 +15272,6 @@ MonoBehaviour:
   rampUp: {fileID: 312777902088940955}
   rampDown: {fileID: 5527631408072672966}
   enemy: {fileID: 163741142185531432}
-  healthStationUI: {fileID: 0}
 --- !u!65 &1450024352
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -17631,7 +17697,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 333194239}
-  m_RootOrder: 1
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!65 &1618908021
 BoxCollider:
@@ -18945,7 +19011,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 333194239}
-  m_RootOrder: 0
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1728484804
 GameObject:
@@ -20011,7 +20077,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 333194239}
-  m_RootOrder: 2
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!65 &1820933603
 BoxCollider:

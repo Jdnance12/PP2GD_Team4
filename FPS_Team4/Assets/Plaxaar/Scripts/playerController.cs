@@ -59,7 +59,7 @@ public class playerController : MonoBehaviour, IDamage, IRecharge
 
         HPOrig = HP;
         lastGroundedHeight = transform.position.y; // Initialize to starting height
-        GameManager.instance.UpdatePlayerHealth(HP, maxHP); //REQUIRED TO UPDATE THE UI THROUGH THE GAME MANAGER FOR DYNAMIC UI
+        //GameManager.instance.UpdatePlayerHealth(HP, maxHP); //REQUIRED TO UPDATE THE UI THROUGH THE GAME MANAGER FOR DYNAMIC UI
 
         Debug.Log("Start method called in playerController.");
 
@@ -326,49 +326,66 @@ public class playerController : MonoBehaviour, IDamage, IRecharge
         GameManager.instance.playerDamageScreen.SetActive(false);
     }
 
-    // public void updatePlayerUI() (REPLACED BY GameManager.instance.UpdatePlayerHealth(HP, maxHP);)
-    // {
-    //     GameManager.instance.playerHPBar.fillAmount = (float)HP / HPOrig;
-    // }
+    public void updatePlayerUI()
+     {
+         GameManager.instance.playerHPBar.fillAmount = (float) HP / HPOrig;
+     }
 
-    public void toggleDoubleJump()
+public void toggleDoubleJump()
     {
         canDoubleJump = true; // Gives player double jump
     }
+
+    //changed code
+    //public void restoreHP(int amount)
+    //{
+    //    if ((HP + amount) <= maxHP)
+    //    {
+    //        HP += amount;
+    //        GameManager.instance.UpdatePlayerHealth(HP, maxHP); //REQUIRED TO UPDATE THE UI THROUGH THE GAME MANAGER FOR DYNAMIC UI
+    //    }
+    //    else if ((HP + amount) > maxHP)
+    //    {
+    //        HP = maxHP;
+    //        GameManager.instance.UpdatePlayerHealth(HP, maxHP); //REQUIRED TO UPDATE THE UI THROUGH THE GAME MANAGER FOR DYNAMIC UI
+    //    }
+    //}
 
     public void restoreHP(int amount)
     {
         if ((HP + amount) <= maxHP)
         {
             HP += amount;
-            GameManager.instance.UpdatePlayerHealth(HP, maxHP); //REQUIRED TO UPDATE THE UI THROUGH THE GAME MANAGER FOR DYNAMIC UI
+            updatePlayerUI();
         }
         else if ((HP + amount) > maxHP)
         {
             HP = maxHP;
-            GameManager.instance.UpdatePlayerHealth(HP, maxHP); //REQUIRED TO UPDATE THE UI THROUGH THE GAME MANAGER FOR DYNAMIC UI
+            updatePlayerUI();
         }
     }
 
-            public void ResetPlayerState()
+
+
+    public void ResetPlayerState()
     {
         Debug.Log("Resetting player shooting state after unpause.");
         isShooting = false; // Reset shooting flag
     }
 
-        public void HealToMax()
-    {
-        HP = maxHP; // Set health to maximum
-        Debug.Log($"Player healed to full health: {HP}/{maxHP}");
+    //public void HealToMax()
+    //{
+    //    HP = maxHP; // Set health to maximum
+    //    Debug.Log($"Player healed to full health: {HP}/{maxHP}");
 
-        // Update health bar UI through the GameManager
-        if (GameManager.instance != null)
-        {
-            GameManager.instance.UpdatePlayerHealth(HP, maxHP);
-        }
-        else
-        {
-            Debug.LogError("GameManager instance is NULL. Cannot update HP UI.");
-        }
-    }
+    //    // Update health bar UI through the GameManager
+    //    if (GameManager.instance != null)
+    //    {
+    //        GameManager.instance.UpdatePlayerHealth(HP, maxHP);
+    //    }
+    //    else
+    //    {
+    //        Debug.LogError("GameManager instance is NULL. Cannot update HP UI.");
+    //    }
+    //}
 }
