@@ -7,5 +7,5 @@ using System.Collections.Generic;
 public interface iDamage
 {
     // method to apply damage
-    void takeDamage(int amount, Weapon weapon);
+    void takeDamage(int amount);
 }
