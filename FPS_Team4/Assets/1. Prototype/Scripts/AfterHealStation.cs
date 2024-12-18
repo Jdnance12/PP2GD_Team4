@@ -40,7 +40,7 @@ public class AfterHealStation : MonoBehaviour
         // Update the dialogue screen with the information
         UpdateDialogueScreen(
             "!Information!",
-            "Stand on the platform of the Healing Station to heal.",
+            "Stand on the platform of the Healing Station and press \"t\" to heal.",
             new Color(0.1f, 0.5f, 0.8f, 1f) // Blue background
         );
     }

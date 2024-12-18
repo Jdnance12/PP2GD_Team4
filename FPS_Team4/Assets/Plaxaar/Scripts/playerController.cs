@@ -326,44 +326,43 @@ public class playerController : MonoBehaviour, IDamage, IRecharge
         GameManager.instance.playerDamageScreen.SetActive(false);
     }
 
-    public void updatePlayerUI()
-     {
-         GameManager.instance.playerHPBar.fillAmount = (float) HP / HPOrig;
-     }
+    //public void updatePlayerUI()
+    // {
+    //     GameManager.instance.playerHPBar.fillAmount = (float) HP / HPOrig;
+    // }
 
 public void toggleDoubleJump()
     {
         canDoubleJump = true; // Gives player double jump
     }
 
-    //changed code
-    //public void restoreHP(int amount)
-    //{
-    //    if ((HP + amount) <= maxHP)
-    //    {
-    //        HP += amount;
-    //        GameManager.instance.UpdatePlayerHealth(HP, maxHP); //REQUIRED TO UPDATE THE UI THROUGH THE GAME MANAGER FOR DYNAMIC UI
-    //    }
-    //    else if ((HP + amount) > maxHP)
-    //    {
-    //        HP = maxHP;
-    //        GameManager.instance.UpdatePlayerHealth(HP, maxHP); //REQUIRED TO UPDATE THE UI THROUGH THE GAME MANAGER FOR DYNAMIC UI
-    //    }
-    //}
-
     public void restoreHP(int amount)
     {
         if ((HP + amount) <= maxHP)
         {
             HP += amount;
-            updatePlayerUI();
+            GameManager.instance.UpdatePlayerHealth(HP, maxHP); //REQUIRED TO UPDATE THE UI THROUGH THE GAME MANAGER FOR DYNAMIC UI
         }
         else if ((HP + amount) > maxHP)
         {
             HP = maxHP;
-            updatePlayerUI();
+            GameManager.instance.UpdatePlayerHealth(HP, maxHP); //REQUIRED TO UPDATE THE UI THROUGH THE GAME MANAGER FOR DYNAMIC UI
         }
     }
+
+    //public void restoreHP(int amount)
+    //{
+    //    if ((HP + amount) <= maxHP)
+    //    {
+    //        HP += amount;
+    //        updatePlayerUI();
+    //    }
+    //    else if ((HP + amount) > maxHP)
+    //    {
+    //        HP = maxHP;
+    //        updatePlayerUI();
+    //    }
+    //}
 
 
 
