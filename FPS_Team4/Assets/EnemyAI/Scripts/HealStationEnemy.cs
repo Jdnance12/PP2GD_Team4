@@ -5,7 +5,7 @@ using UnityEngine;
 using UnityEngine.AI;
 using UnityEngine.UI;
 
-public class HealStationEnemy : MonoBehaviour, IDamage
+public class HealStationEnemy : MonoBehaviour, iDamage
 {
     [SerializeField] Renderer modelBody;
     [SerializeField] Renderer modelArm;

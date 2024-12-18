@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
 
-public class TurretAI : MonoBehaviour, IDamage
+public class TurretAI : MonoBehaviour, iDamage
 {
     [SerializeField] int FOV;
     [SerializeField] int faceTargetSpeed;

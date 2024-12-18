@@ -30,7 +30,7 @@ public class Damage : MonoBehaviour
             return;
         }
 
-        IDamage dmg = other.GetComponent<IDamage>();
+        iDamage dmg = other.GetComponent<iDamage>();
 
         if (dmg != null)
         {

@@ -1,8 +1,9 @@
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-public class playerController : MonoBehaviour, IDamage, IRecharge
+public class playerController : MonoBehaviour, iDamage, IRecharge
 {
     [Header("Components")]
     [SerializeField] CharacterController controller;
@@ -25,10 +26,13 @@ public class playerController : MonoBehaviour, IDamage, IRecharge
     [Header("Input Actions")]
     public InputActionReference weaponMenuAction;
 
-    [Header("Gun Stats")]
+    [Header("Weapon Stats")]
+    [SerializeField] GameObject weaponModel;
+    [SerializeField] List<Weapon> weaponList = new List<Weapon>();
     [SerializeField] int shootDamage;
     [SerializeField] int shootDist;
     [SerializeField] float shootRate;
+    int weaponListPos;
 
     [Header("Temp Variables")]
     [SerializeField] public bool canDoubleJump;
@@ -285,7 +289,7 @@ public class playerController : MonoBehaviour, IDamage, IRecharge
         if (Physics.Raycast(Camera.main.transform.position, Camera.main.transform.forward, out hit, shootDist, ~ignoreMask))
         {
             Debug.Log(hit.collider.name);
-            IDamage dmg = hit.collider.GetComponent<IDamage>();
+            iDamage dmg = hit.collider.GetComponent<iDamage>();
             if (dmg != null)
             {
                 dmg.takeDamage(shootDamage);
@@ -327,6 +331,42 @@ public class playerController : MonoBehaviour, IDamage, IRecharge
         yield return new WaitForSeconds(0.1f);
 
         GameManager.instance.playerDamageScreen.SetActive(false);
+    }
+
+    public void getWeaponStats(Weapon weapon)
+    {
+        weaponList.Add(weapon);
+
+        shootDamage = weapon.shootDamage;
+        shootDist = weapon.shootDist;
+        shootRate = weapon.shootRate;
+
+        weaponModel.GetComponent<MeshFilter>().sharedMesh = weapon.model.GetComponent<MeshFilter>().sharedMesh;
+        weaponModel.GetComponent<MeshRenderer>().sharedMaterial = weapon.model.GetComponent<MeshRenderer>().sharedMaterial;
+    }
+
+    void selectWeapon()
+    {
+        if (Input.GetAxis("Mouse ScrollWheel") > 0 && weaponListPos < weaponList.Count - 1)
+        {
+            weaponListPos++;
+            changeWeapon();
+        }
+        else if (Input.GetAxis("Mouse ScrollWheel") < 0 && weaponListPos > 0)
+        {
+            weaponListPos--;
+            changeWeapon();
+        }
+    }
+
+    public void changeWeapon()
+    {
+        shootDamage = weaponList[weaponListPos].shootDamage;
+        shootDist = weaponList[weaponListPos].shootDist;
+        shootRate = weaponList[weaponListPos].shootRate;
+
+        weaponModel.GetComponent<MeshFilter>().sharedMesh = weaponList[weaponListPos].model.GetComponent<MeshFilter>().sharedMesh;
+        weaponModel.GetComponent<MeshRenderer>().sharedMaterial = weaponList[weaponListPos].model.GetComponent<MeshRenderer>().sharedMaterial;
     }
 
     //public void updatePlayerUI()

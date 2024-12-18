@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class IPickUp : MonoBehaviour
 {
-    [SerializeField] GunStats weapon;
+    [SerializeField] Weapon weapon;
 
     // Start is called before the first frame update
     void Start()

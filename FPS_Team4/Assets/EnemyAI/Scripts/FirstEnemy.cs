@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.AI;
 using UnityEngine.UI;
 
-public class FirstEnemy : MonoBehaviour, IDamage
+public class FirstEnemy : MonoBehaviour, iDamage
 {
     [SerializeField] Renderer modelBody;
     [SerializeField] Renderer modelArm;
