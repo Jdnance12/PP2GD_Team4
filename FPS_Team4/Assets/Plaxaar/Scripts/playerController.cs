@@ -36,6 +36,9 @@ public class playerController : MonoBehaviour, iDamage, IRecharge
 
     [Header("Temp Variables")]
     [SerializeField] public bool canDoubleJump;
+
+    [Header("Abilities")]
+    public bool canUnjamDoors = false; // Tracks if the player can unjam doors
     
     //Local variables
 
@@ -445,6 +448,20 @@ public void toggleDoubleJump()
         else
         {
             Debug.LogError("GameManager instance is NULL. Cannot update HP UI.");
+        }
+    }
+
+    // Method to handle door unjamming by the player
+    public void UnjamDoor()
+    {
+        if (canUnjamDoors)
+        {
+            Debug.Log("Player is unjamming the door");
+            
+        }
+        else
+        {
+            Debug.Log("Player cannot unjam doors yet. Find the toolbox!");
         }
     }
 }
