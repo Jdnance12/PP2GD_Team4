@@ -23,6 +23,21 @@ public class playerController : MonoBehaviour, iDamage, IRecharge
     [SerializeField][Range(1, 5)] int fallDmgHeight;
     [SerializeField] private float zoomSpeed = 5f;
 
+    [Header("Grapple Hook")]
+    public GameObject heavyObject;
+    public LineRenderer lineRenderer;
+    public Vector3 grapplePoint;
+
+    public float maxDistance;
+    public float hookSpeed;
+    private float originalGravity;
+    private float originalHookSpeed;
+
+    private bool isGrappling = false;
+    private bool pullingObject = false;
+    private bool drawLine = false;
+    public bool grappleHookActive;
+
     [Header("Input Actions")]
     public InputActionReference weaponMenuAction;
 
@@ -65,6 +80,10 @@ public class playerController : MonoBehaviour, iDamage, IRecharge
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
+        lineRenderer = GetComponent<LineRenderer>();
+        lineRenderer.positionCount = 0;
+
+        originalGravity = gravity;
 
         HPOrig = HP;
         lastGroundedHeight = transform.position.y; // Initialize to starting height
@@ -92,7 +111,31 @@ public class playerController : MonoBehaviour, iDamage, IRecharge
         {
             movement();
             selectWeapon();
+
+            if(Input.GetButton("Grapple") && grappleHookActive)
+            {
+                LaunchHook();
+
+                if(isGrappling)
+                {
+                    Grapple();
+                    gravity = 0f;
+                }
+                else if(pullingObject && heavyObject != null)
+                {
+                    PullObject();
+                }             
+            }
+
+            if(Input.GetButtonUp("Grapple"))
+            {
+                isGrappling = false;
+                pullingObject = false;
+                drawLine = false;
+                gravity = originalGravity;
+            }
         }
+
 
         //Updates FOV with lerp
         Camera playerCam = playerCamera.GetComponent<Camera>();
@@ -470,6 +513,62 @@ public void toggleDoubleJump()
         else
         {
             Debug.Log("Player cannot unjam doors yet. Find the toolbox!");
+        }
+    }
+
+    void LaunchHook()
+    {
+        RaycastHit hit;
+        if (Physics.Raycast(playerCamera.transform.position, playerCamera.transform.forward, out hit, maxDistance))
+        {
+            if(hit.collider.CompareTag("Heavy Object"))
+            {
+                pullingObject = true;
+                heavyObject = hit.collider.gameObject;
+                lineRenderer.positionCount = 2;
+            }
+            else
+            {
+                grapplePoint = hit.point;
+                isGrappling = true;
+                lineRenderer.positionCount = 2;
+            }
+        }
+    }
+
+    void Grapple()
+    {
+        transform.position = Vector3.MoveTowards(transform.position,grapplePoint, hookSpeed * Time.deltaTime);
+        if(Vector3.Distance(transform.position,grapplePoint) < 1f)
+        {
+            isGrappling = false;
+            lineRenderer.positionCount = 0;
+        }
+    }
+
+    void PullObject()
+    {
+        heavyObject.transform.position = Vector3.MoveTowards(heavyObject.transform.position, transform.position, hookSpeed * Time.deltaTime);
+        if (Vector3.Distance(heavyObject.transform.position, transform.position) < 1f)
+        {
+            pullingObject = false;
+            lineRenderer.positionCount = 0;
+        }
+    }
+
+    void UpdateLine()
+    {
+        if(lineRenderer.positionCount > 0)
+        {
+            lineRenderer.SetPosition(0, transform.position);
+            if(pullingObject && heavyObject != null)
+            {
+                lineRenderer.SetPosition(1, heavyObject.transform.position);
+            }
+            else
+            {
+                lineRenderer.SetPosition(1, grapplePoint);
+            }
         }
     }
 }
