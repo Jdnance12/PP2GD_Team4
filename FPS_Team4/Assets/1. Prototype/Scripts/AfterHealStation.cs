@@ -21,74 +21,74 @@ public class AfterHealStation : MonoBehaviour
         // Check for player interaction to heal
         if (playerInRange && Input.GetButtonDown("Interact"))
         {
-            //HealPlayer();
+            HealPlayer();
         }
     }
 
     private void OnTriggerEnter(Collider other)
     {
-        //if (!other.CompareTag("Player") || dialogueTriggered) return;
+        if (!other.CompareTag("Player") || dialogueTriggered) return;
 
-        //dialogueTriggered = true; // Prevent duplicate triggers
+        dialogueTriggered = true; // Prevent duplicate triggers
 
-        //Debug.Log("Player entered heal station trigger. Displaying dialogue screen");
+        Debug.Log("Player entered heal station trigger. Displaying dialogue screen");
 
-        //// Pause the game and display the dialogue screen
-        //GameManager.instance.statePause();
-        //GameManager.instance.DialogueScreen();
+        // Pause the game and display the dialogue screen
+        GameManager.instance.statePause();
+        GameManager.instance.DialogueScreen();
 
-        //// Update the dialogue screen with the information
-        //UpdateDialogueScreen(
-        //    "!Information!",
-        //    "Stand on the platform of the Healing Station and press \"t\" to heal.",
-        //    new Color(0.1f, 0.5f, 0.8f, 1f) // Blue background
-        //);
+        // Update the dialogue screen with the information
+        UpdateDialogueScreen(
+            "!Information!",
+            "Stand on the platform of the Healing Station and press \"t\" to heal.",
+            new Color(0.1f, 0.5f, 0.8f, 1f) // Blue background
+        );
     }
 
     private void OnTriggerStay(Collider other)
     {
-        //if (other.CompareTag("Player"))
-        //{
-        //    playerInRange = true; // Allow healing when player is in range
-        //}
+        if (other.CompareTag("Player"))
+        {
+            playerInRange = true; // Allow healing when player is in range
+        }
     }
 
     private void OnTriggerExit(Collider other)
     {
-        //if (other.CompareTag("Player"))
-        //{
-        //    playerInRange = false; // Disable healing when player exits
-        //}
+        if (other.CompareTag("Player"))
+        {
+            playerInRange = false; // Disable healing when player exits
+        }
     }
 
-    //void HealPlayer()
-    //{
-    //    Debug.Log("Healing player and activating ramps/enemy");
+    void HealPlayer()
+    {
+        Debug.Log("Healing player and activating ramps/enemy");
 
-    //    // Heal player to full HP
-    //    playerController playerScript = GameManager.instance.player.GetComponent<playerController>();
-    //    if (playerScript != null)
-    //    {
-    //        playerScript.HealToMax(); // Call the function to heal
-    //        Debug.Log("Player healed to max health.");
-    //    }
-    //    else
-    //    {
-    //        Debug.LogError("PlayerController not found on the player object.");
-    //    }
+        // Heal player to full HP
+        playerController playerScript = GameManager.instance.player.GetComponent<playerController>();
+        if (playerScript != null)
+        {
+            playerScript.HealToMax(); // Call the function to heal
+            Debug.Log("Player healed to max health.");
+        }
+        else
+        {
+            Debug.LogError("PlayerController not found on the player object.");
+        }
 
-    //    // Toggle ramps and activate enemy
-    //    rampUp.SetActive(false);
-    //    Debug.Log("RampUp deactivated.");
-    //    rampDown.SetActive(true);
-    //    Debug.Log("RampDown activated.");
-    //    enemy.SetActive(true);
-    //    Debug.Log("Enemy activated.");
+        // Toggle ramps and activate enemy
+        rampUp.SetActive(false);
+        Debug.Log("RampUp deactivated.");
+        rampDown.SetActive(true);
+        Debug.Log("RampDown activated.");
+        enemy.SetActive(true);
+        Debug.Log("Enemy activated.");
 
-    //    // Destroy the heal station object after interaction
-    //    Debug.Log("Destroying AfterHealStation object");
-    //    Destroy(gameObject);
-    //}
+        // Destroy the heal station object after interaction
+        Debug.Log("Destroying AfterHealStation object");
+        Destroy(gameObject);
+    }
 
     private void UpdateDialogueScreen(string header, string content, Color backgroundColor)
     {
