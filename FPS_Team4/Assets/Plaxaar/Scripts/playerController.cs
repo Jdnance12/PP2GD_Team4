@@ -112,18 +112,35 @@ public class playerController : MonoBehaviour, iDamage, IRecharge
         playerVel.y -= gravity * Time.deltaTime;
 
         // Controls
-        if (Input.GetButton("Fire1") && !isShooting)
+
+        if(weaponList.Count > 0 )
         {
-            StartCoroutine(shoot());
+            if (Input.GetButton("Fire1") && !isShooting)
+            {
+                StartCoroutine(shoot());
+            }
+            if (Input.GetButtonDown("Fire2"))
+            {
+                zoom(30f);
+            }
+            if (Input.GetButtonUp("Fire2"))
+            {
+                zoom(60f);
+            }
         }
-        if (Input.GetButtonDown("Fire2"))
-        {
-            zoom(30f);
-        }
-        if (Input.GetButtonUp("Fire2"))
-        {
-            zoom(60f);
-        }
+
+        //if (Input.GetButton("Fire1") && !isShooting)
+        //{
+        //    StartCoroutine(shoot());
+        //}
+        //if (Input.GetButtonDown("Fire2"))
+        //{
+        //    zoom(30f);
+        //}
+        //if (Input.GetButtonUp("Fire2"))
+        //{
+        //    zoom(60f);
+        //}
     }
 
     //void OnEnable()

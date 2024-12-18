@@ -16,5 +16,5 @@ public class Weapon : ScriptableObject
     public GameObject model;
     public int shootDamage;
     public int shootDist;
-    public int shootRate;
+    public float shootRate;
 }
