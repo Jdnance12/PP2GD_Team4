@@ -5,13 +5,17 @@ using UnityEngine;
 public class SlidingDoor : MonoBehaviour
 {
     [SerializeField] private Vector3 openPosition;
+    [SerializeField] private Vector3 vOpenPosition;
     private Vector3 closedPosition;
     [SerializeField] private Vector3 brokenPosition;
+    [SerializeField] private Vector3 vBrokenPosition;
 
     [SerializeField] private float slideSpeed = 1.0f; // Speed of the sliding door
 
     public bool isOpening = false;
     [SerializeField] private bool isBroken;
+    [SerializeField] public bool isVerticalDoor = false;
+
     private int tryDoorCount = 0;
 
     private Transform doorTransform; // Reference to the door's transform
@@ -47,23 +51,47 @@ public class SlidingDoor : MonoBehaviour
         //Debug.Log("Update called. isOpening: " + isOpening);
 
         //player triggers door by stepping into box collider trigger
-        if (isOpening)
+        if (!isVerticalDoor)
         {
-            //open the door
-            doorTransform.localPosition = Vector3.Lerp(doorTransform.localPosition, openPosition, Time.deltaTime * slideSpeed);
-            // uncomment below if not detecting player, otherwise this is redundant
-            //Debug.Log("Door is opening. Current position: " + doorTransform.localPosition);
+            if (isOpening)
+            {
+                //open the door
+                doorTransform.localPosition = Vector3.Lerp(doorTransform.localPosition, openPosition, Time.deltaTime * slideSpeed);
+                // uncomment below if not detecting player, otherwise this is redundant
+                //Debug.Log("Door is opening. Current position: " + doorTransform.localPosition);
+            }
+            else
+            {
+                doorTransform.localPosition = Vector3.Lerp(doorTransform.localPosition, closedPosition, Time.deltaTime * slideSpeed);
+                // uncomment below if door is being weird
+                //Debug.Log("Door is closing. Current position: " + doorTransform.localPosition);
+            }
+
+            if (isBroken && tryDoorCount > 0)
+            {
+                doorTransform.localPosition = Vector3.Lerp(doorTransform.localPosition, brokenPosition, Time.deltaTime * slideSpeed);
+            }
         }
         else
         {
-            doorTransform.localPosition = Vector3.Lerp(doorTransform.localPosition, closedPosition, Time.deltaTime * slideSpeed);
-            // uncomment below if door is being weird
-            //Debug.Log("Door is closing. Current position: " + doorTransform.localPosition);
-        }
+            if (isOpening)
+            {
+                //open the door
+                doorTransform.localPosition = Vector3.Lerp(doorTransform.localPosition, vOpenPosition, Time.deltaTime * slideSpeed);
+                // uncomment below if not detecting player, otherwise this is redundant
+                //Debug.Log("Door is opening. Current position: " + doorTransform.localPosition);
+            }
+            else
+            {
+                doorTransform.localPosition = Vector3.Lerp(doorTransform.localPosition, closedPosition, Time.deltaTime * slideSpeed);
+                // uncomment below if door is being weird
+                //Debug.Log("Door is closing. Current position: " + doorTransform.localPosition);
+            }
 
-        if (isBroken && tryDoorCount > 0)
-        {
-            doorTransform.localPosition = Vector3.Lerp(doorTransform.localPosition, brokenPosition, Time.deltaTime * slideSpeed);
+            if (isBroken && tryDoorCount > 0)
+            {
+                doorTransform.localPosition = Vector3.Lerp(doorTransform.localPosition, vBrokenPosition, Time.deltaTime * slideSpeed);
+            }
         }
     }
 

@@ -12,7 +12,7 @@ public class playerController : MonoBehaviour, IDamage, IRecharge
     [Header("Stats")]
     public int maxHP = 20;
     [SerializeField][Range(1, 10)] public int HP;
-    [SerializeField][Range(1, 5)] float speed;
+    [SerializeField][Range(1, 10)] float speed;
     [SerializeField][Range(2, 5)] float sprintMod;
     [SerializeField] float crouchHeight;
     [SerializeField][Range(2, 5)] float crouchMod;
@@ -329,44 +329,43 @@ public class playerController : MonoBehaviour, IDamage, IRecharge
         GameManager.instance.playerDamageScreen.SetActive(false);
     }
 
-    public void updatePlayerUI()
-     {
-         GameManager.instance.playerHPBar.fillAmount = (float) HP / HPOrig;
-     }
+    //public void updatePlayerUI()
+    // {
+    //     GameManager.instance.playerHPBar.fillAmount = (float) HP / HPOrig;
+    // }
 
 public void toggleDoubleJump()
     {
         canDoubleJump = true; // Gives player double jump
     }
 
-    //changed code
-    //public void restoreHP(int amount)
-    //{
-    //    if ((HP + amount) <= maxHP)
-    //    {
-    //        HP += amount;
-    //        GameManager.instance.UpdatePlayerHealth(HP, maxHP); //REQUIRED TO UPDATE THE UI THROUGH THE GAME MANAGER FOR DYNAMIC UI
-    //    }
-    //    else if ((HP + amount) > maxHP)
-    //    {
-    //        HP = maxHP;
-    //        GameManager.instance.UpdatePlayerHealth(HP, maxHP); //REQUIRED TO UPDATE THE UI THROUGH THE GAME MANAGER FOR DYNAMIC UI
-    //    }
-    //}
-
     public void restoreHP(int amount)
     {
         if ((HP + amount) <= maxHP)
         {
             HP += amount;
-            updatePlayerUI();
+            GameManager.instance.UpdatePlayerHealth(HP, maxHP); //REQUIRED TO UPDATE THE UI THROUGH THE GAME MANAGER FOR DYNAMIC UI
         }
         else if ((HP + amount) > maxHP)
         {
             HP = maxHP;
-            updatePlayerUI();
+            GameManager.instance.UpdatePlayerHealth(HP, maxHP); //REQUIRED TO UPDATE THE UI THROUGH THE GAME MANAGER FOR DYNAMIC UI
         }
     }
+
+    //public void restoreHP(int amount)
+    //{
+    //    if ((HP + amount) <= maxHP)
+    //    {
+    //        HP += amount;
+    //        updatePlayerUI();
+    //    }
+    //    else if ((HP + amount) > maxHP)
+    //    {
+    //        HP = maxHP;
+    //        updatePlayerUI();
+    //    }
+    //}
 
 
 
@@ -376,19 +375,19 @@ public void toggleDoubleJump()
         isShooting = false; // Reset shooting flag
     }
 
-    //public void HealToMax()
-    //{
-    //    HP = maxHP; // Set health to maximum
-    //    Debug.Log($"Player healed to full health: {HP}/{maxHP}");
+    public void HealToMax()
+    {
+        HP = maxHP; // Set health to maximum
+        Debug.Log($"Player healed to full health: {HP}/{maxHP}");
 
-    //    // Update health bar UI through the GameManager
-    //    if (GameManager.instance != null)
-    //    {
-    //        GameManager.instance.UpdatePlayerHealth(HP, maxHP);
-    //    }
-    //    else
-    //    {
-    //        Debug.LogError("GameManager instance is NULL. Cannot update HP UI.");
-    //    }
-    //}
+        // Update health bar UI through the GameManager
+        if (GameManager.instance != null)
+        {
+            GameManager.instance.UpdatePlayerHealth(HP, maxHP);
+        }
+        else
+        {
+            Debug.LogError("GameManager instance is NULL. Cannot update HP UI.");
+        }
+    }
 }
