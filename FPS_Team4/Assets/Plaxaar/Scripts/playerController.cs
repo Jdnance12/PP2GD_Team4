@@ -7,6 +7,7 @@ public class playerController : MonoBehaviour, iDamage, IRecharge
 {
     [Header("Components")]
     [SerializeField] CharacterController controller;
+    [SerializeField] cameraController camController;
     [SerializeField] LayerMask ignoreMask;
     [SerializeField] Transform playerCamera;
 
@@ -108,13 +109,18 @@ public class playerController : MonoBehaviour, iDamage, IRecharge
         Debug.DrawRay(Camera.main.transform.position, Camera.main.transform.forward * shootDist, Color.red);
 
         if(!GameManager.instance.isPaused)
-        {
-            movement();
+        { 
+            if(!isGrappling)
+            {
+                movement();
+            }
+            //movement();
             selectWeapon();
 
             if(Input.GetButton("Grapple") && grappleHookActive)
             {
                 LaunchHook();
+                camController.enabled = false;
 
                 if(isGrappling)
                 {
@@ -132,14 +138,18 @@ public class playerController : MonoBehaviour, iDamage, IRecharge
                 isGrappling = false;
                 pullingObject = false;
                 drawLine = false;
+                lineRenderer.positionCount = 0;
                 gravity = originalGravity;
+                camController.enabled = true;
             }
+
+            UpdateLine();
         }
 
 
         //Updates FOV with lerp
-        Camera playerCam = playerCamera.GetComponent<Camera>();
-        playerCam.fieldOfView = Mathf.Lerp(playerCam.fieldOfView, targetFOV, zoomSpeed * Time.deltaTime);
+        //Camera playerCam = playerCamera.GetComponent<Camera>();
+        //playerCam.fieldOfView = Mathf.Lerp(playerCam.fieldOfView, targetFOV, zoomSpeed * Time.deltaTime);
     }
 
     void movement()
@@ -180,114 +190,12 @@ public class playerController : MonoBehaviour, iDamage, IRecharge
                 zoom(60f);
             }
         }
-
-        //if (Input.GetButton("Fire1") && !isShooting)
-        //{
-        //    StartCoroutine(shoot());
-        //}
-        //if (Input.GetButtonDown("Fire2"))
-        //{
-        //    zoom(30f);
-        //}
-        //if (Input.GetButtonUp("Fire2"))
-        //{
-        //    zoom(60f);
-        //}
-    }
-
-    //void OnEnable()
-    //{
-    //    Debug.Log("OnEnable called in playerController.");
-
-    //    if (hasWeapon && weaponMenuAction != null && weaponMenuAction.action != null)
-    //    {
-    //        weaponMenuAction.action.performed += OnWeaponMenuPerformed; // When Q is held for 0.25s
-    //        weaponMenuAction.action.canceled += OnWeaponMenuCanceled;   // When Q is released
-    //        weaponMenuAction.action.Enable();
-    //        Debug.Log("weaponMenuAction successfully initialized in OnEnable.");
-    //    }
-    //    else
-    //    {
-    //        Debug.LogError("weaponMenuAction or weaponMenuAction.action is null in OnEnable.");
-    //    }
-    //}
-
-    //void OnDisable()
-    //{
-    //    Debug.Log("OnDisable called in playerController.");
-
-    //    if (hasWeapon && weaponMenuAction != null && weaponMenuAction.action != null)
-    //    {
-    //        weaponMenuAction.action.performed -= OnWeaponMenuPerformed;
-    //        weaponMenuAction.action.canceled -= OnWeaponMenuCanceled;
-    //        weaponMenuAction.action.Disable();
-    //        Debug.Log("weaponMenuAction successfully disabled.");
-    //    }
-    //    else
-    //    {
-    //        Debug.LogError("weaponMenuAction or weaponMenuAction.action is null in OnDisable.");
-    //    }
-    //}
-
-    // Called when button hold is performed
-    private void OnWeaponMenuPerformed(InputAction.CallbackContext context)
-    {
-        GameManager.instance.WeaponMenuActive(context);
-    }
-
-    // Called when button is released
-    private void OnWeaponMenuCanceled(InputAction.CallbackContext context)
-    {
-        GameManager.instance.WeaponMenuNotActive(context);
     }
 
     void zoom(float target)
     {
         targetFOV = target;
     }
-
-    //void checkFallDamage()
-    //{
-    //    if (!wasGrounded && controller.isGrounded && !firstDrop)
-    //    {
-    //        float fallDistance = lastGroundedHeight - transform.position.y;
-            
-    //        if (Mathf.Abs(fallDistance) < Mathf.Epsilon)
-    //        {
-    //            fallDistance = 0.0f; // Treat near-zero as zero
-    //        }
-
-
-    //        //Check if fall distance is higher than min fall height
-    //        if (fallDistance > fallDmgHeight)
-    //        {
-    //            int damage;
-    //            //Scales Damage linearly
-    //            if (fallDistance > 15)
-    //            {
-    //                damage = int.MaxValue;
-    //            }
-    //            else
-    //            {
-    //                damage = Mathf.CeilToInt(fallDistance / fallDmgHeight);
-    //            }
-
-    //            takeDamage(damage);
-    //        }
-    //    }
-    //    else
-    //    {
-    //        firstDrop = false;
-    //    }
-
-    //    wasGrounded = controller.isGrounded;
-
-    //    if (controller.isGrounded)
-    //    {
-    //        lastGroundedHeight = transform.position.y;
-    //    }
-
-    //}
 
     void jump()
     {
@@ -532,6 +440,7 @@ public void toggleDoubleJump()
                 grapplePoint = hit.point;
                 isGrappling = true;
                 lineRenderer.positionCount = 2;
+
             }
         }
     }
@@ -541,6 +450,7 @@ public void toggleDoubleJump()
         transform.position = Vector3.MoveTowards(transform.position,grapplePoint, hookSpeed * Time.deltaTime);
         if(Vector3.Distance(transform.position,grapplePoint) < 1f)
         {
+            transform.position = new Vector3(transform.position.x, transform.position.y + 1, transform.position.z + 1);
             isGrappling = false;
             lineRenderer.positionCount = 0;
         }
