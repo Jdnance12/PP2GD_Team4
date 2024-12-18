@@ -44,7 +44,7 @@ public class SlidingDoor : MonoBehaviour
     {
         if (doorTransform == null)
         {
-            Debug.LogError("doorTransform is null. Please check the setup.");
+            Debug.LogError("doorTransform is null on GameObject: " + gameObject.name + ". Please check the setup.");
             return;
         }
         // if not opening, uncomment below to check if isOpening is working
