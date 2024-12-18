@@ -16,7 +16,9 @@ public class IPickUp : MonoBehaviour
     {
         if(other.CompareTag("Player"))
         {
-            
+            GameManager.instance.playerScript.getWeaponStats(weapon);
+
+            Destroy(gameObject);
         }
     }
 }

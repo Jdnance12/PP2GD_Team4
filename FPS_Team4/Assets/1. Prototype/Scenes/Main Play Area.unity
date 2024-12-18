@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.18028352, g: 0.22571376, b: 0.3069224, a: 1}
+  m_IndirectSpecularColor: {r: 0.18028378, g: 0.22571412, b: 0.30692285, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -9818,6 +9818,63 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 5725000371507048362, guid: b2452a5c2cd649a4db9eebcd16f7b155, type: 3}
   m_PrefabInstance: {fileID: 617104693}
   m_PrefabAsset: {fileID: 0}
+--- !u!1001 &618572430
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 4869875937555200370, guid: 39f989bd5fbdc0e42889f9443a8cccfd, type: 3}
+      propertyPath: m_RootOrder
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4869875937555200370, guid: 39f989bd5fbdc0e42889f9443a8cccfd, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 33.907486
+      objectReference: {fileID: 0}
+    - target: {fileID: 4869875937555200370, guid: 39f989bd5fbdc0e42889f9443a8cccfd, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 1.98
+      objectReference: {fileID: 0}
+    - target: {fileID: 4869875937555200370, guid: 39f989bd5fbdc0e42889f9443a8cccfd, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 6.36
+      objectReference: {fileID: 0}
+    - target: {fileID: 4869875937555200370, guid: 39f989bd5fbdc0e42889f9443a8cccfd, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 0.93999255
+      objectReference: {fileID: 0}
+    - target: {fileID: 4869875937555200370, guid: 39f989bd5fbdc0e42889f9443a8cccfd, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0.341195
+      objectReference: {fileID: 0}
+    - target: {fileID: 4869875937555200370, guid: 39f989bd5fbdc0e42889f9443a8cccfd, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4869875937555200370, guid: 39f989bd5fbdc0e42889f9443a8cccfd, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4869875937555200370, guid: 39f989bd5fbdc0e42889f9443a8cccfd, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 39.899
+      objectReference: {fileID: 0}
+    - target: {fileID: 4869875937555200370, guid: 39f989bd5fbdc0e42889f9443a8cccfd, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4869875937555200370, guid: 39f989bd5fbdc0e42889f9443a8cccfd, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 9108607959546713514, guid: 39f989bd5fbdc0e42889f9443a8cccfd, type: 3}
+      propertyPath: m_Name
+      value: DamagerModel
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 39f989bd5fbdc0e42889f9443a8cccfd, type: 3}
 --- !u!1 &631097294
 GameObject:
   m_ObjectHideFlags: 0
@@ -12649,7 +12706,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 6
+  m_RootOrder: 7
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &828914312
 PrefabInstance:
@@ -15651,6 +15708,11 @@ Transform:
   m_Father: {fileID: 512409520}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1072639047 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 1772151576, guid: 82e76b92fe29f2043b66bd2fc1ae2753, type: 3}
+  m_PrefabInstance: {fileID: 1440816878726611422}
+  m_PrefabAsset: {fileID: 0}
 --- !u!4 &1075182818 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 163741142201410853, guid: 1c1d8e46d2ea40e4f99dc2899b64209a, type: 3}
@@ -17113,7 +17175,7 @@ Transform:
   - {fileID: 275970020}
   - {fileID: 2021715176}
   m_Father: {fileID: 0}
-  m_RootOrder: 5
+  m_RootOrder: 6
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &1167171737
 PrefabInstance:
@@ -19155,7 +19217,7 @@ Transform:
   - {fileID: 163741142185531413}
   - {fileID: 1075182818}
   m_Father: {fileID: 0}
-  m_RootOrder: 3
+  m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1349707847
 GameObject:
@@ -33402,7 +33464,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 578533130844305178, guid: 82e76b92fe29f2043b66bd2fc1ae2753, type: 3}
       propertyPath: m_RootOrder
-      value: 2
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 578533130844305178, guid: 82e76b92fe29f2043b66bd2fc1ae2753, type: 3}
       propertyPath: m_LocalPosition.x
@@ -33448,6 +33510,22 @@ PrefabInstance:
       propertyPath: speed
       value: 7
       objectReference: {fileID: 0}
+    - target: {fileID: 578533130844305188, guid: 82e76b92fe29f2043b66bd2fc1ae2753, type: 3}
+      propertyPath: shootDist
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 578533130844305188, guid: 82e76b92fe29f2043b66bd2fc1ae2753, type: 3}
+      propertyPath: shootRate
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 578533130844305188, guid: 82e76b92fe29f2043b66bd2fc1ae2753, type: 3}
+      propertyPath: shootDamage
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 578533130844305188, guid: 82e76b92fe29f2043b66bd2fc1ae2753, type: 3}
+      propertyPath: weaponModel
+      value: 
+      objectReference: {fileID: 1072639047}
     - target: {fileID: 578533130844305188, guid: 82e76b92fe29f2043b66bd2fc1ae2753, type: 3}
       propertyPath: weaponMenuAction
       value: 
@@ -35185,7 +35263,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 389809019826290235, guid: f46cca398c538b34fac07f4aad78c675, type: 3}
       propertyPath: m_RootOrder
-      value: 1
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 389809019826290235, guid: f46cca398c538b34fac07f4aad78c675, type: 3}
       propertyPath: m_AnchorMax.x
