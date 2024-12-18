@@ -12,7 +12,7 @@ public class playerController : MonoBehaviour, IDamage, IRecharge
     [Header("Stats")]
     public int maxHP = 20;
     [SerializeField][Range(1, 10)] public int HP;
-    [SerializeField][Range(1, 5)] float speed;
+    [SerializeField][Range(1, 10)] float speed;
     [SerializeField][Range(2, 5)] float sprintMod;
     [SerializeField] float crouchHeight;
     [SerializeField][Range(2, 5)] float crouchMod;
@@ -373,19 +373,19 @@ public void toggleDoubleJump()
         isShooting = false; // Reset shooting flag
     }
 
-    //public void HealToMax()
-    //{
-    //    HP = maxHP; // Set health to maximum
-    //    Debug.Log($"Player healed to full health: {HP}/{maxHP}");
+    public void HealToMax()
+    {
+        HP = maxHP; // Set health to maximum
+        Debug.Log($"Player healed to full health: {HP}/{maxHP}");
 
-    //    // Update health bar UI through the GameManager
-    //    if (GameManager.instance != null)
-    //    {
-    //        GameManager.instance.UpdatePlayerHealth(HP, maxHP);
-    //    }
-    //    else
-    //    {
-    //        Debug.LogError("GameManager instance is NULL. Cannot update HP UI.");
-    //    }
-    //}
+        // Update health bar UI through the GameManager
+        if (GameManager.instance != null)
+        {
+            GameManager.instance.UpdatePlayerHealth(HP, maxHP);
+        }
+        else
+        {
+            Debug.LogError("GameManager instance is NULL. Cannot update HP UI.");
+        }
+    }
 }

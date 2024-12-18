@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.18028352, g: 0.22571376, b: 0.3069224, a: 1}
+  m_IndirectSpecularColor: {r: 0.18028378, g: 0.22571412, b: 0.30692285, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -7607,6 +7607,10 @@ PrefabInstance:
       propertyPath: m_IsTrigger
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 2538012508140955955, guid: a6379c0fd7055aa469f87c3e05714b21, type: 3}
+      propertyPath: healAmount
+      value: 10
+      objectReference: {fileID: 0}
     - target: {fileID: 3530673732861131726, guid: a6379c0fd7055aa469f87c3e05714b21, type: 3}
       propertyPath: m_RootOrder
       value: 0
@@ -7654,6 +7658,10 @@ PrefabInstance:
     - target: {fileID: 3625201532298705505, guid: a6379c0fd7055aa469f87c3e05714b21, type: 3}
       propertyPath: m_Name
       value: Healing Station platform
+      objectReference: {fileID: 0}
+    - target: {fileID: 3625201532298705505, guid: a6379c0fd7055aa469f87c3e05714b21, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: a6379c0fd7055aa469f87c3e05714b21, type: 3}
@@ -15250,6 +15258,7 @@ GameObject:
   - component: {fileID: 1450024353}
   - component: {fileID: 1450024352}
   - component: {fileID: 1450024351}
+  - component: {fileID: 1450024354}
   m_Layer: 0
   m_Name: HealStationInteract
   m_TagString: Untagged
@@ -15264,7 +15273,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1450024350}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 80e2f396aa195d04882db887d7bf956b, type: 3}
   m_Name: 
@@ -15300,6 +15309,22 @@ Transform:
   m_Father: {fileID: 1335951708}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1450024354
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1450024350}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e41657590cc1a764daaef10103905446, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  healAmount: 10
+  rampUp: {fileID: 0}
+  rampDown: {fileID: 0}
+  enemy: {fileID: 0}
 --- !u!1 &1450673818
 GameObject:
   m_ObjectHideFlags: 0
@@ -22539,15 +22564,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4606005208175116608, guid: bf9d7fdd0f00be74d9e96ca0de33daf5, type: 3}
       propertyPath: m_Size.y
-      value: 9.81
+      value: 8.22
       objectReference: {fileID: 0}
     - target: {fileID: 4606005208175116608, guid: bf9d7fdd0f00be74d9e96ca0de33daf5, type: 3}
       propertyPath: m_Size.z
-      value: 8
+      value: 23.85
       objectReference: {fileID: 0}
     - target: {fileID: 4606005208175116608, guid: bf9d7fdd0f00be74d9e96ca0de33daf5, type: 3}
       propertyPath: m_Center.x
-      value: 2.1
+      value: 1.68
       objectReference: {fileID: 0}
     - target: {fileID: 4606005208175116608, guid: bf9d7fdd0f00be74d9e96ca0de33daf5, type: 3}
       propertyPath: m_Center.y
@@ -22555,7 +22580,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4606005208175116608, guid: bf9d7fdd0f00be74d9e96ca0de33daf5, type: 3}
       propertyPath: m_Center.z
-      value: 12.08
+      value: 2.48
       objectReference: {fileID: 0}
     - target: {fileID: 4606005208175116622, guid: bf9d7fdd0f00be74d9e96ca0de33daf5, type: 3}
       propertyPath: m_Name
@@ -24597,6 +24622,10 @@ PrefabInstance:
     - target: {fileID: 578533130844305178, guid: 82e76b92fe29f2043b66bd2fc1ae2753, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 578533130844305188, guid: 82e76b92fe29f2043b66bd2fc1ae2753, type: 3}
+      propertyPath: speed
+      value: 7
       objectReference: {fileID: 0}
     - target: {fileID: 578533130844305188, guid: 82e76b92fe29f2043b66bd2fc1ae2753, type: 3}
       propertyPath: weaponMenuAction
