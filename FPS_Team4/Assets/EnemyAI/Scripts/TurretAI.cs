@@ -5,8 +5,11 @@ using UnityEngine;
 
 public class TurretAI : MonoBehaviour, iDamage
 {
+    [SerializeField] int HP;
     [SerializeField] int FOV;
     [SerializeField] int faceTargetSpeed;
+    [SerializeField] Renderer modelBody;
+    [SerializeField] Renderer modelArm;
     [SerializeField] Transform headPos;
     [SerializeField] Renderer model;
 
@@ -17,12 +20,15 @@ public class TurretAI : MonoBehaviour, iDamage
     [SerializeField] GameObject bullet;
     [SerializeField] float shootRate;
     [SerializeField] float stunTimer;
+    [SerializeField] float hurtTimer;
 
     bool playerInRange;
     bool isShooting;
     bool isStunned;
 
     Color colorOrigin;
+    Color colorBodyOrigin;
+    Color colorArmOrigin;
 
     // Start is called before the first frame update
     void Start()
@@ -102,6 +108,16 @@ public class TurretAI : MonoBehaviour, iDamage
         yield return new WaitForSeconds(stunTimer);
         model.material.color = colorOrigin;
     }
+
+    IEnumerator TurnYellow()
+    {
+        modelBody.material.color = Color.yellow;
+        modelArm.material.color = Color.yellow;
+        yield return new WaitForSeconds(hurtTimer);
+        modelBody.material.color = colorBodyOrigin;
+        modelArm.material.color = colorArmOrigin;
+    }
+
     IEnumerator Stun(float stunDuration)
     {
         isStunned = true;
@@ -117,9 +133,20 @@ public class TurretAI : MonoBehaviour, iDamage
     }
     public void takeDamage(int amount)
     {
-        //HP -= amount;
-        StartCoroutine(TurnBlue());
+        //For Damager
+        HP -= amount;
+        StartCoroutine(TurnYellow());
 
+        if (HP <= 0)
+        {
+            //I'm dead
+            Destroy(gameObject);
+        }
+    }
+
+    public void takeEMP(int amount)
+    {
         StartCoroutine(Stun(stunTimer));
+        StartCoroutine(TurnBlue());
     }
 }

@@ -32,6 +32,7 @@ public class playerController : MonoBehaviour, iDamage, IRecharge
     [SerializeField] int shootDamage;
     [SerializeField] int shootDist;
     [SerializeField] float shootRate;
+    [SerializeField] float stunTimer;
     int weaponListPos;
 
     [Header("Temp Variables")]
@@ -52,6 +53,7 @@ public class playerController : MonoBehaviour, iDamage, IRecharge
     bool isShooting;
     bool isCrouching;
     bool isJumping;
+    bool isStunned;
     private bool firstDrop = true;
     [SerializeField] bool wasGrounded;
 
@@ -83,7 +85,11 @@ public class playerController : MonoBehaviour, iDamage, IRecharge
     {
         Debug.DrawRay(Camera.main.transform.position, Camera.main.transform.forward * shootDist, Color.red);
 
-        movement();
+        if(!GameManager.instance.isPaused)
+        {
+            movement();
+            selectWeapon();
+        }
 
         //Updates FOV with lerp
         Camera playerCam = playerCamera.GetComponent<Camera>();
@@ -340,6 +346,24 @@ public class playerController : MonoBehaviour, iDamage, IRecharge
             GameManager.instance.youLose();
         }
     }
+    public void takeEMP(int amount)
+    {
+        StartCoroutine(Stun(stunTimer));
+    }
+
+    IEnumerator Stun(float stunDuration)
+    {
+        isStunned = true;
+        isShooting = false;
+
+        GameManager.instance.OnStunBegin(); // Notify GameManager of stun
+
+        yield return new WaitForSeconds(stunDuration);
+
+        isStunned = false;
+
+        GameManager.instance.OnStunEnd(); // Notify GameManager of stun end
+    }
 
     IEnumerator flashScreenDamage()
     {
@@ -409,22 +433,6 @@ public void toggleDoubleJump()
             GameManager.instance.UpdatePlayerHealth(HP, maxHP); //REQUIRED TO UPDATE THE UI THROUGH THE GAME MANAGER FOR DYNAMIC UI
         }
     }
-
-    //public void restoreHP(int amount)
-    //{
-    //    if ((HP + amount) <= maxHP)
-    //    {
-    //        HP += amount;
-    //        updatePlayerUI();
-    //    }
-    //    else if ((HP + amount) > maxHP)
-    //    {
-    //        HP = maxHP;
-    //        updatePlayerUI();
-    //    }
-    //}
-
-
 
     public void ResetPlayerState()
     {

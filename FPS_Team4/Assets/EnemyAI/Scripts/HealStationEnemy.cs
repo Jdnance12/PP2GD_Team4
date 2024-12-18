@@ -23,6 +23,7 @@ public class HealStationEnemy : MonoBehaviour, iDamage
     [SerializeField] Transform shootPos;
     [SerializeField] GameObject bullet;
     [SerializeField] float shootRate;
+    [SerializeField] float stunTimer;
 
     Color colorBodyOrigin;
     Color colorArmOrigin;
@@ -30,6 +31,7 @@ public class HealStationEnemy : MonoBehaviour, iDamage
     bool playerInRange;
     bool playerVisible;
     bool isShooting;
+    bool isStunned;
 
     [SerializeField] GameObject itemPrefab;
     public TextMeshProUGUI titleText;
@@ -139,6 +141,12 @@ public class HealStationEnemy : MonoBehaviour, iDamage
         }
     }
 
+    public void takeEMP(int amount)
+    {
+        StartCoroutine(Stun(stunTimer));
+        StartCoroutine(TurnBlue());
+    }
+
     IEnumerator TurnYellow()
     {
         Debug.Log("Enemy hit: turning yellow");
@@ -152,6 +160,15 @@ public class HealStationEnemy : MonoBehaviour, iDamage
         Debug.Log("Returning to original color.");
     }
 
+    IEnumerator TurnBlue()
+    {
+        modelBody.material.color = Color.blue;
+        modelArm.material.color = Color.blue;
+        yield return new WaitForSeconds(stunTimer);
+        modelBody.material.color = colorBodyOrigin;
+        modelArm.material.color = colorArmOrigin;
+    }
+
     IEnumerator Shoot()
     {
         isShooting = true;
@@ -163,11 +180,19 @@ public class HealStationEnemy : MonoBehaviour, iDamage
         Debug.Log("Finished shooting. Ready to shoot again.");
     }
 
-    void DropItem()
+    IEnumerator Stun(float stunDuration)
     {
-        Debug.Log("Dropping item");
-        Vector3 dropPos = new Vector3(transform.position.x, transform.position.y + 1, transform.position.z);
-        Instantiate(itemPrefab, dropPos, Quaternion.identity);
-        Debug.Log($"Item dropped at position: {dropPos}");
+        isStunned = true;
+        navAgent.isStopped = true;
+        isShooting = false;
+
+        GameManager.instance.OnStunBegin(); // Notify GameManager of stun
+
+        yield return new WaitForSeconds(stunDuration);
+
+        navAgent.isStopped = false;
+        isStunned = false;
+
+        GameManager.instance.OnStunEnd(); // Notify GameManager of stun end
     }
 }

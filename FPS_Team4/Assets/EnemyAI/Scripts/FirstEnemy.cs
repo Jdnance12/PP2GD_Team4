@@ -14,6 +14,7 @@ public class FirstEnemy : MonoBehaviour, iDamage
     [SerializeField] float hurtTimer;
     [SerializeField] int FOV;
     [SerializeField] int faceTargetSpeed;
+    [SerializeField] float stunTimer;
     [SerializeField] Transform headPos;
 
     Vector3 playerDir;
@@ -33,6 +34,7 @@ public class FirstEnemy : MonoBehaviour, iDamage
     bool playerInRange;
     bool playerVisible;
     bool isShooting;
+    bool isStunned;
 
     void Start()
     {
@@ -132,6 +134,12 @@ public class FirstEnemy : MonoBehaviour, iDamage
         }
     }
 
+    public void takeEMP(int amount)
+    {
+        StartCoroutine(Stun(stunTimer));
+        StartCoroutine(TurnBlue());
+    }
+
     IEnumerator TurnYellow()
     {
         Debug.Log("Enemy hit: turning yellow...");
@@ -145,6 +153,15 @@ public class FirstEnemy : MonoBehaviour, iDamage
         Debug.Log("Returning to original color.");
     }
 
+    IEnumerator TurnBlue()
+    {
+        modelBody.material.color = Color.blue;
+        modelArm.material.color = Color.blue;
+        yield return new WaitForSeconds(stunTimer);
+        modelBody.material.color = colorBodyOrigin;
+        modelArm.material.color = colorArmOrigin;
+    }
+
     IEnumerator shoot()
     {
         isShooting = true;
@@ -154,5 +171,21 @@ public class FirstEnemy : MonoBehaviour, iDamage
         yield return new WaitForSeconds(shootRate);
         isShooting = false;
         Debug.Log("Finished shooting. Ready to shoot again.");
+    }
+
+    IEnumerator Stun(float stunDuration)
+    {
+        isStunned = true;
+        navAgent.isStopped = true;
+        isShooting = false;
+
+        GameManager.instance.OnStunBegin(); // Notify GameManager of stun
+
+        yield return new WaitForSeconds(stunDuration);
+
+        navAgent.isStopped = false;
+        isStunned = false;
+
+        GameManager.instance.OnStunEnd(); // Notify GameManager of stun end
     }
 }
