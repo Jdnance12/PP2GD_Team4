@@ -9,7 +9,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 361645131226347251}
-  - component: {fileID: 1457556077441260238}
   - component: {fileID: 361645131226347248}
   - component: {fileID: 361645131226347250}
   - component: {fileID: 361645131226347249}
@@ -38,35 +37,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: -34.63, z: 0}
---- !u!114 &1457556077441260238
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 361645131226347253}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 93c6182da128fc54a823f119d57c0253, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  HP: 20
-  FOV: 75
-  faceTargetSpeed: 3
-  modelBody: {fileID: 0}
-  modelArm: {fileID: 0}
-  headPos: {fileID: 0}
-  model: {fileID: 0}
-  navAgent: {fileID: 0}
-  waypoints: []
-  roamingRadius: 20
-  isTurret: 0
-  currentWayPointIndex: 0
-  shootPos: {fileID: 0}
-  bullet: {fileID: 6204158305650084918, guid: 79033c9b8e26cc947a64522be7157891, type: 3}
-  shootRate: 0
-  stunTimer: 0
-  hurtTimer: 0
 --- !u!114 &361645131226347248
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -82,8 +52,8 @@ MonoBehaviour:
   HP: 0
   FOV: 75
   faceTargetSpeed: 3
-  modelBody: {fileID: 0}
-  modelArm: {fileID: 0}
+  modelBody: {fileID: 361645132394614164}
+  modelArm: {fileID: 361645131765301871}
   headPos: {fileID: 361645131765301870}
   model: {fileID: 361645132394614164}
   shootPos: {fileID: 361645132205897921}
