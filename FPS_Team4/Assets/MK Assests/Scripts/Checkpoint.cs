@@ -51,10 +51,10 @@ public class Checkpoint : MonoBehaviour
 
             // Update checkpoint button visibility
             buttonFunctions buttonScript = FindObjectOfType<buttonFunctions>();
-            if (buttonScript != null)
-            {
-                buttonScript.UpdateCheckpointButtonState();
-            }
+            // if (buttonScript != null)
+            // {
+            //     buttonScript.UpdateCheckpointButtonState();
+            // }
 
             // Show checkpoint UI feedback
             GameManager.instance?.ShowCheckpointUI();

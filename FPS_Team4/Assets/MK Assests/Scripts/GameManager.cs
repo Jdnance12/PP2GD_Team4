@@ -90,7 +90,7 @@ public class GameManager : MonoBehaviour
         if (buttonScript != null)
         {
             Debug.Log("Disabling all checkpoint buttons in Awake.");
-            buttonScript.DisableAllCheckpointButtons();
+            // buttonScript.DisableAllCheckpointButtons();
         }
         else
         {
@@ -511,12 +511,13 @@ public class GameManager : MonoBehaviour
         Debug.Log("Game Saved! PlayerPrefs updated.");
 
         // Refresh the checkpoint button state
-        buttonFunctions buttonScript = FindObjectOfType<buttonFunctions>();
-        if (buttonScript != null)
-        {
-            Debug.Log("Calling UpdateCheckpointButtonState from SaveGame.");
-            buttonScript.UpdateCheckpointButtonState();
-        }
+        // buttonFunctions buttonScript = FindObjectOfType<buttonFunctions>();
+    //     if (buttonScript != null)
+    //     {
+    //         Debug.Log("Calling UpdateCheckpointButtonState from SaveGame.");
+    //         buttonScript.UpdateCheckpointButtonState();
+    //     }
+    // 
     }
 
     public void LoadGame()

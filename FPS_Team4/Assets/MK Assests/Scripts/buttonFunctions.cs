@@ -29,18 +29,18 @@ public class buttonFunctions : MonoBehaviour
     void Start()
     {
         // Ensure checkpoint buttons are initially turned off
-        if (pauseCheckpointButton != null)
-        {
-            pauseCheckpointButton.SetActive(false);
-        }
+        // if (pauseCheckpointButton != null)
+        // {
+        //     pauseCheckpointButton.SetActive(false);
+        // }
 
-        if (loseMenuCheckpointButton != null)
-        {
-            loseMenuCheckpointButton.SetActive(false);
-        }
+        // if (loseMenuCheckpointButton != null)
+        // {
+        //     loseMenuCheckpointButton.SetActive(false);
+        // }
 
-        // Call UpdateCheckpointButtonState to check for valid save data
-        UpdateCheckpointButtonState();
+        // // Call UpdateCheckpointButtonState to check for valid save data
+        // UpdateCheckpointButtonState();
 
         ////check to make sure things are assigned
         //if(doorInteractionPrompt == null)
@@ -94,16 +94,16 @@ public class buttonFunctions : MonoBehaviour
     //    }
     //}
 
-    public void CheckpointInstructionsResume()
-    {
-        if (checkpointInstructions != null && checkpointInstructions.activeSelf)
-        {
-            // Turn off Checkpoint Instructions
-            checkpointInstructions.SetActive(false);
-            GameManager.instance.stateUnpause();
-            Debug.Log("Checkpoint Instructions turned off. Game unpaused.");
-        }
-    }
+    // public void CheckpointInstructionsResume()
+    // {
+    //     if (checkpointInstructions != null && checkpointInstructions.activeSelf)
+    //     {
+    //         // Turn off Checkpoint Instructions
+    //         checkpointInstructions.SetActive(false);
+    //         GameManager.instance.stateUnpause();
+    //         Debug.Log("Checkpoint Instructions turned off. Game unpaused.");
+    //     }
+    // }
 
     public void Restart()
     {
@@ -133,66 +133,66 @@ public class buttonFunctions : MonoBehaviour
     #endif
     }
 
-    public void OnLoadCheckpointButton()
-    {
-        if (GameManager.instance != null)
-        {
-            Debug.Log("Loading Checkpoint...");
+    // public void OnLoadCheckpointButton()
+    // {
+    //     if (GameManager.instance != null)
+    //     {
+    //         Debug.Log("Loading Checkpoint...");
             
-            // Hide Pause Menu and load the game
-            if (pauseMenu != null)
-            {
-                pauseMenu.SetActive(false);
-            }
+    //         // Hide Pause Menu and load the game
+    //         if (pauseMenu != null)
+    //         {
+    //             pauseMenu.SetActive(false);
+    //         }
 
-            if (GameManager.instance != null)
-            {
-                GameManager.instance.LoadGame();
-            }
-            else
-            {
-                Debug.LogError("GameManager instance is null. Cannot load checkpoint.");
-            }
+    //         if (GameManager.instance != null)
+    //         {
+    //             GameManager.instance.LoadGame();
+    //         }
+    //         else
+    //         {
+    //             Debug.LogError("GameManager instance is null. Cannot load checkpoint.");
+    //         }
 
-            // Start countdown coroutine
-            StartCoroutine(ShowCountdown());
-        }
-    }
+    //         // Start countdown coroutine
+    //         StartCoroutine(ShowCountdown());
+    //     }
+    // }
 
-    private IEnumerator ShowCountdown()
-    {
-        // Ensure the countdown UI is visible
-        countdownUI.SetActive(true);
+    // private IEnumerator ShowCountdown()
+    // {
+    //     // Ensure the countdown UI is visible
+    //     countdownUI.SetActive(true);
         
-        // Display "Loading..." text 
-        if (loadingText != null)
-        {
-            loadingText.text = "Loading...";
-        }
+    //     // Display "Loading..." text 
+    //     if (loadingText != null)
+    //     {
+    //         loadingText.text = "Loading...";
+    //     }
 
-        // Countdown logic
-        int countdown = 3;
+    //     // Countdown logic
+    //     int countdown = 3;
 
-        while (countdown > 0)
-        {
-            // Update countdown numbers
-            countdownText.text = countdown.ToString();
+    //     while (countdown > 0)
+    //     {
+    //         // Update countdown numbers
+    //         countdownText.text = countdown.ToString();
             
-            yield return new WaitForSecondsRealtime(1f); // Wait for 1 real-time second
-            countdown--;
-        }
+    //         yield return new WaitForSecondsRealtime(1f); // Wait for 1 real-time second
+    //         countdown--;
+    //     }
 
-        // Hide the countdown UI after the countdown finishes
-        countdownUI.SetActive(false);
+    //     // Hide the countdown UI after the countdown finishes
+    //     countdownUI.SetActive(false);
 
-        // Re-enable the pause menu
-        if (pauseMenu != null)
-        {
-            pauseMenu.SetActive(true);
-        }
+    //     // Re-enable the pause menu
+    //     if (pauseMenu != null)
+    //     {
+    //         pauseMenu.SetActive(true);
+    //     }
 
-        canResume = true; // Allow "Resume" button interaction
-    }
+    //     canResume = true; // Allow "Resume" button interaction
+    // }
 
     public void OnLoadGameFromDeathMenu()
     {
@@ -224,105 +224,105 @@ public class buttonFunctions : MonoBehaviour
         Time.timeScale = 0;
 
         // Start the countdown coroutine (using real-time)
-        StartCoroutine(LoadCheckpointWithCountdown());
+        // StartCoroutine(LoadCheckpointWithCountdown());
     }
 
-    private IEnumerator LoadCheckpointWithCountdown()
-    {
-        Debug.Log("Starting Loading Countdown...");
+    // private IEnumerator LoadCheckpointWithCountdown()
+    // {
+    //     Debug.Log("Starting Loading Countdown...");
 
-        // Show Loading UI
-        countdownUI.SetActive(true);
+    //     // Show Loading UI
+    //     countdownUI.SetActive(true);
 
-        // Display "Loading..." text
-        if (loadingText != null)
-        {
-            loadingText.text = "Loading...";
-        }
+    //     // Display "Loading..." text
+    //     if (loadingText != null)
+    //     {
+    //         loadingText.text = "Loading...";
+    //     }
 
-        // Countdown logic: use real-time unaffected by Time.timeScale
-        int countdown = 3;
-        while (countdown > 0)
-        {
-            if (countdownText != null)
-            {
-                countdownText.text = countdown.ToString();
-            }
+    //     // Countdown logic: use real-time unaffected by Time.timeScale
+    //     int countdown = 3;
+    //     while (countdown > 0)
+    //     {
+    //         if (countdownText != null)
+    //         {
+    //             countdownText.text = countdown.ToString();
+    //         }
 
-            yield return new WaitForSecondsRealtime(1f); // Wait 1 real-time second
-            countdown--;
-        }
+    //         yield return new WaitForSecondsRealtime(1f); // Wait 1 real-time second
+    //         countdown--;
+    //     }
 
-        // Hide the Loading UI
-        countdownUI.SetActive(false);
+    //     // Hide the Loading UI
+    //     countdownUI.SetActive(false);
 
-        // Resume the game
-        GameManager.instance.statePause(); // Game remains paused for the player to resume manually
+    //     // Resume the game
+    //     GameManager.instance.statePause(); // Game remains paused for the player to resume manually
 
-        // Show the Pause Menu
-        if (pauseMenu != null)
-        {
-            pauseMenu.SetActive(true);
-        }
+    //     // Show the Pause Menu
+    //     if (pauseMenu != null)
+    //     {
+    //         pauseMenu.SetActive(true);
+    //     }
 
-        Debug.Log("Loading complete. Pause Menu shown.");
-    }
+    //     Debug.Log("Loading complete. Pause Menu shown.");
+    // }
 
-    public void UpdateCheckpointButtonState()
-    {
-        bool hasValidSaveData = PlayerPrefs.HasKey("Player_X") 
-                                && PlayerPrefs.HasKey("Player_Y") 
-                                && PlayerPrefs.HasKey("Player_Z");
+    // public void UpdateCheckpointButtonState()
+    // {
+    //     bool hasValidSaveData = PlayerPrefs.HasKey("Player_X") 
+    //                             && PlayerPrefs.HasKey("Player_Y") 
+    //                             && PlayerPrefs.HasKey("Player_Z");
 
-        // Additional validation Ensure saved position is reasonable
-        if (hasValidSaveData)
-        {
-            float x = PlayerPrefs.GetFloat("Player_X");
-            float y = PlayerPrefs.GetFloat("Player_Y");
-            float z = PlayerPrefs.GetFloat("Player_Z");
+    //     // Additional validation Ensure saved position is reasonable
+    //     if (hasValidSaveData)
+    //     {
+    //         float x = PlayerPrefs.GetFloat("Player_X");
+    //         float y = PlayerPrefs.GetFloat("Player_Y");
+    //         float z = PlayerPrefs.GetFloat("Player_Z");
 
-            hasValidSaveData = !(x == 0 && y == 0 && z == 0); // Reject invalid positions
-        }
+    //         hasValidSaveData = !(x == 0 && y == 0 && z == 0); // Reject invalid positions
+    //     }
 
-        Debug.Log($"Checkpoint Button Visibility: {hasValidSaveData}");
+    //     Debug.Log($"Checkpoint Button Visibility: {hasValidSaveData}");
 
-        if (pauseCheckpointButton != null)
-        {
-            pauseCheckpointButton.SetActive(hasValidSaveData);
-            Debug.Log($"PauseCheckpointButton active: {pauseCheckpointButton.activeSelf}");
-        }
+    //     if (pauseCheckpointButton != null)
+    //     {
+    //         pauseCheckpointButton.SetActive(hasValidSaveData);
+    //         Debug.Log($"PauseCheckpointButton active: {pauseCheckpointButton.activeSelf}");
+    //     }
 
-        if (loseMenuCheckpointButton != null)
-        {
-            loseMenuCheckpointButton.SetActive(hasValidSaveData);
-            Debug.Log($"LoseMenuCheckpointButton active: {loseMenuCheckpointButton.activeSelf}");
-        }
-    }
+    //     if (loseMenuCheckpointButton != null)
+    //     {
+    //         loseMenuCheckpointButton.SetActive(hasValidSaveData);
+    //         Debug.Log($"LoseMenuCheckpointButton active: {loseMenuCheckpointButton.activeSelf}");
+    //     }
+    // }
 
 
-    private void ShowCheckpointInstructionsOnce()
-    {
-        if (!instructionsShown && checkpointInstructions != null)
-        {
-            checkpointInstructions.SetActive(true);
-            instructionsShown = true;
-        }
-    }
+    // private void ShowCheckpointInstructionsOnce()
+    // {
+    //     if (!instructionsShown && checkpointInstructions != null)
+    //     {
+    //         checkpointInstructions.SetActive(true);
+    //         instructionsShown = true;
+    //     }
+    // }
 
-    public void DisableAllCheckpointButtons()
-    {
-        if (pauseCheckpointButton != null)
-        {
-            pauseCheckpointButton.SetActive(false);
-            Debug.Log("PauseCheckpointButton forced to be disabled.");
-        }
+    // public void DisableAllCheckpointButtons()
+    // {
+    //     if (pauseCheckpointButton != null)
+    //     {
+    //         pauseCheckpointButton.SetActive(false);
+    //         Debug.Log("PauseCheckpointButton forced to be disabled.");
+    //     }
 
-        if (loseMenuCheckpointButton != null)
-        {
-            loseMenuCheckpointButton.SetActive(false);
-            Debug.Log("LoseMenuCheckpointButton forced to be disabled.");
-        }
-    }
+    //     if (loseMenuCheckpointButton != null)
+    //     {
+    //         loseMenuCheckpointButton.SetActive(false);
+    //         Debug.Log("LoseMenuCheckpointButton forced to be disabled.");
+    //     }
+    // }
 
     //public void OnDoorInteractionButtonClicked()
     //{
