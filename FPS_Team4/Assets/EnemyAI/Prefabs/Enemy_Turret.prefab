@@ -309,7 +309,7 @@ Transform:
   m_GameObject: {fileID: 8266244318785069849}
   m_LocalRotation: {x: -0, y: -0.2976252, z: -0, w: 0.9546828}
   m_LocalPosition: {x: 22.25, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 2, y: 4, z: 2}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 8266244318558450851}
@@ -330,14 +330,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7a56cceaf81be014384790754fc62fde, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  HP: 0
   FOV: 75
   faceTargetSpeed: 3
+  modelBody: {fileID: 0}
+  modelArm: {fileID: 0}
   headPos: {fileID: 8266244318237710210}
   model: {fileID: 8266244317473527928}
   shootPos: {fileID: 8266244317804834093}
   bullet: {fileID: 6204158305650084918, guid: 79033c9b8e26cc947a64522be7157891, type: 3}
   shootRate: 0.5
   stunTimer: 10
+  hurtTimer: 0
 --- !u!136 &8266244318785069854
 CapsuleCollider:
   m_ObjectHideFlags: 0
