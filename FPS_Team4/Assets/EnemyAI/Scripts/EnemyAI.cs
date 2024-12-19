@@ -15,11 +15,13 @@ public class EnemyAI : MonoBehaviour, iDamage
     [SerializeField] Renderer modelBody;
     [SerializeField] Renderer modelArm;
     [SerializeField] Transform headPos;
+    [SerializeField] Renderer model;
 
     [Header("----- Movement -----")]
     [SerializeField] NavMeshAgent navAgent;
     [SerializeField] List<Transform> waypoints = new List<Transform>();
     [SerializeField] [Range(5, 20)] float roamingRadius = 20f; // Roaming Radius for random movement
+    [SerializeField] bool isTurret = false; // Flag to determine if enemy is turret
     public int currentWayPointIndex;
 
     //Coroutine co;
@@ -32,6 +34,7 @@ public class EnemyAI : MonoBehaviour, iDamage
 
     Color colorBodyOrigin;
     Color colorArmOrigin;
+    Color colorOrigin;
 
     [Header("----- Weapon Stats -----")]
     [SerializeField] Transform shootPos;
@@ -52,6 +55,7 @@ public class EnemyAI : MonoBehaviour, iDamage
     {
         colorBodyOrigin = modelBody.material.color;
         colorArmOrigin = modelBody.material.color;
+        colorOrigin = model.material.color;
 
         GameManager.instance.RegisterThreat(); // Notify GameManager that enemy is active
     }
@@ -68,11 +72,11 @@ public class EnemyAI : MonoBehaviour, iDamage
             {
                 HandlePlayerVisible(); // call HandlePlayerVisible when the player is visible
             }
-            else if (!playerInRange && waypoints.Count > 0)
+            else if (!playerInRange && !isTurret && waypoints.Count > 0)
             {
                 HandlePlayerNotVisible();
             }
-            else if (waypoints.Count == 0)
+            else if (waypoints.Count == 0 && !isTurret)
             {
                 RoamRandomly();
             }
@@ -153,8 +157,8 @@ public class EnemyAI : MonoBehaviour, iDamage
         if (other.CompareTag("Player"))
         {
             playerInRange = false;
-            StopCoroutine("SearchForPlayer");
-            StartCoroutine("SearchForPlayer");
+            StopAllCoroutines();
+            StartCoroutine(SearchForPlayer());
         }
     }
 
@@ -213,6 +217,15 @@ public class EnemyAI : MonoBehaviour, iDamage
         StartCoroutine(TurnColor(Color.blue, stunTimer));
     }
 
+    IEnumerator TurnColor(Color color, float duration)
+    {
+        modelBody.material.color = color;
+        modelArm.material.color = color;
+        yield return new WaitForSeconds(duration);
+        modelBody.material.color = colorBodyOrigin;
+        modelArm.material.color = colorArmOrigin;
+    }
+
     //IEnumerator TurnYellow()
     //{
     //    modelBody.material.color = Color.yellow;
@@ -242,17 +255,23 @@ public class EnemyAI : MonoBehaviour, iDamage
         isShooting = false;
     }
 
-    IEnumerator Stun(float stunDuration)
+    IEnumerator Stun(float duration)
     {
         isStunned = true;
-        navAgent.isStopped = true;
+        if(!isTurret)
+        {
+            navAgent.isStopped = true;
+        }        
         isShooting = false;
 
         GameManager.instance.OnStunBegin(); // Notify GameManager of stun
 
-        yield return new WaitForSeconds(stunDuration);
+        yield return new WaitForSeconds(duration);
 
-        navAgent.isStopped = false;
+        if (!isTurret)
+        {
+            navAgent.isStopped = false;
+        }
         isStunned = false;
 
         GameManager.instance.OnStunEnd(); // Notify GameManager of stun end
@@ -260,22 +279,30 @@ public class EnemyAI : MonoBehaviour, iDamage
 
     void HandlePlayerVisible()
     {
-        // stop roaming if player is visible
-        if(isRoaming)
+        if(!isTurret)
         {
-            StopCoroutine(RoamCoroutine());
-            isRoaming = false;
+            if (isRoaming)
+            {
+                // stop roaming if player is visible
+                StopCoroutine(RoamCoroutine());
+                isRoaming = false;
+            }
+
+            navAgent.SetDestination(GameManager.instance.player.transform.position);
+            if (navAgent.remainingDistance <= navAgent.stoppingDistance)
+            {
+                FaceTarget();
+            }
+        }
+        else
+        {
+            FaceTarget(); // Turret should aim at the player but not move
         }
 
-        navAgent.SetDestination(GameManager.instance.player.transform.position);
-        if (navAgent.remainingDistance <= navAgent.stoppingDistance)
+        if (!isShooting)
         {
-            FaceTarget();
-            if (!isShooting)
-            {
-                StartCoroutine(shoot());
-            }
-        }        
+            StartCoroutine(shoot());
+        }
     }
 
     void HandlePlayerNotVisible()
@@ -295,20 +322,11 @@ public class EnemyAI : MonoBehaviour, iDamage
         {
             RoamRandomly();
         }
-    }
-
-    IEnumerator TurnColor(Color color, float duration)
-    {
-        modelBody.material.color = color;
-        modelArm.material.color = color;
-        yield return new WaitForSeconds(duration);
-        modelBody.material.color = colorBodyOrigin;
-        modelArm.material.color = colorArmOrigin;
-    }
+    }    
 
     void RoamRandomly()
     {
-        if (!isShooting)
+        if (!isRoaming)
         {
             isRoaming = true;
             StartCoroutine(RoamCoroutine());

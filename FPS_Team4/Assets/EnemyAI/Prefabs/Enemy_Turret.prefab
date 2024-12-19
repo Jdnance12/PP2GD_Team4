@@ -290,6 +290,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8266244318785069855}
+  - component: {fileID: 7172277876021104418}
   - component: {fileID: 8266244318785069852}
   - component: {fileID: 8266244318785069854}
   - component: {fileID: 8266244318785069853}
@@ -318,7 +319,7 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: -34.63, z: 0}
---- !u!114 &8266244318785069852
+--- !u!114 &7172277876021104418
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -326,6 +327,35 @@ MonoBehaviour:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8266244318785069849}
   m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 93c6182da128fc54a823f119d57c0253, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  HP: 20
+  FOV: 75
+  faceTargetSpeed: 3
+  modelBody: {fileID: 0}
+  modelArm: {fileID: 0}
+  headPos: {fileID: 0}
+  model: {fileID: 0}
+  navAgent: {fileID: 0}
+  waypoints: []
+  roamingRadius: 20
+  isTurret: 0
+  currentWayPointIndex: 0
+  shootPos: {fileID: 0}
+  bullet: {fileID: 6204158305650084918, guid: 79033c9b8e26cc947a64522be7157891, type: 3}
+  shootRate: 0
+  stunTimer: 0
+  hurtTimer: 0
+--- !u!114 &8266244318785069852
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8266244318785069849}
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 7a56cceaf81be014384790754fc62fde, type: 3}
   m_Name: 
