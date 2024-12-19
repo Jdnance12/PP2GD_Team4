@@ -429,7 +429,7 @@ public void toggleDoubleJump()
         RaycastHit hit;
         if (Physics.Raycast(playerCamera.transform.position, playerCamera.transform.forward, out hit, maxDistance))
         {
-            if(hit.collider.CompareTag("Heavy Object"))
+            if(hit.collider.CompareTag("Heavy Object") || hit.collider.CompareTag("Enemy"))
             {
                 pullingObject = true;
                 heavyObject = hit.collider.gameObject;
