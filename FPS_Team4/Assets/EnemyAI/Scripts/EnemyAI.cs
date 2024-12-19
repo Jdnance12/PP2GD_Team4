@@ -19,14 +19,15 @@ public class EnemyAI : MonoBehaviour, iDamage
     [Header("----- Movement -----")]
     [SerializeField] NavMeshAgent navAgent;
     [SerializeField] List<Transform> waypoints = new List<Transform>();
+    [SerializeField] [Range(5, 20)] float roamingRadius = 20f; // Roaming Radius for random movement
     public int currentWayPointIndex;
 
-    Coroutine co;
+    //Coroutine co;
 
-    
-    
+
+
     Vector3 playerDir;
-    Vector3 startingPosition;
+    //Vector3 startingPosition;
     float angleToPlayer;
 
     Color colorBodyOrigin;
@@ -59,33 +60,21 @@ public class EnemyAI : MonoBehaviour, iDamage
     void Update()
     {
 
-        if(!isStunned && !isRoaming)
+        if (!isStunned)
         {
             CanSeePlayer();
 
-            if(playerVisible)
+            if (playerVisible)
             {
-                navAgent.SetDestination(GameManager.instance.player.transform.position);
-                if(navAgent.remainingDistance < navAgent.stoppingDistance)
-                {
-                    FaceTarget();
-                }
-                if(!isShooting)
-                {
-                    StartCoroutine(shoot());
-                }
+                HandlePlayerVisible(); // call HandlePlayerVisible when the player is visible
             }
-
-            else
+            else if (!playerInRange && waypoints.Count > 0)
             {
-                if (!playerInRange)
-                {
-                    if (!navAgent.pathPending && navAgent.remainingDistance <= navAgent.stoppingDistance)
-                    {
-                        currentWayPointIndex = (currentWayPointIndex + 1) % waypoints.Count;
-                        MoveToNextWaypoint();
-                    }
-                }               
+                HandlePlayerNotVisible();
+            }
+            else if (waypoints.Count == 0)
+            {
+                RoamRandomly();
             }
         }
 
@@ -101,17 +90,15 @@ public class EnemyAI : MonoBehaviour, iDamage
 
     void MoveToNextWaypoint()
     {
-        if (waypoints == null || waypoints.Count == 0)
+        if (waypoints.Count > 0)
         {
-            return;
-        }
-
-        navAgent.SetDestination(waypoints[currentWayPointIndex].position);
+            navAgent.SetDestination(waypoints[currentWayPointIndex].position);
+        }        
     }
 
     public void MoveToPosition(Vector3 position)
     {
-        
+
         //if(navAgent != null)
         //{
         //    navAgent.SetDestination(position);
@@ -120,7 +107,7 @@ public class EnemyAI : MonoBehaviour, iDamage
 
     void CanSeePlayer()
     {
-        if(isStunned || !playerInRange)
+        if (isStunned || !playerInRange)
         {
             playerVisible = false;
             return;
@@ -132,15 +119,19 @@ public class EnemyAI : MonoBehaviour, iDamage
         Debug.DrawRay(transform.position, playerDir);
 
         RaycastHit hit;
-        if(Physics.Raycast(headPos.position, playerDir, out hit))
+        if (Physics.Raycast(headPos.position, playerDir, out hit))
         {
-            if(hit.collider.CompareTag("Player") && angleToPlayer <= FOV)
-            {
-                playerVisible = true;
-                return;
-            }
+            playerVisible = hit.collider.CompareTag("Player") && angleToPlayer <= FOV;
         }
-        playerVisible = false;
+        else
+        {
+            playerVisible = false;
+        }
+        //if(hit.collider.CompareTag("Player") && angleToPlayer <= FOV)
+        //{
+        //    playerVisible = true;
+        //    return;
+        //}
     }
 
     void FaceTarget()
@@ -151,7 +142,7 @@ public class EnemyAI : MonoBehaviour, iDamage
 
     private void OnTriggerEnter(Collider other)
     {
-        if(other.CompareTag("Player"))
+        if (other.CompareTag("Player"))
         {
             playerInRange = true;
         }
@@ -163,7 +154,7 @@ public class EnemyAI : MonoBehaviour, iDamage
         {
             playerInRange = false;
             StopCoroutine("SearchForPlayer");
-            StartCoroutine("SearchForPlayer");            
+            StartCoroutine("SearchForPlayer");
         }
     }
 
@@ -173,29 +164,29 @@ public class EnemyAI : MonoBehaviour, iDamage
         float searchTimer = 0f;
         float searchRadius = 10f;
 
-        while(searchTimer< searchDuration)
+        while (searchTimer < searchDuration)
         {
             searchTimer += Time.deltaTime;
             CanSeePlayer();
-            if(playerVisible)
+            if (playerVisible)
             {
                 yield break;
             }
 
-            Vector3 randomDirection = Random.insideUnitCircle * searchRadius;
-            randomDirection += transform.position;
+            Vector3 randomDirection = Random.insideUnitCircle * searchRadius * transform.position;
+            //randomDirection += transform.position;
 
             NavMeshHit hit;
-            if(NavMesh.SamplePosition(randomDirection, out hit, searchRadius, 1))
+            if (NavMesh.SamplePosition(randomDirection, out hit, searchRadius, 1))
             {
-                Vector3 finalPosition = hit.position;
-                navAgent.SetDestination(finalPosition);
+                //Vector3 finalPosition = hit.position;
+                navAgent.SetDestination(hit.position);
             }
-            
+
             yield return new WaitForSeconds(1f);
         }
 
-        if(!playerVisible)
+        if (!playerVisible)
         {
             currentWayPointIndex = (currentWayPointIndex + 1) % waypoints.Count;
             MoveToNextWaypoint();
@@ -207,7 +198,7 @@ public class EnemyAI : MonoBehaviour, iDamage
     {
         //For Damager
         HP -= amount;
-        StartCoroutine(TurnYellow());
+        StartCoroutine(TurnColor(Color.yellow, hurtTimer));
 
         if (HP <= 0)
         {
@@ -219,27 +210,27 @@ public class EnemyAI : MonoBehaviour, iDamage
     public void takeEMP(int amount)
     {
         StartCoroutine(Stun(stunTimer));
-        StartCoroutine(TurnBlue());
+        StartCoroutine(TurnColor(Color.blue, stunTimer));
     }
 
-    IEnumerator TurnYellow()
-    {
-        modelBody.material.color = Color.yellow;
-        modelArm.material.color = Color.yellow;
-        yield return new WaitForSeconds(hurtTimer);
-        modelBody.material.color = colorBodyOrigin;
-        modelArm.material.color = colorArmOrigin;
-    }
+    //IEnumerator TurnYellow()
+    //{
+    //    modelBody.material.color = Color.yellow;
+    //    modelArm.material.color = Color.yellow;
+    //    yield return new WaitForSeconds(hurtTimer);
+    //    modelBody.material.color = colorBodyOrigin;
+    //    modelArm.material.color = colorArmOrigin;
+    //}
 
-    //Flashes the Enemy Blue when EMP hits them.
-    IEnumerator TurnBlue()
-    {
-        modelBody.material.color = Color.blue;
-        modelArm.material.color = Color.blue;
-        yield return new WaitForSeconds(stunTimer);
-        modelBody.material.color = colorBodyOrigin;
-        modelArm.material.color = colorArmOrigin;
-    }
+    ////Flashes the Enemy Blue when EMP hits them.
+    //IEnumerator TurnBlue()
+    //{
+    //    modelBody.material.color = Color.blue;
+    //    modelArm.material.color = Color.blue;
+    //    yield return new WaitForSeconds(stunTimer);
+    //    modelBody.material.color = colorBodyOrigin;
+    //    modelArm.material.color = colorArmOrigin;
+    //}
 
     IEnumerator shoot()
     {
@@ -265,5 +256,84 @@ public class EnemyAI : MonoBehaviour, iDamage
         isStunned = false;
 
         GameManager.instance.OnStunEnd(); // Notify GameManager of stun end
+    }
+
+    void HandlePlayerVisible()
+    {
+        // stop roaming if player is visible
+        if(isRoaming)
+        {
+            StopCoroutine(RoamCoroutine());
+            isRoaming = false;
+        }
+
+        navAgent.SetDestination(GameManager.instance.player.transform.position);
+        if (navAgent.remainingDistance <= navAgent.stoppingDistance)
+        {
+            FaceTarget();
+            if (!isShooting)
+            {
+                StartCoroutine(shoot());
+            }
+        }        
+    }
+
+    void HandlePlayerNotVisible()
+    {
+        if (waypoints.Count > 0 && !navAgent.pathPending && navAgent.remainingDistance <= navAgent.stoppingDistance)
+        {
+            if(isRoaming)
+            {
+                StopCoroutine(RoamCoroutine());
+                isRoaming = false;
+            }
+
+            currentWayPointIndex = (currentWayPointIndex + 1) % waypoints.Count;
+            MoveToNextWaypoint();
+        }
+        else if(waypoints.Count == 0)
+        {
+            RoamRandomly();
+        }
+    }
+
+    IEnumerator TurnColor(Color color, float duration)
+    {
+        modelBody.material.color = color;
+        modelArm.material.color = color;
+        yield return new WaitForSeconds(duration);
+        modelBody.material.color = colorBodyOrigin;
+        modelArm.material.color = colorArmOrigin;
+    }
+
+    void RoamRandomly()
+    {
+        if (!isShooting)
+        {
+            isRoaming = true;
+            StartCoroutine(RoamCoroutine());
+        }
+    }
+
+    IEnumerator RoamCoroutine()
+    {
+        while (isRoaming) // Continue roaming only if isRoaming is true
+        {
+            if (navAgent.remainingDistance <= navAgent.stoppingDistance)
+            {
+                Vector3 randomDirection = Random.insideUnitSphere * roamingRadius;
+                randomDirection += transform.position;
+
+                NavMeshHit navHit;
+
+                if (NavMesh.SamplePosition(randomDirection, out navHit, roamingRadius, -1))
+                {
+                    navAgent.SetDestination(navHit.position);
+                }
+
+                yield return new WaitForSeconds(Random.Range(3, 8)); // Wait a random time between 3 and 8 seconds before moving again
+            }
+            yield return null; // continue checking until the destination is reached
+        }
     }
 }
