@@ -9,13 +9,13 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8405582609161396225}
-  - component: {fileID: 1498822399687715895}
+  - component: {fileID: -8811824902943944744}
   - component: {fileID: 5415901667795222675}
   - component: {fileID: 3802797117158900783}
   - component: {fileID: 8874080322016224038}
   - component: {fileID: 3689013984077200217}
   m_Layer: 0
-  m_Name: Double Jump Skill
+  m_Name: Grapple Hook Skill
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -36,7 +36,7 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1498822399687715895
+--- !u!114 &-8811824902943944744
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -45,13 +45,12 @@ MonoBehaviour:
   m_GameObject: {fileID: 5156559820885041073}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 98ec95666cc8cbc4984f3418544ebb8f, type: 3}
+  m_Script: {fileID: 11500000, guid: 670fddb2995636c4787bd6b8b273302a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   titleText: {fileID: 0}
   bodyText: {fileID: 0}
   background: {fileID: 0}
-  doubleJump: 0
 --- !u!33 &5415901667795222675
 MeshFilter:
   m_ObjectHideFlags: 0
