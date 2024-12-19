@@ -12,7 +12,7 @@ public class EnemyAI : MonoBehaviour, iDamage
     [SerializeField] int HP;
     [SerializeField] int FOV;
     [SerializeField] int faceTargetSpeed;
-    [SerializeField] Renderer modelBody;
+    [SerializeField] private Renderer modelBody;
     [SerializeField] Renderer modelArm;
     [SerializeField] Transform headPos;
     [SerializeField] Renderer model;
