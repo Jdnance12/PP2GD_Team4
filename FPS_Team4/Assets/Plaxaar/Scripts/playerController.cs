@@ -78,6 +78,12 @@ public class playerController : MonoBehaviour, iDamage, IRecharge
 
     public bool hasWeapon = false; // track if the player has a weapon
 
+    [Header("Hovering Sound")]
+    public AudioSource audioSource;
+    [SerializeField] private float minVolume = 0.2f; // Volume when not moving
+    [SerializeField] private float maxVolume = 1.0f; // Volume when moving
+    [SerializeField] private float volumeChangeSpeed = 1.0f; // Speed of volume change
+
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
@@ -101,6 +107,18 @@ public class playerController : MonoBehaviour, iDamage, IRecharge
         {
             Debug.Log("WeaponMenuAction or weaponMenuAction.action is null in Start or player has no weapon.");
         }
+
+        // Initialize the audio source
+        audioSource = GetComponent<AudioSource>();
+        if(audioSource == null)
+        {
+            audioSource = gameObject.AddComponent<AudioSource>();
+        }
+
+        // start playing the hovering sound
+        audioSource.loop = true;
+        audioSource.volume = minVolume;
+        audioSource.Play();
     }
 
     // Update is called once per frame
@@ -146,6 +164,9 @@ public class playerController : MonoBehaviour, iDamage, IRecharge
             UpdateLine();
         }
 
+        // Adjust hovering sound volume based on movement
+        AdjustHoveringSoundVolume();
+
 
         //Updates FOV with lerp
         //Camera playerCam = playerCamera.GetComponent<Camera>();
@@ -189,6 +210,20 @@ public class playerController : MonoBehaviour, iDamage, IRecharge
             {
                 zoom(60f);
             }
+        }
+    }
+
+    private void AdjustHoveringSoundVolume()
+    {
+        float targetVolume = (controller.isGrounded && moveDir.magnitude > 0.1f) ? maxVolume : minVolume;
+        audioSource.volume = Mathf.Lerp(audioSource.volume, targetVolume, volumeChangeSpeed * Time.deltaTime);
+    }
+
+    private void PlayFootstepSound()
+    {
+        if(!audioSource.isPlaying)
+        {
+            audioSource.Play();
         }
     }
 
@@ -429,7 +464,7 @@ public void toggleDoubleJump()
         RaycastHit hit;
         if (Physics.Raycast(playerCamera.transform.position, playerCamera.transform.forward, out hit, maxDistance))
         {
-            if(hit.collider.CompareTag("Heavy Object"))
+            if(hit.collider.CompareTag("Heavy Object") || hit.collider.CompareTag("Enemy"))
             {
                 pullingObject = true;
                 heavyObject = hit.collider.gameObject;
