@@ -8,4 +8,5 @@ public interface iDamage
 {
     // method to apply damage
     void takeDamage(int amount);
+    void takeEMP(int amount);
 }

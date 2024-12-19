@@ -205,9 +205,7 @@ public class EnemyAI : MonoBehaviour, iDamage
     //Taking Damage Functions
     public void takeDamage(int amount)
     {
-
-
-
+        //For Damager
         HP -= amount;
         StartCoroutine(TurnYellow());
 
@@ -216,8 +214,12 @@ public class EnemyAI : MonoBehaviour, iDamage
             //I'm dead
             Destroy(gameObject);
         }
+    }
 
+    public void takeEMP(int amount)
+    {
         StartCoroutine(Stun(stunTimer));
+        StartCoroutine(TurnBlue());
     }
 
     IEnumerator TurnYellow()

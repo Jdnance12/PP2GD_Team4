@@ -556,6 +556,12 @@ public class GameManager : MonoBehaviour
         }
     }
 
+    public void ToolboxPickedUp()
+{
+    Debug.Log("Toolbox picked up. GameManager registered the pickup.");
+    // Addtional logic can be added here
+}
+
     // START COMMENT OUT (Alternative first drop method for testing)
     // public void OnFirstDrop()
     // {

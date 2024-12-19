@@ -17,4 +17,22 @@ public class Weapon : ScriptableObject
     public int shootDamage;
     public int shootDist;
     public float shootRate;
+
+
+    public void ApplyDamage(GameObject target)
+    {
+        var damageable = target.GetComponent<iDamage>();
+
+        if(damageable != null )
+        {
+            if(type == WeaponType.Damage)
+            {
+                damageable.takeDamage(shootDamage);
+            }
+            else if(type == WeaponType.EMP)
+            {
+                damageable.takeEMP(shootDamage);
+            }
+        }
+    }
 }
