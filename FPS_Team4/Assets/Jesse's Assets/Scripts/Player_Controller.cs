@@ -12,6 +12,7 @@ public class Player_Controller : MonoBehaviour
 
     [Header("---- Player Components ----")]
     [SerializeField] CharacterController playerCtrl;
+    [SerializeField] Animator anim;
     [SerializeField] LayerMask ignoreMask;
 
     [Header("---- Player Stats ____")]
@@ -42,6 +43,9 @@ public class Player_Controller : MonoBehaviour
     public bool grappleHookActive;
     private bool isGrappling;
     private bool pullingObject;
+
+    public bool gunActive;
+    public bool bladeActive;
     
 
 
@@ -63,6 +67,27 @@ public class Player_Controller : MonoBehaviour
     void Update()
     {
         PlayerMovement();
+
+        if(Input.GetKeyDown(KeyCode.Q))
+        {
+            bladeActive = !bladeActive;
+            if(bladeActive)
+            {
+                gunActive = false;
+            }
+        }
+       
+        if(Input.GetKeyDown(KeyCode.E))
+        {
+            gunActive = !gunActive;
+            if(gunActive)
+            {
+                bladeActive = false;
+            }
+        }
+
+        anim.SetBool("BladeActive", bladeActive);
+        anim.SetBool("GunActive", gunActive);
     }
 
     void PlayerMovement()
