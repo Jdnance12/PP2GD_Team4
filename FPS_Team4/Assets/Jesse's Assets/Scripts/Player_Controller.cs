@@ -4,7 +4,7 @@ using Unity.VisualScripting;
 using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 
-public class Player_Controller : MonoBehaviour
+public class Player_Controller : MonoBehaviour, IDamageable, IRecharge
 {
 
     [Header("---- Camera Components ----")]
@@ -18,9 +18,10 @@ public class Player_Controller : MonoBehaviour
     [SerializeField] LayerMask ignoreMask;
 
     [Header("---- Player Stats ____")]
-    [SerializeField] public int maxHP;
+    [SerializeField] public int HP;
     Vector3 moveDir;
     Vector3 playerVel;
+    int origHP;
 
     [Header("---- Player Movement ----")]
     [SerializeField] public int moveSpeed;
@@ -80,6 +81,7 @@ public class Player_Controller : MonoBehaviour
         lineRenderer.positionCount = 0; //Initial line
 
         //Getting originals
+        origHP = HP;
         origMoveSpeed = moveSpeed;
         origGravity = gravity;
     }
@@ -89,6 +91,11 @@ public class Player_Controller : MonoBehaviour
     {
         PlayerMovement();
         Attack();
+    }
+
+    public void updatePlayerUI()
+    {
+        gm.playerHPBar.fillAmount = (float)HP / origHP;
     }
 
     void PlayerMovement()
@@ -130,8 +137,6 @@ public class Player_Controller : MonoBehaviour
 
     void Attack()
     {
-
-        AnimatorStateInfo stateInfo = anim.GetCurrentAnimatorStateInfo(0);
         fireRate = gunWeaponScript.shootRate;
 
         if (Input.GetKeyDown(KeyCode.E))
@@ -211,33 +216,6 @@ public class Player_Controller : MonoBehaviour
         anim.SetBool("GunActive", gunActive);
     }
 
-    void ActivateGun()
-    {
-        gunActive = true;
-        gunWeapon.SetActive(true);
-        bladeWeapon.SetActive(false);
-
-        gm.gunReticule.gameObject.SetActive(true);
-        gm.bladeReticule.gameObject.SetActive(false);
-
-        menuOpen = false;
-        gm.HideWeaponMenu();
-    }
-    void ActivateBlade()
-    {
-        bladeActive = true;
-        gunActive = false;
-
-        bladeWeapon.SetActive(true);
-        gunWeapon.SetActive(false);
-
-        gm.gunReticule.gameObject.SetActive(false);
-        gm.bladeReticule.gameObject.SetActive(true);
-
-        menuOpen = false;
-        gm.HideWeaponMenu();
-    }
-
     IEnumerator FireCouroutine()
     {
         isFiring = true;
@@ -247,5 +225,32 @@ public class Player_Controller : MonoBehaviour
             gunWeaponScript.Shoot();
             yield return new WaitForSeconds(fireRate);
         }
+    }
+
+    public void TakeDamage(int damage)
+    {
+        HP -= damage;
+        updatePlayerUI();
+        StartCoroutine(flashDamageScreen());
+
+        if(HP < 0)
+        {
+            //You're Dead
+        }
+    }
+
+    IEnumerator flashDamageScreen()
+    {
+        gm.playerDamageQue.SetActive(true);
+
+        yield return new WaitForSeconds(0.1f);
+        
+        gm.playerDamageQue.SetActive(false);
+    }
+
+    public void restoreHP(int amount)
+    {
+        HP = origHP;
+        updatePlayerUI();
     }
 }

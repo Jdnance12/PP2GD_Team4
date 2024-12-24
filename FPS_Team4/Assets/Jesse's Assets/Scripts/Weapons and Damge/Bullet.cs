@@ -7,9 +7,24 @@ public class Bullet : MonoBehaviour
 
     [SerializeField] public int damage;
 
-    private void OnCollisionEnter(Collision collision)
+    [SerializeField] Rigidbody rb;
+
+    [SerializeField] int damageAmount;
+    [SerializeField] int speed;
+    [SerializeField] int destroyTime;
+    private void Start()
     {
-        IDamageable damageable = collision.gameObject.GetComponent<IDamageable>();
+        rb.velocity = transform.forward * speed;
+        Destroy(gameObject, destroyTime);
+    }
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.isTrigger)
+        {
+            return;
+        }
+
+        IDamageable damageable = other.gameObject.GetComponent<IDamageable>();
         if(damageable != null )
         {
             damageable.TakeDamage(damage);

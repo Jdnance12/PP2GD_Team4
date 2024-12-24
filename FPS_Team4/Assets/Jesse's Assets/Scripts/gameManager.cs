@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -9,19 +10,28 @@ public class gameManager : MonoBehaviour
     public static gameManager instance;
 
     [Header("--- Player Elements ----")]
-    public GameObject player; // Player object reference
+    //Player Components
+    public GameObject player;
     public playerController playerScript;
+    // Player HP
+    public Image playerHPBar;
+    public GameObject playerDamageQue;
 
     [Header("--- UI Elements ----")]
-    [SerializeField] public GameObject menuActive; // Current active menu
-    [SerializeField] public GameObject menuPause; // Pause menu object
-    [SerializeField] public GameObject menuWin, menuLose; //Win Lose Menu's
+    //Paused Menus
+    [SerializeField] public GameObject menuActive;
+    [SerializeField] public GameObject menuPause;
+    [SerializeField] public GameObject menuWin, menuLose;
+    [SerializeField] public TMP_Text scrapCountText;
+    [SerializeField] public TMP_Text nodeCountText;
+    float timeScaleOriginal;
+    //Weapons And Reticlules
     [SerializeField] public GameObject weaponMenu;
-
     [SerializeField] public Image gunReticule;
     [SerializeField] public Image bladeReticule;
-
-    float timeScaleOriginal;
+    //Item Additions
+    public int scrapCount;
+    public int nodeCount;
 
     [Header("---- Bools ----")]
     public bool isPaused;
@@ -29,55 +39,39 @@ public class gameManager : MonoBehaviour
     private void Awake()
     {
         instance = this;
+
+        timeScaleOriginal = Time.timeScale;
+
+        player = GameObject.FindWithTag("Player"); // Find player by tag
+        playerScript = player.GetComponent<playerController>(); // Get player script
     }
 
     private void Update()
     {
-        if (Input.GetButtonDown("Cancel")) // Check for pause/unpause input
-        {
-            if (menuActive == null) // No active menu
-            {
-                statePause(); // Enter pause state
-                menuActive = menuPause; // Set pause menu
-                menuActive.SetActive(true); // Show menu
-            }
-            else if (menuActive == menuPause) // Pause menu active
-            {
-                stateUnpause(); // Unpause game
-            }
-        }
+
     }
 
     public void statePause()
     {
-        Debug.Log("Game paused.");
         isPaused = true;
         Time.timeScale = 0;
         Cursor.visible = true;
         Cursor.lockState = CursorLockMode.Confined;
-        playerScript.enabled = false;
     }
 
     public void stateUnpause()
     {
-        Debug.Log("Game unpaused.");
         isPaused = false;
-
         Time.timeScale = timeScaleOriginal;
         Cursor.visible = false;
         Cursor.lockState = CursorLockMode.Locked;
+        menuActive.SetActive(false);
+        menuActive = null;
+    }
 
-        if (playerScript != null)
-        {
-            playerScript.enabled = true;
-            playerScript.ResetPlayerState(); // Only reset shooting
-        }
+    public void youLose()
+    {
 
-        if (menuActive != null)
-        {
-            menuActive.SetActive(false);
-            menuActive = null;
-        }
     }
 
     public void ShowWeaponMenu()
@@ -87,5 +81,24 @@ public class gameManager : MonoBehaviour
     public void HideWeaponMenu()
     {
         weaponMenu.SetActive(false);
+    }
+    public void AddScrapCount(int amount)
+    {
+        scrapCount += amount;
+        scrapCountText.text = scrapCount.ToString("F0");
+    }
+    public bool SpendScrap(int amount)
+    {
+        if(scrapCount >= amount)
+        {
+            scrapCount -= amount;
+            return true;
+        }
+        return false;
+    }
+    public void AddNodeCount(int amount)
+    {
+        nodeCount += amount;
+        nodeCountText.text = nodeCount.ToString("F0");
     }
 }
