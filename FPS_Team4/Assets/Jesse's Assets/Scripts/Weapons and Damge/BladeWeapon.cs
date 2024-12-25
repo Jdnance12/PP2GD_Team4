@@ -6,6 +6,22 @@ using UnityEngine;
 public class BladeWeapon : MonoBehaviour
 {
     [SerializeField] public int damage;
+    [SerializeField] Collider bladeCollider;
+
+    private void Start()
+    {
+        bladeCollider.enabled = false;
+    }
+
+    public void EnableCollider()
+    {
+        bladeCollider.enabled = true;
+    }
+
+    public void DisableCollider()
+    {
+        bladeCollider.enabled = false;
+    }
 
     private void OnTriggerEnter(Collider other)
     {

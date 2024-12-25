@@ -40,6 +40,8 @@ public class gameManager : MonoBehaviour
     {
         instance = this;
 
+        menuActive = null;
+
         timeScaleOriginal = Time.timeScale;
 
         player = GameObject.FindWithTag("Player"); // Find player by tag
@@ -65,8 +67,8 @@ public class gameManager : MonoBehaviour
         Time.timeScale = timeScaleOriginal;
         Cursor.visible = false;
         Cursor.lockState = CursorLockMode.Locked;
-        menuActive.SetActive(false);
-        menuActive = null;
+        //menuActive.SetActive(false);
+        //menuActive = null;
     }
 
     public void youLose()

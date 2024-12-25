@@ -8,7 +8,7 @@ public class Scrap_PickUp : MonoBehaviour
     {
         if (other.CompareTag("Player"))
         {
-            int randomScrapAmount = Random.Range(1, 11);
+            int randomScrapAmount = Random.Range(2, 10);
             gameManager.instance.AddScrapCount(randomScrapAmount);
             Destroy(gameObject);
         }

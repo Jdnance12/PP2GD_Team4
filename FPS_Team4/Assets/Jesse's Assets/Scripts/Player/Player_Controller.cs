@@ -145,10 +145,12 @@ public class Player_Controller : MonoBehaviour, IDamageable, IRecharge
             if (menuOpen)
             {
                 gm.ShowWeaponMenu();
+                gm.statePause();
             }
             else
             {
                 gm.HideWeaponMenu();
+                gm.stateUnpause();
             }
         }
         if (menuOpen)
@@ -174,6 +176,7 @@ public class Player_Controller : MonoBehaviour, IDamageable, IRecharge
 
                 menuOpen = false;
                 gm.HideWeaponMenu();
+                gm.stateUnpause();
             }
             else if (Input.GetKeyDown(KeyCode.Alpha2))
             {
@@ -196,6 +199,7 @@ public class Player_Controller : MonoBehaviour, IDamageable, IRecharge
 
                 menuOpen = false;
                 gm.HideWeaponMenu();
+                gm.stateUnpause();
             }
         }
 
@@ -211,9 +215,49 @@ public class Player_Controller : MonoBehaviour, IDamageable, IRecharge
             }
         }
 
+        if(bladeActive)
+        {
+            if (Input.GetButtonDown("Fire1"))
+            {
+                int randomAnim = Random.Range(1, 4);
+                anim.SetBool("Swing1", randomAnim == 1);
+                anim.SetBool("Swing2", randomAnim == 2);
+                anim.SetBool("Swing3", randomAnim == 3);
+
+                if(randomAnim == 1 || randomAnim == 2 || randomAnim == 3)
+                {
+                    StartCoroutine(BladeAnimationState(randomAnim));
+                }
+            }
+
+            if (Input.GetButtonDown("Fire2"))
+            {
+                anim.SetBool("Stab", true);
+                StartCoroutine(StabeAnimationState());
+            }
+        }
 
         anim.SetBool("BladeActive", bladeActive);
         anim.SetBool("GunActive", gunActive);
+    }
+
+    IEnumerator BladeAnimationState(int index)
+    {
+        bladeWeapon.GetComponent<BladeWeapon>().EnableCollider();
+        yield return new WaitForSeconds(anim.GetCurrentAnimatorStateInfo(0).length);
+        bladeWeapon.GetComponent<BladeWeapon>().DisableCollider();
+
+        anim.SetBool("Swing1", index == 1 && false);
+        anim.SetBool("Swing2", index == 2 && false);
+        anim.SetBool("Swing3", index == 3 && false);
+    }
+    IEnumerator StabeAnimationState()
+    {
+        bladeWeapon.GetComponent<BladeWeapon>().EnableCollider();
+        yield return new WaitForSeconds(anim.GetCurrentAnimatorStateInfo(0).length);
+        bladeWeapon.GetComponent<BladeWeapon>().DisableCollider();
+
+        anim.SetBool("Stab", false);
     }
 
     IEnumerator FireCouroutine()
