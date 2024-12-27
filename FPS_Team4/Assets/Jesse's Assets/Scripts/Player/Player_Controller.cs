@@ -16,6 +16,7 @@ public class Player_Controller : MonoBehaviour, IDamageable, IRecharge
     [SerializeField] CharacterController playerCtrl;
     [SerializeField] Animator anim;
     [SerializeField] LayerMask ignoreMask;
+    [SerializeField] GrappleHookController grappleHook;
 
     [Header("---- Player Stats ____")]
     [SerializeField] public int HP;
@@ -29,19 +30,9 @@ public class Player_Controller : MonoBehaviour, IDamageable, IRecharge
     [SerializeField] int jumpMax;
     [SerializeField] int jumpCount;
     [SerializeField] public float jumpSpeed;
-    [SerializeField] public int gravity;
+    [SerializeField] public float gravity;
     private int origMoveSpeed;
     bool isSprinting = false;
-
-    [Header("---- Grapple Hook ----")]
-    [SerializeField] Vector3 grapplePoint;
-    private GameObject heavyObject;
-    public LineRenderer lineRenderer;
-    [SerializeField] int maxDistance;
-    [SerializeField] int grappleSpeed;
-    [SerializeField] int pullSpeed;
-    private int origGravity;
-    private int origHookSpeed;
 
     [Header("---- Weapons ----")]
     [SerializeField] GameObject gunWeapon;
@@ -50,11 +41,22 @@ public class Player_Controller : MonoBehaviour, IDamageable, IRecharge
     
     private GunWeapon gunWeaponScript;
 
+    [Header("Grapple Hook")]
+    public GameObject heavyObject;
+    public LineRenderer lineRenderer;
+    public Vector3 grapplePoint;
+
+    public float maxDistance;
+    public float hookSpeed;
+    private float originalGravity;
+    private float originalHookSpeed;
+
 
     [Header("---- Bools ----")]
-    public bool grappleHookActive;
-    private bool isGrappling;
-    private bool pullingObject;
+    private bool isGrappling = false;
+    private bool pullingObject = false;
+    private bool drawLine = false;
+
     private bool isFiring;
 
     public bool gunActive;
@@ -76,20 +78,19 @@ public class Player_Controller : MonoBehaviour, IDamageable, IRecharge
 
         gunWeaponScript = gunWeapon.GetComponent<GunWeapon>();
 
-        //For the grapple hook line
-        lineRenderer = GetComponent<LineRenderer>();
-        lineRenderer.positionCount = 0; //Initial line
-
         //Getting originals
         origHP = HP;
         origMoveSpeed = moveSpeed;
-        origGravity = gravity;
     }
 
     // Update is called once per frame
     void Update()
     {
-        PlayerMovement();
+        if(grappleHook.isGrappling == false)
+        {
+            PlayerMovement();
+        }
+        //PlayerMovement();
         Attack();
     }
 
@@ -138,6 +139,7 @@ public class Player_Controller : MonoBehaviour, IDamageable, IRecharge
     void Attack()
     {
         fireRate = gunWeaponScript.shootRate;
+        bool stabReady = anim.GetBool("StabReady");
 
         if (Input.GetKeyDown(KeyCode.E))
         {
@@ -217,23 +219,35 @@ public class Player_Controller : MonoBehaviour, IDamageable, IRecharge
 
         if(bladeActive)
         {
-            if (Input.GetButtonDown("Fire1"))
+            if(!stabReady)
             {
-                int randomAnim = Random.Range(1, 4);
-                anim.SetBool("Swing1", randomAnim == 1);
-                anim.SetBool("Swing2", randomAnim == 2);
-                anim.SetBool("Swing3", randomAnim == 3);
-
-                if(randomAnim == 1 || randomAnim == 2 || randomAnim == 3)
+                if (Input.GetButtonDown("Fire1"))
                 {
-                    StartCoroutine(BladeAnimationState(randomAnim));
+                    int randomAnim = Random.Range(1, 4);
+                    anim.SetBool("Swing1", randomAnim == 1);
+                    anim.SetBool("Swing2", randomAnim == 2);
+                    anim.SetBool("Swing3", randomAnim == 3);
+
+                    if (randomAnim == 1 || randomAnim == 2 || randomAnim == 3)
+                    {
+                        StartCoroutine(BladeAnimationState(randomAnim));
+                    }
                 }
             }
 
-            if (Input.GetButtonDown("Fire2"))
+            if (Input.GetButton("Fire2"))
             {
-                anim.SetBool("Stab", true);
-                StartCoroutine(StabeAnimationState());
+                anim.SetBool("StabReady", true);
+
+                if (Input.GetButtonDown("Fire1"))
+                {
+                    anim.SetBool("Stab", true);
+                    StartCoroutine(StabeAnimationState());
+                }
+            }
+            if (Input.GetButtonUp("Fire2"))
+            {
+                anim.SetBool("StabReady", false);
             }
         }
 

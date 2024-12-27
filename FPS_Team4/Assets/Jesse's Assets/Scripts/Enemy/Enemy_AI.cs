@@ -9,7 +9,7 @@ public class Enemy_AI : MonoBehaviour, IDamageable, IDisrupt
     [SerializeField] NavMeshAgent navAgent;
     [SerializeField] Renderer model;
     [SerializeField] GameObject player;
-    [SerializeField] GameObject scrapPrefab;
+    [SerializeField] GameObject partsPrefab;
 
     Color origColor;
 
@@ -169,7 +169,7 @@ public class Enemy_AI : MonoBehaviour, IDamageable, IDisrupt
 
         if (HP <= 0)
         {
-            Instantiate(scrapPrefab, transform.position, Quaternion.identity);
+            Instantiate(partsPrefab, transform.position, Quaternion.identity);
             Destroy();
         }
     }

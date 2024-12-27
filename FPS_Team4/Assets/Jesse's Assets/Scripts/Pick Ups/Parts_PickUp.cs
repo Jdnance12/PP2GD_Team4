@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Scrap_PickUp : MonoBehaviour
+public class Parts_PickUp : MonoBehaviour
 {
     private void OnTriggerEnter(Collider other)
     {

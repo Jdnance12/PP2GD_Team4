@@ -13,11 +13,17 @@ public class gameManager : MonoBehaviour
     //Player Components
     public GameObject player;
     public playerController playerScript;
+
     // Player HP
     public Image playerHPBar;
     public GameObject playerDamageQue;
 
-    [Header("--- UI Elements ----")]
+    [Header("--- Object UI Elements ----")]
+    [SerializeField] TMP_Text grappleUIText;
+    [SerializeField] Image grappleUIImage;
+
+
+    [Header("--- Camera UI Elements ----")]
     //Paused Menus
     [SerializeField] public GameObject menuActive;
     [SerializeField] public GameObject menuPause;
@@ -102,5 +108,14 @@ public class gameManager : MonoBehaviour
     {
         nodeCount += amount;
         nodeCountText.text = nodeCount.ToString("F0");
+    }
+
+    public void DisplayGrappleText(string text)
+    {
+        
+    }
+    public void HideGrappleText()
+    {
+
     }
 }
