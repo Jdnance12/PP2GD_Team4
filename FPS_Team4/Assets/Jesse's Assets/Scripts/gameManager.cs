@@ -12,7 +12,8 @@ public class gameManager : MonoBehaviour
     [Header("--- Player Elements ----")]
     //Player Components
     public GameObject player;
-    public playerController playerScript;
+    public Player_Controller playerScript;
+    public Upgrade_Menu upgradeMeu;
 
     // Player HP
     public Image playerHPBar;
@@ -28,7 +29,9 @@ public class gameManager : MonoBehaviour
     [SerializeField] public GameObject menuActive;
     [SerializeField] public GameObject menuPause;
     [SerializeField] public GameObject menuWin, menuLose;
-    [SerializeField] public TMP_Text scrapCountText;
+    [SerializeField] public GameObject upgradeMenu;
+    [SerializeField] public Upgrade_Menu upgradeMenuScript;
+    [SerializeField] public TMP_Text partsCountText;
     [SerializeField] public TMP_Text nodeCountText;
     float timeScaleOriginal;
     //Weapons And Reticlules
@@ -36,7 +39,7 @@ public class gameManager : MonoBehaviour
     [SerializeField] public Image gunReticule;
     [SerializeField] public Image bladeReticule;
     //Item Additions
-    public int scrapCount;
+    public int partsCount;
     public int nodeCount;
 
     [Header("---- Bools ----")]
@@ -51,12 +54,12 @@ public class gameManager : MonoBehaviour
         timeScaleOriginal = Time.timeScale;
 
         player = GameObject.FindWithTag("Player"); // Find player by tag
-        playerScript = player.GetComponent<playerController>(); // Get player script
+        playerScript = player.GetComponent<Player_Controller>(); // Get player script
     }
 
     private void Update()
     {
-
+        partsCountText.text = upgradeMenuScript.playerCurrencyText.text;
     }
 
     public void statePause()
@@ -73,13 +76,24 @@ public class gameManager : MonoBehaviour
         Time.timeScale = timeScaleOriginal;
         Cursor.visible = false;
         Cursor.lockState = CursorLockMode.Locked;
-        //menuActive.SetActive(false);
-        //menuActive = null;
+        menuActive.SetActive(false);
+        menuActive = null;
     }
 
     public void youLose()
     {
 
+    }
+
+    public void ShowUpgradeMenu()
+    {
+        statePause();
+        menuActive = upgradeMenu;
+        menuActive.SetActive(true);
+    }
+    public void HideUpgradeMenu()
+    {
+        stateUnpause();
     }
 
     public void ShowWeaponMenu()
@@ -90,32 +104,9 @@ public class gameManager : MonoBehaviour
     {
         weaponMenu.SetActive(false);
     }
-    public void AddScrapCount(int amount)
-    {
-        scrapCount += amount;
-        scrapCountText.text = scrapCount.ToString("F0");
-    }
-    public bool SpendScrap(int amount)
-    {
-        if(scrapCount >= amount)
-        {
-            scrapCount -= amount;
-            return true;
-        }
-        return false;
-    }
     public void AddNodeCount(int amount)
     {
         nodeCount += amount;
         nodeCountText.text = nodeCount.ToString("F0");
-    }
-
-    public void DisplayGrappleText(string text)
-    {
-        
-    }
-    public void HideGrappleText()
-    {
-
     }
 }

@@ -8,9 +8,16 @@ public class BladeWeapon : MonoBehaviour
     [SerializeField] public int damage;
     [SerializeField] Collider bladeCollider;
 
+    [SerializeField] public Upgrade_Menu upgradeMenu;
+
     private void Start()
     {
         bladeCollider.enabled = false;
+    }
+
+    private void Update()
+    {
+        damage = upgradeMenu.bladeDamage;
     }
 
     public void EnableCollider()

@@ -7,6 +7,7 @@ public class GrappleHookController : MonoBehaviour
     private gameManager gm;
 
     [SerializeField] Player_Controller playerCtrlr;
+    [SerializeField] Upgrade_Menu upgradeMenu;
     [SerializeField] Transform playerCamera;
     [SerializeField] Camera_Controller camController;
     [SerializeField] Transform grappleStart;
@@ -42,6 +43,8 @@ public class GrappleHookController : MonoBehaviour
 
     private void Update()
     {
+
+        maxDistance = upgradeMenu.hookDist;
 
         if (Input.GetButton("Grapple"))
         {

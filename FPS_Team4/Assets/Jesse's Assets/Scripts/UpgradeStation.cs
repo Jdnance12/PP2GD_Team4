@@ -29,16 +29,4 @@ public class UpgradeStation : MonoBehaviour
         upgradeMenu.SetActive(false);
         gameManager.instance.stateUnpause();
     }
-    public void UpgradeWeaponDamage()
-    {
-        if(gameManager.instance.SpendScrap(upgradeCost))
-        {
-            gunWeapon.damage += 5;
-            Debug.Log("Weapon damage upgraded!");
-        }
-        else
-        {
-            Debug.Log("Not enough Scrap!");
-        }
-    }
 }

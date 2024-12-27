@@ -14,6 +14,7 @@ public class Player_Controller : MonoBehaviour, IDamageable, IRecharge
 
     [Header("---- Player Components ----")]
     [SerializeField] CharacterController playerCtrl;
+    [SerializeField] Upgrade_Menu upgradeMenu;
     [SerializeField] Animator anim;
     [SerializeField] LayerMask ignoreMask;
     [SerializeField] GrappleHookController grappleHook;
@@ -86,7 +87,9 @@ public class Player_Controller : MonoBehaviour, IDamageable, IRecharge
     // Update is called once per frame
     void Update()
     {
-        if(grappleHook.isGrappling == false)
+        HP = upgradeMenu.playerHP;
+
+        if (!gm.isPaused && !grappleHook.isGrappling)
         {
             PlayerMovement();
         }

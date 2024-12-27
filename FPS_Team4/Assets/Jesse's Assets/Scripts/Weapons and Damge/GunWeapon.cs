@@ -7,6 +7,7 @@ public class GunWeapon : MonoBehaviour
 {
     [Header("---- Weapon Components ----")]
     [SerializeField] public Camera playerCamera;
+    [SerializeField] public Upgrade_Menu upgradeMenu;
     [SerializeField] public GameObject hitEffectPrefab;
     [SerializeField] public GameObject muzzleFlashPrefab;
     [SerializeField] public Transform muzzleFlashPoint;
@@ -31,7 +32,7 @@ public class GunWeapon : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+        damage = upgradeMenu.gunDamage;
     }
 
     public void Shoot()
