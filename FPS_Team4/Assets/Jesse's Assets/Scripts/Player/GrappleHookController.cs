@@ -44,7 +44,7 @@ public class GrappleHookController : MonoBehaviour
     private void Update()
     {
 
-        maxDistance = upgradeMenu.hookDist;
+        //maxDistance = upgradeMenu.hookDist;
 
         if (Input.GetButton("Grapple"))
         {

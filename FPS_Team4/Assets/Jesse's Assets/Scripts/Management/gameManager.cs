@@ -1,3 +1,4 @@
+using JetBrains.Annotations;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
@@ -9,13 +10,17 @@ public class gameManager : MonoBehaviour
 
     public static gameManager instance;
 
+    [Header("---- Player Initial Stats ----")]
+    [SerializeField] public int playerBaseHP;
+    [SerializeField] public int shieldBaseAmount;
+    [SerializeField] public int gunBaseDamage;
+    [SerializeField] public int bladeBaseDamage;
+
     [Header("--- Player Elements ----")]
     //Player Components
     public GameObject player;
     public Player_Controller playerScript;
     public Upgrade_Menu upgradeMeu;
-
-    // Player HP
     public Image playerHPBar;
     public GameObject playerDamageQue;
 
@@ -35,7 +40,6 @@ public class gameManager : MonoBehaviour
     [SerializeField] public TMP_Text nodeCountText;
     float timeScaleOriginal;
     //Weapons And Reticlules
-    [SerializeField] public GameObject weaponMenu;
     [SerializeField] public Image gunReticule;
     [SerializeField] public Image bladeReticule;
     //Item Additions
@@ -47,7 +51,15 @@ public class gameManager : MonoBehaviour
 
     private void Awake()
     {
-        instance = this;
+        if(instance == null)
+        {
+            instance = this;
+            DontDestroyOnLoad(gameObject);
+        }
+        else
+        {
+            Destroy(gameObject);
+        }
 
         menuActive = null;
 
@@ -69,22 +81,19 @@ public class gameManager : MonoBehaviour
         Cursor.visible = true;
         Cursor.lockState = CursorLockMode.Confined;
     }
-
     public void stateUnpause()
     {
         isPaused = false;
         Time.timeScale = timeScaleOriginal;
         Cursor.visible = false;
         Cursor.lockState = CursorLockMode.Locked;
-        menuActive.SetActive(false);
+        //menuActive.SetActive(false);
         menuActive = null;
     }
-
     public void youLose()
     {
 
     }
-
     public void ShowUpgradeMenu()
     {
         statePause();
@@ -94,15 +103,6 @@ public class gameManager : MonoBehaviour
     public void HideUpgradeMenu()
     {
         stateUnpause();
-    }
-
-    public void ShowWeaponMenu()
-    {
-        weaponMenu.SetActive(true);
-    }
-    public void HideWeaponMenu()
-    {
-        weaponMenu.SetActive(false);
     }
     public void AddNodeCount(int amount)
     {

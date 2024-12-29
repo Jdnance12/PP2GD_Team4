@@ -17,7 +17,7 @@ public class BladeWeapon : MonoBehaviour
 
     private void Update()
     {
-        damage = upgradeMenu.bladeDamage;
+        //damage = upgradeMenu.bladeDamage;
     }
 
     public void EnableCollider()

@@ -20,7 +20,7 @@ public class Enemy_AI : MonoBehaviour, IDamageable, IDisrupt
 
 
     [Header("---- Enemy Stats ----")]
-    [SerializeField] public int HP;
+    [SerializeField] public float HP;
 
     [Header("---- Enemy Movement ----")]
     [SerializeField] int FOV;
@@ -36,6 +36,10 @@ public class Enemy_AI : MonoBehaviour, IDamageable, IDisrupt
 
     Vector3 playerDirection;
     Vector3 startingPosition;
+
+    [Header("---- Enemy Disruption ----")]
+    [SerializeField] float disruptionDuration;
+    private Color disruptedColor = Color.blue;
 
     [Header("---- Bools ----")]
     public bool isRoaming;
@@ -60,18 +64,21 @@ public class Enemy_AI : MonoBehaviour, IDamageable, IDisrupt
     // Update is called once per frame
     void Update()
     {
-        if(playerInRange && !FollowPlayer())
+        if (!isDisrupted)
         {
-            if(!isRoaming && navAgent.remainingDistance < 0.01f)
+            if (playerInRange && !FollowPlayer())
             {
-                coroutine = StartCoroutine(RoamCoroutine());
+                if (!isRoaming && navAgent.remainingDistance < 0.01f)
+                {
+                    coroutine = StartCoroutine(RoamCoroutine());
+                }
             }
-        }
-        else if (!playerInRange)
-        {
-            if(!isRoaming && navAgent.remainingDistance < 0.1f)
+            else if (!playerInRange)
             {
-                coroutine = StartCoroutine(RoamCoroutine());
+                if (!isRoaming && navAgent.remainingDistance < 0.1f)
+                {
+                    coroutine = StartCoroutine(RoamCoroutine());
+                }
             }
         }
     }
@@ -162,7 +169,7 @@ public class Enemy_AI : MonoBehaviour, IDamageable, IDisrupt
         }
     }
 
-    public void TakeDamage(int damageAmount)
+    public void TakeDamage(float damageAmount)
     {
         HP -= damageAmount;
         StartCoroutine(flashRed());
@@ -183,11 +190,25 @@ public class Enemy_AI : MonoBehaviour, IDamageable, IDisrupt
 
     public void causeDisrupt()
     {
-        isDisrupted = true;
+        StartCoroutine(DisruptedRoutine());        
     }
 
     void Destroy()
     {
         Destroy(gameObject);
+    }
+    IEnumerator DisruptedRoutine()
+    {
+        isDisrupted = true;
+        model.material.color = disruptedColor;
+
+        navAgent.isStopped = true;
+        isShooting = false;
+
+        yield return new WaitForSeconds(disruptionDuration);
+
+        navAgent.isStopped = false;
+        model.material.color = origColor;
+        isDisrupted = false;
     }
 }

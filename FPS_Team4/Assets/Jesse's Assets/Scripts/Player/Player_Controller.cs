@@ -11,6 +11,8 @@ public class Player_Controller : MonoBehaviour, IDamageable, IRecharge
     [SerializeField] Camera_Controller camCtrl;
     [SerializeField] Transform playerCamera;
     private gameManager gm;
+    public GameObject upgrader;
+    public Upgrade_Menu upgradeScript;
 
     [Header("---- Player Components ----")]
     [SerializeField] CharacterController playerCtrl;
@@ -20,10 +22,11 @@ public class Player_Controller : MonoBehaviour, IDamageable, IRecharge
     [SerializeField] GrappleHookController grappleHook;
 
     [Header("---- Player Stats ____")]
-    [SerializeField] public int HP;
+    [SerializeField] public float maxHP;
+    private float currentHP;
     Vector3 moveDir;
     Vector3 playerVel;
-    int origHP;
+    float origHP;
 
     [Header("---- Player Movement ----")]
     [SerializeField] public int moveSpeed;
@@ -36,11 +39,20 @@ public class Player_Controller : MonoBehaviour, IDamageable, IRecharge
     bool isSprinting = false;
 
     [Header("---- Weapons ----")]
+    [SerializeField] GameObject weaponMenu; //Menu for Weapons
+    [SerializeField] GameObject skillMenu; //Menu for the Tools
     [SerializeField] GameObject gunWeapon;
     [SerializeField] GameObject bladeWeapon;
+    [SerializeField] GameObject empWeapon;
     [SerializeField] float fireRate;
     
     private GunWeapon gunWeaponScript;
+    private EMPWeapon empWeaponScript;
+
+    [SerializeField] float waveCooldown = 5f;
+    [SerializeField] float radialCooldown = 10f;
+    private float waveCooldownTimer;
+    private float radialCooldownTimer;
 
     [Header("Grapple Hook")]
     public GameObject heavyObject;
@@ -66,7 +78,8 @@ public class Player_Controller : MonoBehaviour, IDamageable, IRecharge
     public bool canUseGun;
     public bool canUseBlade;
 
-    private bool menuOpen = false;
+    public bool menuOpen = false;
+    public bool toolsMenuOpen = false;
     
 
 
@@ -77,31 +90,72 @@ public class Player_Controller : MonoBehaviour, IDamageable, IRecharge
 
         gm = gameManager.instance;
 
+        upgradeScript = upgrader.GetComponent<Upgrade_Menu>();
         gunWeaponScript = gunWeapon.GetComponent<GunWeapon>();
 
+        maxHP = upgradeScript.GetUpgradedHealth(); //Players HP from Upgrades
+
         //Getting originals
-        origHP = HP;
+        currentHP = maxHP;
         origMoveSpeed = moveSpeed;
     }
 
     // Update is called once per frame
     void Update()
     {
-        HP = upgradeMenu.playerHP;
 
         if (!gm.isPaused && !grappleHook.isGrappling)
         {
             PlayerMovement();
+            Attack();
         }
-        //PlayerMovement();
-        Attack();
+        if (Input.GetKeyDown(KeyCode.E))
+        {
+            ToggleWeaponMenu();
+        }
+        if (Input.GetKeyDown(KeyCode.Q))
+        {
+            ToggleSkillMenu();
+        }
     }
 
     public void updatePlayerUI()
     {
-        gm.playerHPBar.fillAmount = (float)HP / origHP;
+        gm.playerHPBar.fillAmount = currentHP / maxHP;
     }
-
+    public void UpdateMaxHP(float newMaxHP)
+    {
+        maxHP = newMaxHP;
+        currentHP = maxHP;
+    }
+    public void ToggleWeaponMenu()
+    {
+        if (weaponMenu.activeSelf)
+        {
+            weaponMenu.SetActive(false);
+            gm.stateUnpause();
+        }
+        else
+        {
+            weaponMenu.SetActive(true);
+            skillMenu.SetActive(false);
+            gm.statePause();
+        }
+    }
+    public void ToggleSkillMenu()
+    {
+        if (skillMenu.activeSelf)
+        {
+            skillMenu.SetActive(false);
+            gm.stateUnpause();
+        }
+        else
+        {
+            skillMenu.SetActive(true);
+            weaponMenu.SetActive(false);
+            gm.statePause();
+        }
+    }
     void PlayerMovement()
     {
 
@@ -144,71 +198,7 @@ public class Player_Controller : MonoBehaviour, IDamageable, IRecharge
         fireRate = gunWeaponScript.shootRate;
         bool stabReady = anim.GetBool("StabReady");
 
-        if (Input.GetKeyDown(KeyCode.E))
-        {
-            menuOpen = !menuOpen;
-            if (menuOpen)
-            {
-                gm.ShowWeaponMenu();
-                gm.statePause();
-            }
-            else
-            {
-                gm.HideWeaponMenu();
-                gm.stateUnpause();
-            }
-        }
-        if (menuOpen)
-        {
-            if (Input.GetKeyDown(KeyCode.Alpha1))
-            {
-                //ActivateGun();
-                gunActive = !gunActive;
-                if (gunActive)
-                {
-                    bladeActive = false;
-                    gunWeapon.SetActive(true);
-                    bladeWeapon.SetActive(false);
-
-                    gm.gunReticule.gameObject.SetActive(true);
-                    gm.bladeReticule.gameObject.SetActive(false);
-
-                }
-                else
-                {
-                    gm.gunReticule.gameObject.SetActive(false);
-                }
-
-                menuOpen = false;
-                gm.HideWeaponMenu();
-                gm.stateUnpause();
-            }
-            else if (Input.GetKeyDown(KeyCode.Alpha2))
-            {
-                //ActivateBlade();
-                bladeActive = !bladeActive;
-                if (bladeActive)
-                {
-
-                    gunActive = false;
-                    bladeWeapon.SetActive(true);
-                    gunWeapon.SetActive(false);
-
-                    gm.gunReticule.gameObject.SetActive(false);
-                    gm.bladeReticule.gameObject.SetActive(true);
-                }
-                else
-                {
-                    gm.bladeReticule.gameObject.SetActive(false);
-                }
-
-                menuOpen = false;
-                gm.HideWeaponMenu();
-                gm.stateUnpause();
-            }
-        }
-
-        if (gunActive)
+        if(gunActive)
         {
             if (Input.GetButton("Fire1") && !isFiring)
             {
@@ -257,7 +247,52 @@ public class Player_Controller : MonoBehaviour, IDamageable, IRecharge
         anim.SetBool("BladeActive", bladeActive);
         anim.SetBool("GunActive", gunActive);
     }
+    public void ToggleGun()
+    {
+        gunActive = !gunActive;
+        if (gunActive)
+        {
+            bladeActive = false;
+            gunWeapon.SetActive(true);
+            bladeWeapon.SetActive(false);
 
+            gm.gunReticule.gameObject.SetActive(true);
+            gm.bladeReticule.gameObject.SetActive(false);
+
+        }
+        else
+        {
+            gm.gunReticule.gameObject.SetActive(false);
+        }
+
+        ToggleWeaponMenu();
+
+        //menuOpen = false;
+        //gm.stateUnpause();
+    }
+    public void ToggleBlade()
+    {
+        bladeActive = !bladeActive;
+        if (bladeActive)
+        {
+
+            gunActive = false;
+            bladeWeapon.SetActive(true);
+            gunWeapon.SetActive(false);
+
+            gm.gunReticule.gameObject.SetActive(false);
+            gm.bladeReticule.gameObject.SetActive(true);
+        }
+        else
+        {
+            gm.bladeReticule.gameObject.SetActive(false);
+        }
+
+        ToggleWeaponMenu();
+
+        //menuOpen = false;
+        //gm.stateUnpause();
+    }
     IEnumerator BladeAnimationState(int index)
     {
         bladeWeapon.GetComponent<BladeWeapon>().EnableCollider();
@@ -276,7 +311,6 @@ public class Player_Controller : MonoBehaviour, IDamageable, IRecharge
 
         anim.SetBool("Stab", false);
     }
-
     IEnumerator FireCouroutine()
     {
         isFiring = true;
@@ -287,19 +321,17 @@ public class Player_Controller : MonoBehaviour, IDamageable, IRecharge
             yield return new WaitForSeconds(fireRate);
         }
     }
-
-    public void TakeDamage(int damage)
+    public void TakeDamage(float damage)
     {
-        HP -= damage;
+        currentHP -= damage;
         updatePlayerUI();
         StartCoroutine(flashDamageScreen());
 
-        if(HP < 0)
-        {
-            //You're Dead
-        }
+        //if(currentHP <= 0)
+        //{
+        //    //You're Dead
+        //}
     }
-
     IEnumerator flashDamageScreen()
     {
         gm.playerDamageQue.SetActive(true);
@@ -308,10 +340,9 @@ public class Player_Controller : MonoBehaviour, IDamageable, IRecharge
         
         gm.playerDamageQue.SetActive(false);
     }
-
     public void restoreHP(int amount)
     {
-        HP = origHP;
+        currentHP = maxHP;
         updatePlayerUI();
     }
 }
