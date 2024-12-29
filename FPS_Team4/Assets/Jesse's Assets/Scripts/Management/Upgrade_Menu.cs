@@ -28,14 +28,23 @@ public class Upgrade_Menu : MonoBehaviour
     private const int maxUpgrades = 4;
 
     public int playerHealthCost;
+    public int shieldCost;
     public int gunDmgCost;
+    public int bladeDmgCost;
+    public int hookDistCost;
 
     public int playerHealthUpCount;
+    public int shieldUpCount;
     public int gunDmgUpCount;
+    public int bladeDmgUpCount;
+    public int hookDistUpCount;
 
     [Header("---- Stats ----")]
     public int upgradedPlayerHP;
+    public int upgradedShield;
     public int upgradedGunDamage;
+    public int upgradedBladeDamage;
+    public int upgradedHookDistance;
 
     public int playerCurrency;
 
@@ -48,7 +57,10 @@ public class Upgrade_Menu : MonoBehaviour
 
         //Base Stats
         upgradedPlayerHP = gm.playerBaseHP;
+        upgradedShield = gm.shieldBaseAmount;
         upgradedGunDamage = gm.gunBaseDamage;
+        upgradedBladeDamage = gm.bladeBaseDamage;
+        upgradedHookDistance = gm.hookBaseDistance;
 
         //Base Costs
         playerHealthCost = 1;
@@ -114,9 +126,18 @@ public class Upgrade_Menu : MonoBehaviour
         }
     }
 
-    public float GetUpgradedHealth()
+    public void ShieldUpgrade()
     {
-        return upgradedPlayerHP;
+        if(playerCurrency >= shieldCost && shieldUpCount <= 4)
+        {
+            SubtractPartsCount(shieldCost);
+
+            shieldCost += shieldCost;
+
+            upgradedShield = Mathf.RoundToInt(upgradedShield + 100f);
+
+            gm.player.GetComponent<Player_Controller>().UpdateMaxShield(GetUpgradedShield());
+        }
     }
 
     public void GunDmgUpgrade()
@@ -136,28 +157,43 @@ public class Upgrade_Menu : MonoBehaviour
             
         }
     }
+
+    public void BladeDmgUpgrade()
+    {
+        if (playerCurrency >= bladeDmgCost && bladeDmgUpCount <= 4)
+        {
+            
+            //Update Player Currency
+            SubtractPartsCount(bladeDmgCost);
+
+            //Upgrade Cost
+            bladeDmgCost += bladeDmgCost;
+
+            //Damage Up
+            upgradedBladeDamage = Mathf.RoundToInt(upgradedBladeDamage * upgradeMultiplier);
+            bladeDmgUpCount++;
+            
+        }
+    }
+    public float GetUpgradedHealth()
+    {
+        return upgradedPlayerHP;
+    }
     public float GetUpgradedGunDamage()
     {
         return upgradedGunDamage;
     }
-
-    public void BladeDmgUpgrade()
+    public float GetUpgradedBladeDamage()
     {
-        //if (playerCurrency >= bladeDmgCost)
-        //{
-        //    if (gunDmgUpCount <= 4)
-        //    {
-        //        //Update Player Currency
-        //        SubtractPartsCount(bladeDmgCost);
-
-        //        //Upgrade Cost
-        //        bladeDmgCost += bladeDmgCost;
-
-        //        //Damage Up
-        //        //bladeDamage += Mathf.FloorToInt(BASE_BLADE_DAMAGE * UPGRADE_MULITIPLIER);
-        //        bladeDmgUpCount++;
-        //    }
-        //}
+        return upgradedBladeDamage;
+    }
+    public float GetUpGradedHookDistance()
+    {
+        return upgradedHookDistance;
+    }
+    public float GetUpgradedShield()
+    {
+        return upgradedShield;
     }
 
     public void AddPartsCount(int amount)

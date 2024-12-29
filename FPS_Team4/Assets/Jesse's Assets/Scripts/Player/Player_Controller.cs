@@ -1,11 +1,36 @@
 using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
+using UnityEditor;
 using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 
 public class Player_Controller : MonoBehaviour, IDamageable, IRecharge
 {
+    [Header("---- Bools ----")]
+    public bool isSprinting = false;
+    public bool isFiring;
+    public bool gunActive;
+    public bool bladeActive;
+    public bool canUseGun;
+    public bool canUseBlade;
+
+    [Header("---- Player Stats ____")]
+    [SerializeField] public float maxHP;
+    [SerializeField] private float currentHP;
+    [SerializeField] public float maxShield;
+    [SerializeField] private float currentShield;
+
+    [Header("---- Player Movement ----")]
+    [SerializeField] public int moveSpeed;
+    [SerializeField] public int sprintModifier;
+    [SerializeField] int jumpMax;
+    [SerializeField] int jumpCount;
+    [SerializeField] public float jumpSpeed;
+    [SerializeField] public float gravity;
+    Vector3 moveDir;
+    Vector3 playerVel;
+    private int origMoveSpeed;
 
     [Header("---- Camera Components ----")]
     [SerializeField] Camera_Controller camCtrl;
@@ -21,65 +46,14 @@ public class Player_Controller : MonoBehaviour, IDamageable, IRecharge
     [SerializeField] LayerMask ignoreMask;
     [SerializeField] GrappleHookController grappleHook;
 
-    [Header("---- Player Stats ____")]
-    [SerializeField] public float maxHP;
-    private float currentHP;
-    Vector3 moveDir;
-    Vector3 playerVel;
-    float origHP;
-
-    [Header("---- Player Movement ----")]
-    [SerializeField] public int moveSpeed;
-    [SerializeField] public int sprintModifier;
-    [SerializeField] int jumpMax;
-    [SerializeField] int jumpCount;
-    [SerializeField] public float jumpSpeed;
-    [SerializeField] public float gravity;
-    private int origMoveSpeed;
-    bool isSprinting = false;
-
     [Header("---- Weapons ----")]
     [SerializeField] GameObject weaponMenu; //Menu for Weapons
     [SerializeField] GameObject skillMenu; //Menu for the Tools
     [SerializeField] GameObject gunWeapon;
     [SerializeField] GameObject bladeWeapon;
-    [SerializeField] GameObject empWeapon;
     [SerializeField] float fireRate;
     
     private GunWeapon gunWeaponScript;
-    private EMPWeapon empWeaponScript;
-
-    [SerializeField] float waveCooldown = 5f;
-    [SerializeField] float radialCooldown = 10f;
-    private float waveCooldownTimer;
-    private float radialCooldownTimer;
-
-    [Header("Grapple Hook")]
-    public GameObject heavyObject;
-    public LineRenderer lineRenderer;
-    public Vector3 grapplePoint;
-
-    public float maxDistance;
-    public float hookSpeed;
-    private float originalGravity;
-    private float originalHookSpeed;
-
-
-    [Header("---- Bools ----")]
-    private bool isGrappling = false;
-    private bool pullingObject = false;
-    private bool drawLine = false;
-
-    private bool isFiring;
-
-    public bool gunActive;
-    public bool bladeActive;
-
-    public bool canUseGun;
-    public bool canUseBlade;
-
-    public bool menuOpen = false;
-    public bool toolsMenuOpen = false;
     
 
 
@@ -94,10 +68,14 @@ public class Player_Controller : MonoBehaviour, IDamageable, IRecharge
         gunWeaponScript = gunWeapon.GetComponent<GunWeapon>();
 
         maxHP = upgradeScript.GetUpgradedHealth(); //Players HP from Upgrades
+        maxShield = upgradeScript.GetUpgradedShield(); //Players Shield Amount from Upgrades
+
 
         //Getting originals
         currentHP = maxHP;
         origMoveSpeed = moveSpeed;
+
+        updatePlayerUI();
     }
 
     // Update is called once per frame
@@ -122,11 +100,22 @@ public class Player_Controller : MonoBehaviour, IDamageable, IRecharge
     public void updatePlayerUI()
     {
         gm.playerHPBar.fillAmount = currentHP / maxHP;
+        gm.playerShieldBar.fillAmount = currentShield / maxShield;
+        
     }
     public void UpdateMaxHP(float newMaxHP)
     {
         maxHP = newMaxHP;
         currentHP = maxHP;
+
+        updatePlayerUI();
+    }
+    public void UpdateMaxShield(float newMaxShield)
+    {
+        maxShield = newMaxShield;
+        currentShield = maxShield;
+
+        updatePlayerUI();
     }
     public void ToggleWeaponMenu()
     {
@@ -323,6 +312,13 @@ public class Player_Controller : MonoBehaviour, IDamageable, IRecharge
     }
     public void TakeDamage(float damage)
     {
+        if(maxShield > 0)
+        {
+            currentShield -= damage;
+            updatePlayerUI();
+            StartCoroutine(flashSheildHItScreen());
+        }
+        
         currentHP -= damage;
         updatePlayerUI();
         StartCoroutine(flashDamageScreen());
@@ -339,6 +335,14 @@ public class Player_Controller : MonoBehaviour, IDamageable, IRecharge
         yield return new WaitForSeconds(0.1f);
         
         gm.playerDamageQue.SetActive(false);
+    }
+    IEnumerator flashSheildHItScreen()
+    {
+        gm.playerShieldHitQue.SetActive(true);
+
+        yield return new WaitForSeconds(0.1f);
+
+        gm.playerShieldHitQue.SetActive(false);
     }
     public void restoreHP(int amount)
     {

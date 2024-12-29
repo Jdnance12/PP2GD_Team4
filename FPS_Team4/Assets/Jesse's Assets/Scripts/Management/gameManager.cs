@@ -1,4 +1,5 @@
 using JetBrains.Annotations;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
@@ -15,6 +16,7 @@ public class gameManager : MonoBehaviour
     [SerializeField] public int shieldBaseAmount;
     [SerializeField] public int gunBaseDamage;
     [SerializeField] public int bladeBaseDamage;
+    [SerializeField] public int hookBaseDistance;
 
     [Header("--- Player Elements ----")]
     //Player Components
@@ -22,7 +24,9 @@ public class gameManager : MonoBehaviour
     public Player_Controller playerScript;
     public Upgrade_Menu upgradeMeu;
     public Image playerHPBar;
+    public Image playerShieldBar;
     public GameObject playerDamageQue;
+    public GameObject playerShieldHitQue;
 
     [Header("--- Object UI Elements ----")]
     [SerializeField] TMP_Text grappleUIText;
@@ -54,7 +58,6 @@ public class gameManager : MonoBehaviour
         if(instance == null)
         {
             instance = this;
-            DontDestroyOnLoad(gameObject);
         }
         else
         {
@@ -87,7 +90,7 @@ public class gameManager : MonoBehaviour
         Time.timeScale = timeScaleOriginal;
         Cursor.visible = false;
         Cursor.lockState = CursorLockMode.Locked;
-        //menuActive.SetActive(false);
+        menuActive.SetActive(false);
         menuActive = null;
     }
     public void youLose()

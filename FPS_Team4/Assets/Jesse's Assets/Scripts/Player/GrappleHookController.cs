@@ -7,7 +7,8 @@ public class GrappleHookController : MonoBehaviour
     private gameManager gm;
 
     [SerializeField] Player_Controller playerCtrlr;
-    [SerializeField] Upgrade_Menu upgradeMenu;
+    public GameObject upgrader;
+    public Upgrade_Menu upgradeScript;
     [SerializeField] Transform playerCamera;
     [SerializeField] Camera_Controller camController;
     [SerializeField] Transform grappleStart;
@@ -32,6 +33,7 @@ public class GrappleHookController : MonoBehaviour
     private void Start()
     {
         gm = gameManager.instance;
+        upgradeScript = upgrader.GetComponent<Upgrade_Menu>();
 
         playerCtrlr = GetComponent<Player_Controller>();
 
@@ -44,12 +46,12 @@ public class GrappleHookController : MonoBehaviour
     private void Update()
     {
 
-        //maxDistance = upgradeMenu.hookDist;
+        maxDistance = upgradeScript.upgradedHookDistance;
 
         if (Input.GetButton("Grapple"))
         {
             LaunchHook();
-            //camController.enabled = false;
+            camController.enabled = false;
 
             if (isGrappling)
             {
