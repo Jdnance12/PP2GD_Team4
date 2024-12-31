@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PlayerController : MonoBehaviour, IDamageable
+public class PlayerController : MonoBehaviour, IDamageable, IRecharge
 {
     [Header("----- Bools -----")]
     public bool isSprinting = false;
@@ -348,6 +348,10 @@ public class PlayerController : MonoBehaviour, IDamageable
             gunScript.Shoot();
             yield return new WaitForSeconds(fireRate);
         }
+    }
+    public void restoreHP(int amount)
+    {
+        currentHP = maxHP;
     }
     public void TakeDamage(float damage)
     {

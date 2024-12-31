@@ -321,6 +321,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3706462997311893653}
+  - component: {fileID: 2328392652804966713}
   - component: {fileID: 5584629706405695986}
   m_Layer: 0
   m_Name: Heal Station
@@ -347,6 +348,19 @@ Transform:
   m_Father: {fileID: 4843714887039328544}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &2328392652804966713
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3325902071270415410}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7fbac9fc8b51fc844bc36985bd6dfc1a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  healAmount: 100
 --- !u!65 &5584629706405695986
 BoxCollider:
   m_ObjectHideFlags: 0

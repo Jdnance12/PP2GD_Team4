@@ -33,12 +33,14 @@ public class UpgradeManager : MonoBehaviour
     public int gunDmgCost;
     public int bladeDmgCost;
     public int hookDistCost;
+    public int doubleJumpCost;
 
     public int playerHealthUpCount;
     public int shieldUpCount;
     public int gunDmgUpCount;
     public int bladeDmgUpCount;
     public int hookDistUpCount;
+    public int doubleJumpCount;
 
     [Header("---- Stats ----")]
     public float upgradedPlayerHP;
@@ -70,12 +72,14 @@ public class UpgradeManager : MonoBehaviour
         shieldCost = 50;
         gunDmgCost = 50;
         bladeDmgCost = 50;
+        doubleJumpCost = 100;
 
         // Base Counts
         playerHealthUpCount = 0;
         shieldUpCount = 0; 
         gunDmgUpCount = 0;
         bladeDmgUpCount = 0;
+        doubleJumpCount = 0;
         
     }
     public void AddPartsCount(int amount)
@@ -101,7 +105,10 @@ public class UpgradeManager : MonoBehaviour
     //Skill Unlocks
     public void DoubleJumpUnlock()
     {
-        gm.player.GetComponent<PlayerController>().jumpMax = 2;
+        if(playerCurrency <= doubleJumpCost && doubleJumpCount < 1)
+        {
+            gm.player.GetComponent<PlayerController>().jumpMax = 2;
+        }
     }
     
     
