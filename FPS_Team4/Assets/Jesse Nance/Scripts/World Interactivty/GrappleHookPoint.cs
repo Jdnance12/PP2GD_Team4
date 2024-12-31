@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class GrappleHookPoint : MonoBehaviour
 {
-    private gameManager gm;
+    private GameManager gm;
     [SerializeField] GameObject uiElement;
     [SerializeField] Transform playerTrans;
     
@@ -14,7 +14,7 @@ public class GrappleHookPoint : MonoBehaviour
 
     private void Start()
     {
-        gm = gameManager.instance;
+        gm = GameManager.instance;
         playerTrans = gm.player.transform;
     }
 

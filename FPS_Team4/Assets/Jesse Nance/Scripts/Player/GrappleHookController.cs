@@ -57,7 +57,7 @@ public class GrappleHookController : MonoBehaviour
     private void Update()
     {
 
-        //maxDistance = upgradeScript.upgradedHookDistance;
+        //maxDistance = upgradeManager.upgradedHookDistance;
 
         if (Input.GetButton("Grapple"))
         {
@@ -112,10 +112,10 @@ public class GrappleHookController : MonoBehaviour
 
     void Grapple()
     {
-        transform.position = Vector3.MoveTowards(transform.position, grappleTarget, hookSpeed * Time.deltaTime);
-        if (Vector3.Distance(transform.position, grappleTarget) < 1f)
+        player.transform.position = Vector3.MoveTowards(player.transform.position, grappleTarget, hookSpeed * Time.deltaTime);
+        if (Vector3.Distance(player.transform.position, grappleTarget) < 1f)
         {
-            transform.position = new Vector3(transform.position.x, transform.position.y, transform.position.z);
+            player.transform.position = new Vector3(player.transform.position.x, player.transform.position.y, player.transform.position.z);
             isGrappling = false;
             lineRenderer.positionCount = 0;
         }
@@ -125,7 +125,7 @@ public class GrappleHookController : MonoBehaviour
     {
         float yPos = heavyObject.transform.position.y;
 
-        Vector3 targetPosition = new Vector3(transform.position.x, yPos, transform.position.z);
+        Vector3 targetPosition = new Vector3(player.transform.position.x, yPos, player.transform.position.z);
         heavyObject.transform.position = Vector3.MoveTowards(heavyObject.transform.position, targetPosition, pullSpeed * Time.deltaTime);
         if (Vector3.Distance(heavyObject.transform.position, targetPosition) < 1f)
         {

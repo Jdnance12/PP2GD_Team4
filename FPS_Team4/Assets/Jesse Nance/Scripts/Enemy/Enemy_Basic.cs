@@ -50,7 +50,7 @@ public class Enemy_Basic : MonoBehaviour, IDamageable, IDisrupt
     // Start is called before the first frame update
     void Start()
     {
-        player = gameManager.instance.player;
+        player = GameManager.instance.player;
 
         origStoppingDist = navAgent.stoppingDistance;
 

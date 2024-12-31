@@ -66,10 +66,10 @@ public class UpgradeManager : MonoBehaviour
         upgradedBladeDamage = bladeWeapon.GetComponent<BladeWeapon>().damage;
 
         // Base Cost
-        playerHealthCost = 0;
-        shieldCost = 0;
-        gunDmgCost = 1;
-        bladeDmgCost = 1;
+        playerHealthCost = 50;
+        shieldCost = 50;
+        gunDmgCost = 50;
+        bladeDmgCost = 50;
 
         // Base Counts
         playerHealthUpCount = 0;
@@ -91,9 +91,9 @@ public class UpgradeManager : MonoBehaviour
     public void UpdateAmounts()
     {
         playerHealthCostText.text = playerHealthCost.ToString("F0");
-        //gunDmgCostText.text = gunDmgCost.ToString("F0");
-        //bladeDmgCostText.text = bladeDmgCost.ToString("F0");
-        //hookDistCostText.text = hookDistCost.ToString("F0");
+        gunDmgCostText.text = gunDmgCost.ToString("F0");
+        bladeDmgCostText.text = bladeDmgCost.ToString("F0");
+        hookDistCostText.text = hookDistCost.ToString("F0");
     }
 
 

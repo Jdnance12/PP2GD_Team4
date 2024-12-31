@@ -13,6 +13,13 @@ public class UpgradeStation : MonoBehaviour
 
     public bool playerInRange = false;
 
+
+    private void Start()
+    {
+        upgradeMenu = GameObject.Find("Upgrade Menu");
+        upgradeMenu.SetActive(false);
+    }
+
     private void OnTriggerEnter(Collider other)
     {
         if (other.CompareTag("Player"))

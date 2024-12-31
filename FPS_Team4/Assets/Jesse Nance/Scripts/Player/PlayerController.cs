@@ -46,6 +46,7 @@ public class PlayerController : MonoBehaviour, IDamageable
     [SerializeField] Camera_Controller camCtrl;
     [SerializeField] UpgradeManager upgradeManager;
     [SerializeField] Animator armsAnim;
+    [SerializeField] Animator bodyAnim;
     private Transform playerCamTrans;
     private GameManager gm;
 
@@ -74,6 +75,8 @@ public class PlayerController : MonoBehaviour, IDamageable
 
         gunWeapon = GameObject.Find("Gun Weapon Object"); gunScript = gunWeapon.GetComponent<GunWeapon>();
         bladeWeapon = GameObject.Find("Blade Weapon Object");
+        weaponMenu = GameObject.Find("Weapon Menu"); weaponMenu.SetActive(false);
+        skillMenu = GameObject.Find("Skill Menu"); skillMenu.SetActive(false);
 
         grappleHook = GameObject.Find("Grapple Hook Object");
         grappleHookCtrl = grappleHook.GetComponent<GrappleHookController>();
@@ -101,6 +104,10 @@ public class PlayerController : MonoBehaviour, IDamageable
             PlayerMovement();
             Attack();
             HandleCrouch();
+        }
+        if (isCrouching == false)
+        {
+            Jump();
         }
         if (Input.GetKeyDown(KeyCode.E))
         {
@@ -203,25 +210,28 @@ public class PlayerController : MonoBehaviour, IDamageable
     }
     void PlayerMovement()
     {
-        if(playerCtrl.isGrounded)
-        {
-            jumpCount = 0;
-            playerVel = Vector3.zero;
-        }
+        //Gravity
+        playerCtrl.Move(playerVel * Time.deltaTime);
+        playerVel.y -= gravity * Time.deltaTime;
 
         //Player Movement
         moveDir = (transform.right * Input.GetAxis("Horizontal")) + (transform.forward * Input.GetAxis("Vertical"));
         playerCtrl.Move(moveDir * speed * Time.deltaTime);
 
         Sprint();
+    }
+    public void Jump()
+    {
 
-        //Gravity
-        playerCtrl.Move(playerVel * Time.deltaTime);
-        playerVel.y -= gravity * Time.deltaTime;
+        if (playerCtrl.isGrounded)
+        {
+            jumpCount = 0;
+            playerVel = Vector3.zero;
+        }
 
-        //Jump Controls
         if (Input.GetButtonDown("Jump") && jumpCount < jumpMax)
         {
+
             jumpCount++;
             playerVel.y = jumpSpeed;
         }
@@ -246,12 +256,14 @@ public class PlayerController : MonoBehaviour, IDamageable
                 playerCtrl.height = playerCtrl.height / 2f;
                 playerCtrl.center = new Vector3(playerCtrl.center.x, 1, playerCtrl.center.z);
                 speed = crouchSpeed;
+                bodyAnim.SetBool("IsCrouched", true);
             }
             else
             {
                 playerCtrl.height = standHeight;
                 playerCtrl.center = new Vector3(playerCtrl.center.x, 2, playerCtrl.center.z);
                 speed = standSpeed;
+                bodyAnim.SetBool("IsCrouched", false);
             }
         }
     }
