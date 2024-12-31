@@ -10,14 +10,14 @@ public class BladeWeapon : MonoBehaviour
     [SerializeField] Collider bladeCollider;
 
     [SerializeField] public GameObject upgradeObject;
-    [SerializeField] public UpgradeScript upgradeScript;
+    [SerializeField] public UpgradeManager upgradeManager;
 
     private void Start()
     {
         bladeCollider.enabled = false;
 
         upgradeObject = GameObject.Find("Game Manager");
-        upgradeScript = upgradeObject.GetComponent<UpgradeScript>();
+        upgradeManager = upgradeObject.GetComponent<UpgradeManager>();
     }
 
     private void Update()

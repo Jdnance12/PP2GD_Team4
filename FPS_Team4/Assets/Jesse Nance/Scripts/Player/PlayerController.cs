@@ -21,7 +21,7 @@ public class PlayerController : MonoBehaviour, IDamageable
     [Header("---- Movement Stats ----")]
     [SerializeField] float speed = 7;
     [SerializeField] int sprintMod = 2;
-    [SerializeField] int jumpMax = 2;
+    [SerializeField] public int jumpMax = 2;
     [SerializeField] int jumpCount = 0;
     [SerializeField] int jumpSpeed = 20;
     [SerializeField] public float gravity = 40;
@@ -44,7 +44,7 @@ public class PlayerController : MonoBehaviour, IDamageable
     [SerializeField] CharacterController playerCtrl;
     [SerializeField] GameObject playerCamera;
     [SerializeField] Camera_Controller camCtrl;
-    [SerializeField] UpgradeScript upgradeScript;
+    [SerializeField] UpgradeManager upgradeManager;
     [SerializeField] Animator armsAnim;
     private Transform playerCamTrans;
     private GameManager gm;
@@ -70,7 +70,7 @@ public class PlayerController : MonoBehaviour, IDamageable
         camCtrl = playerCamera.GetComponent<Camera_Controller>();
         playerCamTrans = playerCamera.transform;
 
-        upgradeScript = gameManager.GetComponent<UpgradeScript>(); // Referencing the script for the players upgrades
+        upgradeManager = gameManager.GetComponent<UpgradeManager>(); // Referencing the script for the players upgrades
 
         gunWeapon = GameObject.Find("Gun Weapon Object"); gunScript = gunWeapon.GetComponent<GunWeapon>();
         bladeWeapon = GameObject.Find("Blade Weapon Object");
@@ -87,6 +87,8 @@ public class PlayerController : MonoBehaviour, IDamageable
         origMoveSpeed = speed;
 
         standHeight = playerCtrl.height;
+
+        updatePlayerUI();
 
     }
 

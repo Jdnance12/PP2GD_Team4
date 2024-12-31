@@ -9,7 +9,6 @@ public class Upgrade_Menu : MonoBehaviour
 {
     [Header("---- Components ----")]
     private gameManager gm;
-    public GameObject uiElement;
 
     [Header("---- Text Components ----")]
     public TMP_Text playerHealthCostText;
@@ -74,7 +73,7 @@ public class Upgrade_Menu : MonoBehaviour
         if (other.CompareTag("Player"))
         {
             playerInRange = true;
-            uiElement.SetActive(true);
+            //uiElement.SetActive(true);
         }
     }
     private void OnTriggerExit(Collider other)
@@ -82,7 +81,7 @@ public class Upgrade_Menu : MonoBehaviour
         if (other.CompareTag("Player"))
         {
             playerInRange = false;
-            uiElement.SetActive(false);
+            //uiElement.SetActive(false);
         }
     }
 

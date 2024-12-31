@@ -8,13 +8,14 @@ public class GunWeapon : MonoBehaviour
     [Header("---- Weapon Components ----")]
     [SerializeField] public Camera playerCamera;
     public GameObject upgradeObject;
-    public UpgradeScript upgradeScript;
+    public UpgradeManager upgradeManager;
     [SerializeField] public GameObject hitEffectPrefab;
     [SerializeField] public GameObject muzzleFlashPrefab;
     [SerializeField] public Transform muzzleFlashPoint;
 
     [Header("---- Weapon Stats ----")]
     [SerializeField] public float damage;
+    [SerializeField] private float currentDamage;
     [SerializeField] public float range;
     [SerializeField] public float shootRate;
     [SerializeField] public float accuracy;
@@ -29,7 +30,7 @@ public class GunWeapon : MonoBehaviour
     {
         playerCamera = Camera.main;
         upgradeObject = GameObject.Find("Game Manager");
-        upgradeScript = upgradeObject.GetComponent<UpgradeScript>();
+        upgradeManager = upgradeObject.GetComponent<UpgradeManager>();
     }
 
     // Update is called once per frame

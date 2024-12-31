@@ -4,29 +4,56 @@ using UnityEngine;
 
 public class UpgradeStation : MonoBehaviour
 {
+    public GameObject uiElement;
 
     public int upgradeCost;
-    public GunWeapon gunWeapon;
+    //public GameObject gunWeaponObj;
+    //public GunWeapon gunWeapon;
     public GameObject upgradeMenu;
 
-    private bool playerInRange = false;
+    public bool playerInRange = false;
+
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.CompareTag("Player"))
+        {
+            playerInRange = true;
+            uiElement.SetActive(true);
+        }
+    }
+    private void OnTriggerExit(Collider other)
+    {
+        if (other.CompareTag("Player"))
+        {
+            playerInRange = false;
+            uiElement.SetActive(false);
+        }
+    }
 
     private void Update()
     {
-        if(playerInRange && Input.GetKeyDown(KeyCode.T))
+        if(playerInRange && Input.GetKey(KeyCode.T))
         {
             OpenUpgradeMenu();
         }
+        //if (upgradeMenu.activeSelf)
+        //{
+        //    if(Input.GetKeyDown(KeyCode.T))
+        //    {
+        //        CloseUpgradeMenu();
+        //    }
+        //}
     }
 
     private void OpenUpgradeMenu()
     {
-        upgradeMenu.SetActive(true);
-        gameManager.instance.statePause();
+        GameManager.instance.menuActive = upgradeMenu;
+        GameManager.instance.menuActive.gameObject.SetActive(true);
+        GameManager.instance.GamePaused();
     }
     public void CloseUpgradeMenu()
     {
-        upgradeMenu.SetActive(false);
-        gameManager.instance.stateUnpause();
+        //upgradeMenu.SetActive(false);
+        GameManager.instance.GameUnPaused();
     }
 }

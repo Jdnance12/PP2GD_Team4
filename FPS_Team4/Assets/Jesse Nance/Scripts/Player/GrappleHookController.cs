@@ -10,7 +10,7 @@ public class GrappleHookController : MonoBehaviour
     public PlayerController playerCtrlr;
 
     public GameObject upgradeObject;
-    public UpgradeScript upgradeScript;
+    public UpgradeManager upgradeManager;
 
     public GameObject playerCam;
     public Transform playerCamTrans;
@@ -39,7 +39,7 @@ public class GrappleHookController : MonoBehaviour
     {
         gm = GameManager.instance;
         upgradeObject = GameObject.Find("Game Manager");
-        upgradeScript = upgradeObject.GetComponent<UpgradeScript>();
+        upgradeManager = upgradeObject.GetComponent<UpgradeManager>();
 
         player = gm.player;
         playerCtrlr = gm.playerScript;
