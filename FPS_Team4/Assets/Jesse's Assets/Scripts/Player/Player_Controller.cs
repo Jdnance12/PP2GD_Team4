@@ -67,7 +67,7 @@ public class Player_Controller : MonoBehaviour, IDamageable, IRecharge
         upgradeScript = upgrader.GetComponent<Upgrade_Menu>();
         gunWeaponScript = gunWeapon.GetComponent<GunWeapon>();
 
-        maxHP = upgradeScript.GetUpgradedHealth(); //Players HP from Upgrades
+        maxHP = gm.playerBaseHP; //Players HP from Upgrades
         maxShield = upgradeScript.GetUpgradedShield(); //Players Shield Amount from Upgrades
 
 
@@ -315,7 +315,7 @@ public class Player_Controller : MonoBehaviour, IDamageable, IRecharge
         if(maxShield > 0)
         {
             currentShield -= damage;
-            updatePlayerUI();
+            //updatePlayerUI();
             StartCoroutine(flashSheildHItScreen());
         }
         
