@@ -61,22 +61,19 @@ public class Enemy_Basic : MonoBehaviour, IDamageable, IDisrupt
 
     // Update is called once per frame
     void Update()
-    {
-        if (!isDisrupted)
+    {                    
+        if(playerInRange && !FollowPlayer())
         {
-            if (playerInRange && !FollowPlayer())
+            if(!isRoaming && navAgent.remainingDistance < 0.01)
             {
-                if (!isRoaming && navAgent.remainingDistance < 0.01f)
-                {
-                    coroutine = StartCoroutine(RoamCoroutine());
-                }
+                coroutine = StartCoroutine(RoamCoroutine());
             }
-            else if (!playerInRange)
+        }
+        else if (!playerInRange)
+        {
+            if (!isRoaming && navAgent.remainingDistance < 0.01)
             {
-                if (!isRoaming && navAgent.remainingDistance < 0.1f)
-                {
-                    coroutine = StartCoroutine(RoamCoroutine());
-                }
+                coroutine = StartCoroutine(RoamCoroutine());
             }
         }
     }
@@ -120,8 +117,10 @@ public class Enemy_Basic : MonoBehaviour, IDamageable, IDisrupt
         RaycastHit hit;
         if (Physics.Raycast(transform.position, playerDirection, out hit))
         {
-            if (hit.collider.CompareTag("Player") && angleToPlayer <= FOV)
+            if (hit.collider.CompareTag("Player"))
             {
+
+                faceTarget();
                 navAgent.SetDestination(player.transform.position);
 
                 if (navAgent.remainingDistance < navAgent.stoppingDistance)
@@ -141,17 +140,18 @@ public class Enemy_Basic : MonoBehaviour, IDamageable, IDisrupt
 
     void faceTarget()
     {
-        Quaternion rot = Quaternion.LookRotation(new Vector3(player.transform.position.x, 0, player.transform.position.z));
+        //playerDirection = player.transform.position - transform.position;
+        Quaternion rot = Quaternion.LookRotation(new Vector3(playerDirection.x, 0, playerDirection.z));
         transform.rotation = Quaternion.Lerp(transform.rotation, rot, Time.deltaTime * faceTargetSpeed);
     }
 
 
     void OnTriggerEnter(Collider other)
     {
-        if (other.isTrigger)
-        {
-            return;
-        }
+        //if (other.isTrigger)
+        //{
+        //    return;
+        //}
 
         if (other.CompareTag("Player"))
         {
