@@ -15,7 +15,7 @@ public class GameManager : MonoBehaviour
     public GameObject player;
     public PlayerController playerScript;
 
-    public UpgradeScript upgradeScript;
+    public UpgradeManager upgradeScript;
 
     [Header("---- UI Feedback ----")]
     public GameObject playerHealthHitImage;
@@ -37,6 +37,8 @@ public class GameManager : MonoBehaviour
     float timeScaleOriginal;
 
     [Header("---- UI Counts ----")]
+    private List<Enemy> Area1Enemies = new List<Enemy>();
+    private int enemyCount;
     public int partsCount;
     public int nodeCount;
 
@@ -55,7 +57,7 @@ public class GameManager : MonoBehaviour
         player = GameObject.FindWithTag("Player");
         playerScript = player.GetComponent<PlayerController>();
 
-        upgradeScript = GetComponent<UpgradeScript>();
+        upgradeScript = GetComponent<UpgradeManager>();
 
         menuActive = null;
 

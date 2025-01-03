@@ -10,7 +10,7 @@ public class EMPWeapon : MonoBehaviour
     private GameManager gm;
 
     [SerializeField] public GameObject upgradeObject;
-    [SerializeField] public UpgradeScript upgradeScript;
+    [SerializeField] public UpgradeManager upgradeManager;
 
     [SerializeField] public GameObject radialPrefab;
     [SerializeField] public GameObject wavePrefab;
@@ -32,7 +32,7 @@ public class EMPWeapon : MonoBehaviour
         gm = GameManager.instance;
 
         upgradeObject = GameObject.Find("Game Manager");
-        upgradeScript = upgradeObject.GetComponent<UpgradeScript>();
+        upgradeManager = upgradeObject.GetComponent<UpgradeManager>();
 
         wavePointObj = GameObject.Find("EMP Wave Position");
         radialPointObj = GameObject.Find("EMP Radial Position");

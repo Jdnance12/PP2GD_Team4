@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
+using Random = UnityEngine.Random;
 
 public class Enemy_Basic : MonoBehaviour, IDamageable, IDisrupt
 {
@@ -97,7 +98,7 @@ public class Enemy_Basic : MonoBehaviour, IDamageable, IDisrupt
 
             NavMeshHit navHit;
 
-            if (NavMesh.SamplePosition(randomDirection, out navHit, roamingRadius, -1))
+            if (NavMesh.SamplePosition(randomDirection, out navHit, roamingRadius, 1))
             {
                 navAgent.SetDestination(navHit.position);
             }
@@ -148,10 +149,10 @@ public class Enemy_Basic : MonoBehaviour, IDamageable, IDisrupt
 
     void OnTriggerEnter(Collider other)
     {
-        //if (other.isTrigger)
-        //{
-        //    return;
-        //}
+        if (other.isTrigger)
+        {
+            return;
+        }
 
         if (other.CompareTag("Player"))
         {

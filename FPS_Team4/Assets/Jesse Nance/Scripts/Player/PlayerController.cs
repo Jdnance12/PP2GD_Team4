@@ -351,7 +351,9 @@ public class PlayerController : MonoBehaviour, IDamageable, IRecharge
     }
     public void restoreHP(int amount)
     {
+        //currentHP += amount;
         currentHP = maxHP;
+        updatePlayerUI();
     }
     public void TakeDamage(float damage)
     {

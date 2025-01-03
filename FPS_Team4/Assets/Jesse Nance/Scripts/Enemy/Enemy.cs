@@ -1,32 +1,25 @@
 using System.Collections;
 using System.Collections.Generic;
-using Unity.VisualScripting;
+using Unity.VisualScripting.Antlr3.Runtime.Misc;
 using UnityEngine;
 using UnityEngine.AI;
 
-public class EnemyBasic : MonoBehaviour, IDamageable
+public class Enemy : MonoBehaviour, IDamageable
 {
     private GameManager gm;
 
     [Header("---- Bools ----")]
     public bool isDisrupted;
-    public bool isShooting;
     public bool playerInRange;
-
+    
     [Header("---- Stats ----")]
     [SerializeField] float HP;
-    [SerializeField] float shootRate;
 
     [Header("--- Movement Stats ----")]
     [SerializeField] int faceTargetSpeed;
-    [SerializeField] int FOV;
-    [SerializeField] float angleToPlayer;
 
     [Header("---- Components ----")]
     [SerializeField] GameObject player;
-    [SerializeField] GameObject bullet;
-    [SerializeField] Transform headPos;
-    [SerializeField] Transform shootPos;
     [SerializeField] Renderer model;
     [SerializeField] GameObject partsPrefab;
     [SerializeField] NavMeshAgent navAgent;
@@ -48,8 +41,18 @@ public class EnemyBasic : MonoBehaviour, IDamageable
     // Update is called once per frame
     void Update()
     {
-        if (playerInRange && CanSeePlayer())
+        if (playerInRange)
         {
+            playerDir = player.transform.position - transform.position;
+
+            navAgent.SetDestination(GameManager.instance.player.transform.position);
+
+            if(navAgent.remainingDistance < navAgent.stoppingDistance)
+            {
+                FaceTarget();
+            }
+
+            
             
         }
     }
@@ -68,53 +71,11 @@ public class EnemyBasic : MonoBehaviour, IDamageable
         }
     }
 
-    // Player/Object Detection and Movement
-    void FaceTarget(Vector3 target)
+    // Player/Object Detection
+    void FaceTarget()
     {
-        Quaternion rot = Quaternion.LookRotation(new Vector3(target.x, 0, target.z));
+        Quaternion rot = Quaternion.LookRotation(new Vector3(playerDir.x, 0, playerDir.z));
         transform.rotation = Quaternion.Lerp(transform.rotation, rot, Time.deltaTime * faceTargetSpeed);
-    }
-
-    bool CanSeePlayer()
-    {
-        playerDir = player.transform.position + Vector3.up * 2.0f - headPos.position;
-        angleToPlayer = Vector3.Angle(playerDir, transform.forward);
-
-        Debug.DrawRay(headPos.position, playerDir);
-
-        RaycastHit hit;
-        if (Physics.Raycast(headPos.position, playerDir, out hit))
-        {
-
-            if (hit.collider.CompareTag("Player") && angleToPlayer <= FOV)
-            {
-                navAgent.SetDestination(player.transform.position);
-
-                if (navAgent.remainingDistance < navAgent.stoppingDistance)
-                {
-                    FaceTarget(playerDir);
-                }
-
-                if (!isShooting)
-                {
-                    StartCoroutine(Shoot());
-                }
-                return true;
-            }
-        }
-        return false;
-    }
-
-
-    //Enemy Shooting
-    IEnumerator Shoot()
-    {
-        isShooting = true;
-
-        Instantiate(bullet, shootPos.position, transform.rotation);
-
-        yield return new WaitForSeconds(shootRate);
-        isShooting = false;
     }
 
 
