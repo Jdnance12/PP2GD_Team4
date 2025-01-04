@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEditor.Animations;
 using UnityEngine;
 //using UnityEngine.InputSystem.XR.Haptics;
@@ -8,6 +9,9 @@ using UnityEngine;
 public class EMPWeapon : MonoBehaviour
 {
     private GameManager gm;
+
+    public bool empActive;
+    public bool radialActive;
 
     [SerializeField] public GameObject upgradeObject;
     [SerializeField] public UpgradeManager upgradeManager;
@@ -20,9 +24,13 @@ public class EMPWeapon : MonoBehaviour
     [SerializeField] public Transform radialPointTrans;
     [SerializeField] public Transform wavePointTrans;
 
+    [SerializeField] public GameObject textObject;
+    [SerializeField] private TMP_Text objectText;
+
     [SerializeField] public float destroyTimer;
     [SerializeField] public int waveSpeed;
     [SerializeField] public float maxDistance;
+    [SerializeField] public float displayDuration;
 
     [SerializeField] public AnimatorController playerAnim;
 
@@ -33,6 +41,10 @@ public class EMPWeapon : MonoBehaviour
 
         upgradeObject = GameObject.Find("Game Manager");
         upgradeManager = upgradeObject.GetComponent<UpgradeManager>();
+
+        textObject = GameObject.Find("Error Text");
+        objectText = textObject.GetComponent<TMP_Text>();
+        textObject.SetActive(false);
 
         wavePointObj = GameObject.Find("EMP Wave Position");
         radialPointObj = GameObject.Find("EMP Radial Position");
@@ -47,23 +59,37 @@ public class EMPWeapon : MonoBehaviour
     }
 
     public void RadialDistrupt()
-    { 
-        GameObject pulse = Instantiate(radialPrefab, radialPointTrans.position, Quaternion.identity);
-        pulse.transform.localScale = Vector3.zero;
+    {
+        if (empActive == true && radialActive == true)
+        {
+            GameObject pulse = Instantiate(radialPrefab, radialPointTrans.position, Quaternion.identity);
+            pulse.transform.localScale = Vector3.zero;
 
-        StartCoroutine(ScaleUp(pulse, destroyTimer));
+            StartCoroutine(ScaleUp(pulse, destroyTimer));
 
-        Destroy(pulse, destroyTimer);
+            Destroy(pulse, destroyTimer);
 
-        gm.player.GetComponent<PlayerController>().ToggleSkillMenu();
+            gm.player.GetComponent<PlayerController>().ToggleSkillMenu();
+        }
+        else
+        {
+            StartCoroutine(flashText());
+        }
     }
     public void WaveDisrupt()
     {
-        GameObject wave = Instantiate(wavePrefab, wavePointTrans.position, wavePointTrans.rotation);
+        if(empActive == true)
+        {
+            GameObject wave = Instantiate(wavePrefab, wavePointTrans.position, wavePointTrans.rotation);
 
-        StartCoroutine(MoveWave(wave, maxDistance, destroyTimer));
+            StartCoroutine(MoveWave(wave, maxDistance, destroyTimer));
 
-        gm.player.GetComponent<PlayerController>().ToggleSkillMenu();
+            gm.player.GetComponent<PlayerController>().ToggleSkillMenu();
+        }
+        else
+        {
+            StartCoroutine(flashText());
+        }
     }
     IEnumerator MoveWave(GameObject wave, float maxDistance, float destroyTimer)
     {
@@ -100,5 +126,14 @@ public class EMPWeapon : MonoBehaviour
         {
             pulse.transform.localScale = targetScale;
         }
+    }
+    IEnumerator flashText()
+    {
+        textObject.SetActive(true);
+        objectText.text = "Unlock EMP with an Upgrade Station";
+
+        yield return new WaitForSeconds(displayDuration);
+
+        textObject.SetActive(false);
     }
 }

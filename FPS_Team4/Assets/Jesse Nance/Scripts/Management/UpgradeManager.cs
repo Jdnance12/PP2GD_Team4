@@ -14,15 +14,24 @@ public class UpgradeManager : MonoBehaviour
 
     [Header("---- Text Components ----")]
     public TMP_Text playerHealthCostText;
-    public TMP_Text gunDmgCostText;
-    public TMP_Text bladeDmgCostText;
-    public TMP_Text hookDistCostText;
-    public TMP_Text playerCurrencyText;
+    public TMP_Text playerHealthCountText;
+    
+    public TMP_Text playerShieldCostText;
+    public TMP_Text playerShieldCountText;
 
-    [Header("---- Buttons ----")]
-    public Button gunDmgUpButton;
-    public Button bladeDmgUpButton;
-    public Button hookDistUpButton;
+    public TMP_Text doubleJumpLabelText;
+    public TMP_Text doubleJumpCostText;
+    public TMP_Text doubleJumpCountText;
+    
+    public TMP_Text gunDmgCostText;
+    public TMP_Text gunDmgCountText;
+    
+    public TMP_Text bladeDmgCostText;
+    public TMP_Text bladeDmgCountText;
+    
+    public TMP_Text hookDistCostText;
+    
+    public TMP_Text playerCurrencyText;
 
     [Header("---- Modifiers ----")]
     public float upgradeMultiplier = 1.25f;
@@ -67,19 +76,7 @@ public class UpgradeManager : MonoBehaviour
         upgradedGunDamage = gunWeapon.GetComponent<GunWeapon>().damage;
         upgradedBladeDamage = bladeWeapon.GetComponent<BladeWeapon>().damage;
 
-        // Base Cost
-        playerHealthCost = 50;
-        shieldCost = 50;
-        gunDmgCost = 50;
-        bladeDmgCost = 50;
-        doubleJumpCost = 100;
-
-        // Base Counts
-        playerHealthUpCount = 0;
-        shieldUpCount = 0; 
-        gunDmgUpCount = 0;
-        bladeDmgUpCount = 0;
-        doubleJumpCount = 0;
+        UpdateAmounts();
         
     }
     public void AddPartsCount(int amount)
@@ -95,9 +92,21 @@ public class UpgradeManager : MonoBehaviour
     public void UpdateAmounts()
     {
         playerHealthCostText.text = playerHealthCost.ToString("F0");
+        playerHealthCountText.text = playerHealthUpCount.ToString("F0");
+
+        playerShieldCostText.text = shieldCost.ToString("F0");
+        playerShieldCountText.text = shieldUpCount.ToString("F0");
+
+        doubleJumpCostText.text = doubleJumpCost.ToString("F0");
+        doubleJumpCountText.text = doubleJumpCount.ToString("F0");
+
         gunDmgCostText.text = gunDmgCost.ToString("F0");
+        gunDmgCountText.text = gunDmgUpCount.ToString("F0");
+
         bladeDmgCostText.text = bladeDmgCost.ToString("F0");
-        hookDistCostText.text = hookDistCost.ToString("F0");
+        bladeDmgCountText.text = bladeDmgUpCount.ToString("F0");
+        
+        //hookDistCostText.text = hookDistCost.ToString("F0");
     }
 
 
@@ -105,10 +114,23 @@ public class UpgradeManager : MonoBehaviour
     //Skill Unlocks
     public void DoubleJumpUnlock()
     {
-        if(playerCurrency <= doubleJumpCost && doubleJumpCount < 1)
+        if(playerCurrency >= doubleJumpCost && doubleJumpCount < 1)
         {
+            SubtractPartsCount(doubleJumpCost);
+            doubleJumpCost = 0;
+            doubleJumpCount++;
+
             gm.player.GetComponent<PlayerController>().jumpMax = 2;
+
+            UpdateAmounts();
+
+            doubleJumpLabelText.color = Color.gray;
+            doubleJumpCostText.color = Color.gray;
         }
+    }
+    public void empWaveUnlock()
+    {
+
     }
     
     
@@ -116,7 +138,7 @@ public class UpgradeManager : MonoBehaviour
     //Stat Upgrades
     public void HealthUpgrade()
     {
-        if(playerCurrency >= playerHealthCost && playerHealthUpCount <= 4)
+        if(playerCurrency >= playerHealthCost && playerHealthUpCount < 4)
         {
             SubtractPartsCount(playerHealthCost);
 
@@ -126,11 +148,13 @@ public class UpgradeManager : MonoBehaviour
             playerHealthUpCount++;
 
             gm.player.GetComponent<PlayerController>().UpdateMaxHP(GetUpgradedHealth());
+
+            UpdateAmounts();
         }
     }
     public void ShieldUpgrade()
     {
-        if (playerCurrency >= shieldCost && shieldUpCount <= 4)
+        if (playerCurrency >= shieldCost && shieldUpCount < 4)
         {
             SubtractPartsCount(shieldCost);
 
@@ -140,11 +164,13 @@ public class UpgradeManager : MonoBehaviour
             shieldUpCount++;
 
             gm.player.GetComponent<PlayerController>().UpdateMaxShield(GetUpgradedShield());
+
+            UpdateAmounts();
         }
     }
     public void GunDmgUpgrade()
     {
-        if (playerCurrency >= gunDmgCost && gunDmgUpCount <= 4)
+        if (playerCurrency >= gunDmgCost && gunDmgUpCount < 4)
         {
 
             //Update Player Currency
@@ -157,11 +183,12 @@ public class UpgradeManager : MonoBehaviour
             upgradedGunDamage = Mathf.RoundToInt(upgradedGunDamage * upgradeMultiplier);
             gunDmgUpCount++;
 
+            UpdateAmounts();
         }
     }
     public void BladeDmgUpgrade()
     {
-        if (playerCurrency >= bladeDmgCost && bladeDmgUpCount <= 4)
+        if (playerCurrency >= bladeDmgCost && bladeDmgUpCount < 4)
         {
 
             //Update Player Currency
@@ -174,6 +201,7 @@ public class UpgradeManager : MonoBehaviour
             upgradedBladeDamage = Mathf.RoundToInt(upgradedBladeDamage * upgradeMultiplier);
             bladeDmgUpCount++;
 
+            UpdateAmounts();
         }
     }
 

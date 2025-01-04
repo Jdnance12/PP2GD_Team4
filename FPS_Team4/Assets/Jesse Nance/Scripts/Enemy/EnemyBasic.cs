@@ -4,7 +4,7 @@ using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.AI;
 
-public class EnemyBasic : MonoBehaviour, IDamageable
+public class EnemyBasic : MonoBehaviour, IDamageable, IDisrupt
 {
     private GameManager gm;
 
@@ -21,6 +21,10 @@ public class EnemyBasic : MonoBehaviour, IDamageable
     [SerializeField] int faceTargetSpeed;
     [SerializeField] int FOV;
     [SerializeField] float angleToPlayer;
+    [SerializeField] int disruptDuration;
+    [SerializeField] float roamRadius;
+
+    private Coroutine co;
 
     [Header("---- Components ----")]
     [SerializeField] GameObject player;
@@ -29,6 +33,8 @@ public class EnemyBasic : MonoBehaviour, IDamageable
     [SerializeField] Transform shootPos;
     [SerializeField] Renderer model;
     [SerializeField] GameObject partsPrefab;
+    [SerializeField] GameObject damageTextPrefab;
+    [SerializeField] GameObject damageTextPos;
     [SerializeField] NavMeshAgent navAgent;
 
     private Vector3 playerDir;
@@ -48,9 +54,23 @@ public class EnemyBasic : MonoBehaviour, IDamageable
     // Update is called once per frame
     void Update()
     {
-        if (playerInRange && CanSeePlayer())
+        if (!isDisrupted)
         {
-            
+            if (playerInRange && !CanSeePlayer())
+            {
+                if(navAgent.remainingDistance < 0.01f)
+                {
+                    StartCoroutine(Roaming());
+                }
+            }
+            else if (!playerInRange)
+            {
+                if (navAgent.remainingDistance < 0.01f)
+                {
+                    StartCoroutine(Roaming());
+                }
+            }
+            StartCoroutine(Roaming());
         }
     }
     private void OnTriggerEnter(Collider other)
@@ -73,6 +93,24 @@ public class EnemyBasic : MonoBehaviour, IDamageable
     {
         Quaternion rot = Quaternion.LookRotation(new Vector3(target.x, 0, target.z));
         transform.rotation = Quaternion.Lerp(transform.rotation, rot, Time.deltaTime * faceTargetSpeed);
+    }
+
+    IEnumerator Roaming()
+    {
+        if(navAgent.remainingDistance <= navAgent.stoppingDistance)
+        {
+            Vector3 randDirection = Random.insideUnitSphere * roamRadius;
+            randDirection += transform.position;
+
+            NavMeshHit navHit;
+            if(NavMesh.SamplePosition(randDirection, out navHit, roamRadius, -1))
+            {
+                navAgent.SetDestination(navHit.position);
+            }
+
+            yield return new WaitForSeconds(Random.Range(3, 8));
+        }
+        yield return null;
     }
 
     bool CanSeePlayer()
@@ -118,6 +156,11 @@ public class EnemyBasic : MonoBehaviour, IDamageable
     }
 
 
+    // Damage and Disruption
+    public void causeDisrupt()
+    {
+        StartCoroutine(Disrupted());
+    }  
     public void TakeDamage(float damageAmount)
     {
         HP -= damageAmount;
@@ -129,10 +172,24 @@ public class EnemyBasic : MonoBehaviour, IDamageable
             Destroy(gameObject);
         }
     }
+    IEnumerator Disrupted()
+    {
+        isDisrupted = true;
+        model.material.color = Color.blue;
 
+        navAgent.isStopped = true;
+        isShooting = false;
+
+        yield return new WaitForSeconds(disruptDuration);
+
+        navAgent.isStopped = false;
+        model.material.color = origColor;
+        isDisrupted = false;
+    }
     IEnumerator flashRed()
     {
         model.material.color = Color.red;
+
         yield return new WaitForSeconds(0.1f); //Turns red for 1 second
         model.material.color = origColor;
     }

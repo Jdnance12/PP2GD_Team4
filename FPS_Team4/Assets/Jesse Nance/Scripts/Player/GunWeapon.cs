@@ -31,12 +31,14 @@ public class GunWeapon : MonoBehaviour
         playerCamera = Camera.main;
         upgradeObject = GameObject.Find("Game Manager");
         upgradeManager = upgradeObject.GetComponent<UpgradeManager>();
+
+        //currentDamage = upgradeManager.GetUpgradedGunDamage();
     }
 
     // Update is called once per frame
     void Update()
     {
-        //damage = upgradeScript.GetUpgradedGunDamage();
+        currentDamage = upgradeManager.GetUpgradedGunDamage();
     }
 
     public void Shoot()
@@ -50,7 +52,7 @@ public class GunWeapon : MonoBehaviour
             IDamageable damageable = hit.collider.GetComponent<IDamageable>();
             if (damageable != null)
             {
-                damageable.TakeDamage(damage);
+                damageable.TakeDamage(currentDamage);
             }
 
             GameObject muzzleFlash = Instantiate(muzzleFlashPrefab, muzzleFlashPoint.position, muzzleFlashPoint.rotation);

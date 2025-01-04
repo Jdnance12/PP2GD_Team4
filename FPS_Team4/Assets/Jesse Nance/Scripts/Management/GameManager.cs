@@ -37,7 +37,6 @@ public class GameManager : MonoBehaviour
     float timeScaleOriginal;
 
     [Header("---- UI Counts ----")]
-    private List<Enemy> Area1Enemies = new List<Enemy>();
     private int enemyCount;
     public int partsCount;
     public int nodeCount;
@@ -96,5 +95,12 @@ public class GameManager : MonoBehaviour
         Cursor.lockState = CursorLockMode.Locked;
         menuActive.SetActive(false);
         menuActive = null;
+    }
+    public void WeaponMenuUnPaused()
+    {
+        isPaused = false;
+        Time.timeScale = timeScaleOriginal;
+        Cursor.visible = false;
+        Cursor.lockState = CursorLockMode.Locked;
     }
 }

@@ -144,7 +144,7 @@ public class PlayerController : MonoBehaviour, IDamageable, IRecharge
         if (weaponMenu.activeSelf)
         {
             weaponMenu.SetActive(false);
-            gm.GameUnPaused();
+            gm.WeaponMenuUnPaused();
         }
         else
         {
@@ -158,7 +158,7 @@ public class PlayerController : MonoBehaviour, IDamageable, IRecharge
         if (skillMenu.activeSelf)
         {
             skillMenu.SetActive(false);
-            gm.GameUnPaused();
+            gm.WeaponMenuUnPaused();
         }
         else
         {

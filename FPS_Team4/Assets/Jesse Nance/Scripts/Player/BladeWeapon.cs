@@ -7,6 +7,7 @@ using UnityEngine;
 public class BladeWeapon : MonoBehaviour
 {
     [SerializeField] public float damage;
+    [SerializeField] private float currentDamage;
     [SerializeField] Collider bladeCollider;
 
     [SerializeField] public GameObject upgradeObject;
@@ -22,7 +23,7 @@ public class BladeWeapon : MonoBehaviour
 
     private void Update()
     {
-        //damage = upgradeMenu.GetUpgradedBladeDamage();
+        currentDamage = upgradeManager.GetUpgradedBladeDamage();
     }
 
     public void EnableCollider()
@@ -45,7 +46,7 @@ public class BladeWeapon : MonoBehaviour
         IDamageable damageable = other.GetComponent<IDamageable>();
         if (damageable != null)
         {
-            damageable.TakeDamage(damage);
+            damageable.TakeDamage(currentDamage);
         }
     }
 }

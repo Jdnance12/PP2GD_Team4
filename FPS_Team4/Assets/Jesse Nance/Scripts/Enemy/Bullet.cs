@@ -9,7 +9,6 @@ public class Bullet : MonoBehaviour
 
     [SerializeField] Rigidbody rb;
 
-    [SerializeField] int damageAmount;
     [SerializeField] int speed;
     [SerializeField] int destroyTime;
     private void Start()
