@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.Rendering;
 using UnityEngine.UI;
@@ -25,10 +26,13 @@ public class GameManager : MonoBehaviour
 
     [Header("---- UI Menus ----")]
     [SerializeField] public GameObject menuActive;
+    [SerializeField] public GameObject menuStart;
     [SerializeField] public GameObject menuPause;
     [SerializeField] public GameObject menuWin, menuLose;
-    //public GameObject weaponMenu;
-    //public GameObject skillMenu;
+
+    [SerializeField] public GameObject menuMisc;
+    [SerializeField] public TMP_Text miscTitleText;
+    [SerializeField] public TMP_Text miscBodyText;
 
     [Header("---- UI Weapon Reticules ----")]
     public Image gunReticule;
@@ -79,6 +83,12 @@ public class GameManager : MonoBehaviour
                 GameUnPaused();
             }
         }
+    }
+
+    public void ShowStartMenu()
+    {
+        menuActive = menuStart;
+        menuActive.SetActive(true);
     }
     public void GamePaused()
     {

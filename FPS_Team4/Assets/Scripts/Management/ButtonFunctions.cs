@@ -14,6 +14,12 @@ public class ButtonFunctions : MonoBehaviour
         SceneManager.LoadScene(SceneManager.GetActiveScene().name);
         GameManager.instance.GameUnPaused();
     }
+    public void PlayButton()
+    {
+        GameManager.instance.menuActive.SetActive(false);
+        GameManager.instance.GameUnPaused();
+        GameManager.instance.menuActive = null;
+    }
     public void Quit()
     {
 #if UNITY_EDITOR
