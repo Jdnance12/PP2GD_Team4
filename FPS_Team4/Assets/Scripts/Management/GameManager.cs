@@ -34,6 +34,8 @@ public class GameManager : MonoBehaviour
     [SerializeField] public TMP_Text miscTitleText;
     [SerializeField] public TMP_Text miscBodyText;
 
+    [SerializeField] public GameObject upgradeMenuObject;
+
     [Header("---- UI Weapon Reticules ----")]
     public Image gunReticule;
     public Image bladeReticule;
@@ -61,6 +63,7 @@ public class GameManager : MonoBehaviour
         playerScript = player.GetComponent<PlayerController>();
 
         upgradeScript = GetComponent<UpgradeManager>();
+        upgradeMenuObject.SetActive(false);
 
         menuActive = null;
 

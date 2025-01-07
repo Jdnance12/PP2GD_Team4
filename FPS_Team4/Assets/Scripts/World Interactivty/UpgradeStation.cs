@@ -4,11 +4,11 @@ using UnityEngine;
 
 public class UpgradeStation : MonoBehaviour
 {
+    public GameManager gm;
+
     public GameObject uiElement;
 
     public int upgradeCost;
-    //public GameObject gunWeaponObj;
-    //public GunWeapon gunWeapon;
     public GameObject upgradeMenu;
 
     public bool playerInRange = false;
@@ -16,7 +16,9 @@ public class UpgradeStation : MonoBehaviour
 
     private void Start()
     {
-        upgradeMenu = GameObject.Find("Upgrade Menu");
+        gm = GameManager.instance;
+
+        upgradeMenu = gm.upgradeMenuObject;
         upgradeMenu.SetActive(false);
     }
 
@@ -43,13 +45,6 @@ public class UpgradeStation : MonoBehaviour
         {
             OpenUpgradeMenu();
         }
-        //if (upgradeMenu.activeSelf)
-        //{
-        //    if(Input.GetKeyDown(KeyCode.T))
-        //    {
-        //        CloseUpgradeMenu();
-        //    }
-        //}
     }
 
     private void OpenUpgradeMenu()
