@@ -109,6 +109,14 @@ public class GameManager : MonoBehaviour
         menuActive.SetActive(false);
         menuActive = null;
     }
+    public void YouWin()
+    {
+
+    }
+    public void YouLose()
+    {
+
+    }
     public void WeaponMenuUnPaused()
     {
         isPaused = false;

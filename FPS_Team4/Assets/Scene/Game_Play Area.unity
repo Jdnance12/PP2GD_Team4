@@ -123,11 +123,6 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 23800000, guid: 2dbddada10ba91e4cac3118c6d0869a2, type: 2}
---- !u!4 &115846166 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 115846166, guid: 37551cddd914de1409693ac012b5eecd, type: 3}
-  m_PrefabInstance: {fileID: 1010839031}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &222543287
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -141,7 +136,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4886374820582020695, guid: 67d0e6648442e3d438f0abc96c3a702a, type: 3}
       propertyPath: m_RootOrder
-      value: 2
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 4886374820582020695, guid: 67d0e6648442e3d438f0abc96c3a702a, type: 3}
       propertyPath: m_LocalPosition.x
@@ -202,7 +197,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4843714887039328544, guid: 2af2f5b9e6b02144ea471242515c8c34, type: 3}
       propertyPath: m_RootOrder
-      value: 1
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 4843714887039328544, guid: 2af2f5b9e6b02144ea471242515c8c34, type: 3}
       propertyPath: m_LocalPosition.x
@@ -246,64 +241,6 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 2af2f5b9e6b02144ea471242515c8c34, type: 3}
---- !u!1 &964060584
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 964060585}
-  - component: {fileID: 964060587}
-  - component: {fileID: 964060586}
-  m_Layer: 0
-  m_Name: Player Station Trigger
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &964060585
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 964060584}
-  m_LocalRotation: {x: -0, y: 0.19408323, z: -0, w: 0.9809851}
-  m_LocalPosition: {x: -175.9, y: -15.02, z: 75.1}
-  m_LocalScale: {x: 23.405718, y: 1.7357273, z: 12.551577}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 115846166}
-  m_RootOrder: 4
-  m_LocalEulerAnglesHint: {x: 0, y: 22.382, z: 0}
---- !u!65 &964060586
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 964060584}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 1
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Size: {x: 1, y: 1, z: 1}
-  m_Center: {x: 0, y: 0, z: 0}
---- !u!114 &964060587
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 964060584}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 37342615ef0d82c4b8212b2648afe6cd, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1001 &1010839031
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -311,10 +248,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 115846167, guid: 37551cddd914de1409693ac012b5eecd, type: 3}
-      propertyPath: initalPlayerStation
-      value: 
-      objectReference: {fileID: 964060584}
     - target: {fileID: 4083406808416786621, guid: 37551cddd914de1409693ac012b5eecd, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
@@ -430,7 +363,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: -8679921383154817045, guid: c52354165ae7806418aa90b0eed62872, type: 3}
       propertyPath: m_RootOrder
-      value: 3
+      value: 4
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: c52354165ae7806418aa90b0eed62872, type: 3}
       propertyPath: m_LocalPosition.x

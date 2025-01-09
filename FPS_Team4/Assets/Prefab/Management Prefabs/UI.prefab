@@ -167,6 +167,7 @@ Transform:
   - {fileID: 1285143741}
   - {fileID: 772429143}
   - {fileID: 2774804461819230383}
+  - {fileID: 964060585}
   m_Father: {fileID: 4083406809000761302}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -189,9 +190,11 @@ MonoBehaviour:
   initialDamager: {fileID: 1285143740}
   initialWeaponTutorial: {fileID: 772429142}
   initialEnemy: {fileID: 2774804461819230372}
+  initalPlayerStation: {fileID: 964060584}
   tutoralMenu: 0
   weaponTutorial: 0
   enemyDestroyed: 0
+  playerStation: 0
 --- !u!1 &140258759
 GameObject:
   m_ObjectHideFlags: 0
@@ -882,6 +885,64 @@ BoxCollider:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 772429142}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 1, y: 1, z: 1}
+  m_Center: {x: 0, y: 0, z: 0}
+--- !u!1 &964060584
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 964060585}
+  - component: {fileID: 964060587}
+  - component: {fileID: 964060586}
+  m_Layer: 0
+  m_Name: Player Station Trigger
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &964060585
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 964060584}
+  m_LocalRotation: {x: -0, y: 0.19408323, z: -0, w: 0.9809851}
+  m_LocalPosition: {x: -175.9, y: -15.02, z: 75.1}
+  m_LocalScale: {x: 23.405718, y: 1.7357273, z: 12.551577}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 115846166}
+  m_RootOrder: 4
+  m_LocalEulerAnglesHint: {x: 0, y: 22.382, z: 0}
+--- !u!114 &964060587
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 964060584}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 37342615ef0d82c4b8212b2648afe6cd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!65 &964060586
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 964060584}
   m_Material: {fileID: 0}
   m_IsTrigger: 1
   m_Enabled: 1
@@ -8147,6 +8208,7 @@ MonoBehaviour:
   menuMisc: {fileID: 244184913}
   miscTitleText: {fileID: 1456586211}
   miscBodyText: {fileID: 2114962444}
+  upgradeMenuObject: {fileID: 4083406809958636201}
   gunReticule: {fileID: 4083406808627665420}
   bladeReticule: {fileID: 4083406810293192919}
   partsCount: 0
