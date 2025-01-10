@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class ProgressionManager : MonoBehaviour
 {
+    [Header("---- Game Objects ----")]
     [SerializeField] private GameManager gm;
     [SerializeField] private GameObject player;
 

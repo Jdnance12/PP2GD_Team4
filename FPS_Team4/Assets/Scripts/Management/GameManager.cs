@@ -13,8 +13,11 @@ public class GameManager : MonoBehaviour
     [Header("---- Bools ----")]
     public bool isPaused;
 
+    [Header("---- Game Objects ----")]
     public GameObject player;
     public PlayerController playerScript;
+    public GameObject controlComputerObj;
+    public ControlComputer controlComputerScript;
 
     public UpgradeManager upgradeScript;
 
@@ -58,10 +61,15 @@ public class GameManager : MonoBehaviour
         {
             Destroy(gameObject);
         }
+        // For Computer in Control Room
+        controlComputerObj = GameObject.Find("Control Computer");
+        controlComputerScript = controlComputerObj.GetComponent<ControlComputer>();
 
+        // Getting the player's object and script
         player = GameObject.FindWithTag("Player");
         playerScript = player.GetComponent<PlayerController>();
 
+        // Getting the Upgrade Manager before setting it as false
         upgradeScript = GetComponent<UpgradeManager>();
         upgradeMenuObject.SetActive(false);
 
