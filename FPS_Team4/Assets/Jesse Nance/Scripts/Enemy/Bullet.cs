@@ -13,7 +13,7 @@ public class Bullet : MonoBehaviour
     [SerializeField] int destroyTime;
     private void Start()
     {
-        rb.velocity = transform.forward * speed;
+        rb.linearVelocity = transform.forward * speed;
         Destroy(gameObject, destroyTime);
     }
     private void OnTriggerEnter(Collider other)
