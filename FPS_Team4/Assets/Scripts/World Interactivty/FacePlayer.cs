@@ -7,6 +7,8 @@ public class FacePlayer : MonoBehaviour
     GameManager gm;
     GameObject player;
 
+    GameObject objectToFind;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -17,7 +19,7 @@ public class FacePlayer : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        Vector3 direction = player.transform.position - transform.position;
+        Vector3 direction = player.transform.position + Vector3.up * 2.0f - transform.position;
         Quaternion rotation = Quaternion.LookRotation(-direction);
         transform.rotation = rotation;
     }

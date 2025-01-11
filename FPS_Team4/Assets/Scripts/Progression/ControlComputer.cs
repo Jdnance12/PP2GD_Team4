@@ -8,8 +8,10 @@ public class ControlComputer : MonoBehaviour
 {
     [Header("---- Bools ----")]
     public bool playerInRange;
+    public bool playerInteracted;
 
     [Header("---- Screen Images ----")]
+    [SerializeField] GameObject aiFace;
     [SerializeField] List<Image> screens;
 
     [Header("---- Original Colors ----")]
@@ -22,6 +24,8 @@ public class ControlComputer : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        aiFace.SetActive(false);
+
         origScreenColors = new List<Color>();
         screenColorRed = new List<Color>();
 
@@ -37,7 +41,13 @@ public class ControlComputer : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-       
+        if (playerInRange)
+        {
+            if (Input.GetButton("Interact") && !playerInteracted)
+            {
+                playerInteracted = true;
+            }
+        }
     }
 
     private void OnTriggerEnter(Collider other)
@@ -47,21 +57,6 @@ public class ControlComputer : MonoBehaviour
             playerInRange = true;
         }
     }
-    private void OnTriggerStay(Collider other)
-    {
-        if (other.CompareTag("Player"))
-        {
-            playerInRange = true;
-        }
-
-        else if (playerInRange)
-        {
-            if (Input.GetButton("Interact"))
-            {
-                GameManager.instance.YouWin();
-            }
-        }
-    }
     private void OnTriggerExit(Collider other)
     {
         if (other.CompareTag("Player"))
@@ -69,8 +64,6 @@ public class ControlComputer : MonoBehaviour
             playerInRange = false;
         }
     }
-
-
     IEnumerator flashRed()
     {
         float timer = 0f;

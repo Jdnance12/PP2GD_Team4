@@ -9,7 +9,12 @@ public class Progression_Manager : MonoBehaviour
 {
 
     GameManager gameManager;
-    GameObject player;
+    [Header("---- Game Objects ----")]
+    [SerializeField] GameObject player;
+    [SerializeField] GameObject controlBoss;
+
+    public GameObject controlComputer;
+    ControlComputer computerScript;
 
 
     // Start is called before the first frame update
@@ -17,6 +22,9 @@ public class Progression_Manager : MonoBehaviour
     {
         gameManager = GameManager.instance;
         player = gameManager.player;
+
+        controlComputer = GameObject.Find("Control Computer");
+        computerScript = controlComputer.GetComponent<ControlComputer>();
     }
 
     // Update is called once per frame

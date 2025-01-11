@@ -30,7 +30,7 @@ public class PlayerController : MonoBehaviour, IDamageable, IRecharge
     private float origMoveSpeed;
 
     [Header("---- Crouch Stats ----")]
-    [SerializeField] private float crouchHeight = 0.5f;
+    //[SerializeField] private float crouchHeight = 0.5f;
     [SerializeField] private float standHeight = 2.0f;
     [SerializeField] private float crouchSpeed = 3.5f;
     [SerializeField] private float standSpeed = 7.0f;
