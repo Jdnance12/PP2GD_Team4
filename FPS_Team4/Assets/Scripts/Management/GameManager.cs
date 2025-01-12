@@ -7,7 +7,6 @@ using UnityEngine.UI;
 
 public class GameManager : MonoBehaviour
 {
-
     public static GameManager instance;
 
     [Header("---- Bools ----")]
@@ -30,6 +29,7 @@ public class GameManager : MonoBehaviour
     [SerializeField] public GameObject menuStart;
     [SerializeField] public GameObject menuPause;
     [SerializeField] public GameObject menuWin, menuLose;
+    [SerializeField] public GameObject settingsMenu; // Reference to the settings menu
 
     [SerializeField] public GameObject aiDialogueTextImage;
     [SerializeField] public TMP_Text aiDialogueText;
@@ -84,13 +84,13 @@ public class GameManager : MonoBehaviour
     {
         if (Input.GetButtonDown("Cancel"))
         {
-            if(menuActive == null)
+            if (menuActive == null)
             {
                 GamePaused();
                 menuActive = menuPause;
                 menuActive.SetActive(true);
             }
-            else if (menuActive.activeSelf)
+            else if (menuActive == menuPause && menuActive.activeSelf)
             {
                 GameUnPaused();
             }
@@ -102,6 +102,7 @@ public class GameManager : MonoBehaviour
         menuActive = menuStart;
         menuActive.SetActive(true);
     }
+
     public void GamePaused()
     {
         isPaused = true;
@@ -109,23 +110,44 @@ public class GameManager : MonoBehaviour
         Cursor.visible = true;
         Cursor.lockState = CursorLockMode.Confined;
     }
+
     public void GameUnPaused()
     {
         isPaused = false;
         Time.timeScale = timeScaleOriginal;
         Cursor.visible = false;
         Cursor.lockState = CursorLockMode.Locked;
-        menuActive.SetActive(false);
-        menuActive = null;
+        if (menuActive != null)
+        {
+            menuActive.SetActive(false);
+            menuActive = null;
+        }
     }
+
+    public void ShowSettingsMenu()
+    {
+        if (settingsMenu != null)
+        {
+            if (menuPause != null && menuPause.activeSelf)
+            {
+                menuPause.SetActive(false);
+            }
+            GamePaused();
+            menuActive = settingsMenu;
+            menuActive.SetActive(true);
+        }
+    }
+
     public void YouWin()
     {
 
     }
+
     public void YouLose()
     {
 
     }
+
     public void WeaponMenuUnPaused()
     {
         isPaused = false;

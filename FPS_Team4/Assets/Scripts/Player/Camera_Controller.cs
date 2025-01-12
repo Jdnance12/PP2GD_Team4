@@ -5,7 +5,7 @@ using UnityEngine;
 public class Camera_Controller : MonoBehaviour
 {
     [SerializeField] GameObject player;
-    [SerializeField] int sensitivity;
+    [SerializeField] float sensitivity;
     [SerializeField] int lockMin, lockMax;
     float rotX;
 
@@ -41,7 +41,7 @@ public class Camera_Controller : MonoBehaviour
         //Clamp
         rotX = Mathf.Clamp(rotX, lockMin, lockMax);
 
-        if(!invertY)
+        if (!invertY)
         {
             rotX -= mouseY;
         }
@@ -49,5 +49,11 @@ public class Camera_Controller : MonoBehaviour
         {
             rotX += mouseY;
         }
+    }
+
+    public void SetSensitivity(float newSensitivity)
+    {
+        // Scale the slider value to the desired sensitivity range (100 to 2000)
+        sensitivity = newSensitivity * 100;
     }
 }
