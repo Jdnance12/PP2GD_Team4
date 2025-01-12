@@ -16,18 +16,18 @@ public class Progression_Manager : MonoBehaviour
     public bool tutorialActive;
     public bool firstDialoguePlayed;
 
-    [Header("---- Game Objects ----")]
+    [Header("---- Tutorial Start Room Game Objects ----")]
     [SerializeField] GameObject player;
     [SerializeField] GameObject controlBoss;
+    [SerializeField] public GameObject controlComputerObj;
+    ControlComputer computerScript;
+    [SerializeField] GameObject controlDoorObj;
+    [SerializeField] ControlRoomDoor controlDoorScript;
+    [SerializeField] GameObject enemyStartRoom;
 
+    [Header("---- AI Dialogue ----")]
     public float letterDelay;
     private string fullText;
-
-    public GameObject controlComputer;
-    ControlComputer computerScript;
-
-
-
 
     // Start is called before the first frame update
     void Start()
@@ -35,8 +35,11 @@ public class Progression_Manager : MonoBehaviour
         gameManager = GameManager.instance;
         player = gameManager.player;
 
-        controlComputer = GameObject.Find("Control Computer");
-        computerScript = controlComputer.GetComponent<ControlComputer>();
+        controlComputerObj = GameObject.Find("Control Computer"); // Finding the Control Computer
+        computerScript = controlComputerObj.GetComponent<ControlComputer>(); // Accessing the Control Computers Script
+
+        controlDoorObj = GameObject.Find("Control Door"); // Finding the Control Room Door
+        controlDoorScript = controlDoorObj.GetComponent<ControlRoomDoor>(); // Accessing the Control Room Door Script
     }
 
     // Update is called once per frame
@@ -55,7 +58,7 @@ public class Progression_Manager : MonoBehaviour
 
     public void Tutorial()
     {
-        if(computerScript.playerInteracted == true && !firstDialoguePlayed)
+        if (computerScript.playerInteracted == true && !firstDialoguePlayed)
         {
             computerScript.aiFace.SetActive(true);
 
@@ -67,6 +70,10 @@ public class Progression_Manager : MonoBehaviour
             StopCoroutine(ShowText(gameManager.aiDialogueText));
             StartCoroutine(ShowText(gameManager.aiDialogueText));
             firstDialoguePlayed = true;
+        }
+        if (firstDialoguePlayed)
+        {
+            controlDoorScript.OpenDoor();
         }
     }
     public void GameProgression()

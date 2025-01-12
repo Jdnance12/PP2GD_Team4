@@ -16,8 +16,6 @@ public class GameManager : MonoBehaviour
     [Header("---- Game Objects ----")]
     public GameObject player;
     public PlayerController playerScript;
-    public GameObject controlComputerObj;
-    public ControlComputer controlComputerScript;
 
     public UpgradeManager upgradeScript;
 
@@ -65,8 +63,6 @@ public class GameManager : MonoBehaviour
             Destroy(gameObject);
         }
         // For Computer in Control Room
-        controlComputerObj = GameObject.Find("Control Computer");
-        controlComputerScript = controlComputerObj.GetComponent<ControlComputer>();
 
         // Getting the player's object and script
         player = GameObject.FindWithTag("Player");
