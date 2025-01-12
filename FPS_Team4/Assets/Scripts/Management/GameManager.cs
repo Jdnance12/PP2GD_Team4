@@ -33,6 +33,9 @@ public class GameManager : MonoBehaviour
     [SerializeField] public GameObject menuPause;
     [SerializeField] public GameObject menuWin, menuLose;
 
+    [SerializeField] public GameObject aiDialogueTextImage;
+    [SerializeField] public TMP_Text aiDialogueText;
+
     [SerializeField] public GameObject menuMisc;
     [SerializeField] public TMP_Text miscTitleText;
     [SerializeField] public TMP_Text miscBodyText;
@@ -68,6 +71,8 @@ public class GameManager : MonoBehaviour
         // Getting the player's object and script
         player = GameObject.FindWithTag("Player");
         playerScript = player.GetComponent<PlayerController>();
+
+        // Getting AI Dialogue Text
 
         // Getting the Upgrade Manager before setting it as false
         upgradeScript = GetComponent<UpgradeManager>();

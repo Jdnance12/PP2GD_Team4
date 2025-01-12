@@ -11,7 +11,9 @@ public class ControlComputer : MonoBehaviour
     public bool playerInteracted;
 
     [Header("---- Screen Images ----")]
-    [SerializeField] GameObject aiFace;
+    [SerializeField] public GameObject aiFace;
+    [SerializeField] GameObject interactImage;
+    [SerializeField] Collider triggerCollider;
     [SerializeField] List<Image> screens;
 
     [Header("---- Original Colors ----")]
@@ -46,6 +48,8 @@ public class ControlComputer : MonoBehaviour
             if (Input.GetButton("Interact") && !playerInteracted)
             {
                 playerInteracted = true;
+                interactImage.SetActive(false);
+                triggerCollider.enabled = false;
             }
         }
     }
