@@ -10,7 +10,6 @@ GameObject:
   m_Component:
   - component: {fileID: 892560995}
   - component: {fileID: 892560997}
-  - component: {fileID: 892560996}
   m_Layer: 0
   m_Name: Player Render Camera
   m_TagString: Untagged
@@ -76,14 +75,6 @@ Camera:
   m_OcclusionCulling: 1
   m_StereoConvergence: 10
   m_StereoSeparation: 0.022
---- !u!81 &892560996
-AudioListener:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 892560994}
-  m_Enabled: 1
 --- !u!1 &24457864696766207
 GameObject:
   m_ObjectHideFlags: 0
@@ -2162,7 +2153,6 @@ MonoBehaviour:
   jumpCount: 0
   jumpSpeed: 20
   gravity: 40
-  crouchHeight: 0.5
   standHeight: 2
   crouchSpeed: 3.5
   standSpeed: 7
@@ -2447,6 +2437,7 @@ MonoBehaviour:
   hitEffectPrefab: {fileID: 5062664097983592078, guid: 82d9a03f61786d045999904d7b1245a3, type: 3}
   muzzleFlashPrefab: {fileID: 1120380619856000313, guid: 4505876ba9cb59245a987dad63a60206, type: 3}
   muzzleFlashPoint: {fileID: 3494326252602032435}
+  playerArm: {fileID: 0}
   damage: 10
   currentDamage: 0
   range: 100
@@ -2454,6 +2445,9 @@ MonoBehaviour:
   accuracy: 0.01
   effectDuration: 0.25
   muzzleFlashDuration: 0.1
+  recoilAmount: 0.1
+  recoilSpeed: 10
+  recoilReturnSpeed: 5
 --- !u!1 &5359787554890971969
 GameObject:
   m_ObjectHideFlags: 0

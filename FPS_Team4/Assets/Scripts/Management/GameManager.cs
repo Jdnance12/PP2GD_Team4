@@ -15,6 +15,8 @@ public class GameManager : MonoBehaviour
     [Header("---- Game Objects ----")]
     public GameObject player;
     public PlayerController playerScript;
+    public GameObject progressManager;
+    public Progression_Manager progressScript;
 
     public UpgradeManager upgradeScript;
 
@@ -37,6 +39,8 @@ public class GameManager : MonoBehaviour
     [SerializeField] public GameObject menuMisc;
     [SerializeField] public TMP_Text miscTitleText;
     [SerializeField] public TMP_Text miscBodyText;
+
+    [SerializeField] public TMP_Text nodeAmountText;
 
     [SerializeField] public GameObject upgradeMenuObject;
 
@@ -62,13 +66,14 @@ public class GameManager : MonoBehaviour
         {
             Destroy(gameObject);
         }
-        // For Computer in Control Room
 
         // Getting the player's object and script
         player = GameObject.FindWithTag("Player");
         playerScript = player.GetComponent<PlayerController>();
 
-        // Getting AI Dialogue Text
+        // Getting the Progress Manager
+        progressManager = GameObject.Find("Progression Manager");
+        progressScript = progressManager.GetComponent<Progression_Manager>();
 
         // Getting the Upgrade Manager before setting it as false
         upgradeScript = GetComponent<UpgradeManager>();
@@ -140,12 +145,16 @@ public class GameManager : MonoBehaviour
 
     public void YouWin()
     {
-
+        menuActive = menuWin;
+        menuActive.SetActive(true);
+        GamePaused();
     }
 
     public void YouLose()
     {
-
+        menuActive = menuLose;
+        menuActive.SetActive(true);
+        GamePaused();
     }
 
     public void WeaponMenuUnPaused()
@@ -154,5 +163,11 @@ public class GameManager : MonoBehaviour
         Time.timeScale = timeScaleOriginal;
         Cursor.visible = false;
         Cursor.lockState = CursorLockMode.Locked;
+    }
+
+    public void AddNodeCount(int amount)
+    {
+        nodeCount += amount;
+        nodeAmountText.text = nodeCount.ToString("F0");
     }
 }

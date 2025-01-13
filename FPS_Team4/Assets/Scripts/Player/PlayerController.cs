@@ -20,7 +20,7 @@ public class PlayerController : MonoBehaviour, IDamageable, IRecharge
 
     [Header("---- Movement Stats ----")]
     [SerializeField] float speed = 7;
-    [SerializeField] int sprintMod = 2;
+    [SerializeField] float sprintMod = 2;
     [SerializeField] public int jumpMax = 2;
     [SerializeField] int jumpCount = 0;
     [SerializeField] int jumpSpeed = 20;
