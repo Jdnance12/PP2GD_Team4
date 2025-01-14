@@ -384,4 +384,14 @@ public class PlayerController : MonoBehaviour, IDamageable, IRecharge
 
         gm.playerShieldHitImage.SetActive(false);
     }
+
+    public float GetCurrentHP()
+    {
+        return currentHP;
+    }
+
+    public float GetMaxHP()
+    {
+        return maxHP;
+    }
 }
