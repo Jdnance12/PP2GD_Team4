@@ -35,6 +35,10 @@ public class PlayerController : MonoBehaviour, IDamageable, IRecharge
     [SerializeField] private float crouchSpeed = 3.5f;
     [SerializeField] private float standSpeed = 7.0f;
 
+      [Header("---- Slope Handling ----")]
+    [SerializeField] private float slopeForce = 5f;
+    [SerializeField] private float slopeForceRayLength = 1.5f;
+
     [Header("----- Weapon Stats -----")]
     [SerializeField] float fireRate;
 
@@ -102,6 +106,7 @@ public class PlayerController : MonoBehaviour, IDamageable, IRecharge
         if (!gm.isPaused && !grappleHookCtrl.isGrappling)
         {
             PlayerMovement();
+            AdjustToSlope();
             Attack();
             HandleCrouch();
         }
@@ -220,6 +225,23 @@ public class PlayerController : MonoBehaviour, IDamageable, IRecharge
 
         Sprint();
     }
+
+    void AdjustToSlope()
+    {
+        if (playerCtrl.isGrounded)
+        {
+            RaycastHit hit;
+            if (Physics.Raycast(transform.position, Vector3.down, out hit, slopeForceRayLength))
+            {
+                if (Vector3.Angle(hit.normal, Vector3.up) > playerCtrl.slopeLimit)
+                {
+                    Vector3 slopeDirection = Vector3.Cross(Vector3.Cross(hit.normal, Vector3.down), hit.normal);
+                    playerCtrl.Move(slopeDirection * slopeForce * Time.deltaTime);
+                  }
+               }
+            }
+        }
+
     public void Jump()
     {
 
