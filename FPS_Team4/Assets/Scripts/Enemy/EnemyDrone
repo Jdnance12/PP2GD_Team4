@@ -1,0 +1,210 @@
+using System.Collections;
+using UnityEngine;
+using UnityEngine.AI;
+
+public class EnemyDrone : MonoBehaviour, IDamageable, IDisrupt
+{
+    private GameManager gm;
+
+    [Header("---- Bools ----")]
+    public bool isDisrupted;
+    public bool isShooting;
+    public bool playerInRange;
+
+    [Header("---- Stats ----")]
+    [SerializeField] float HP = 100f;
+    [SerializeField] float shootRate = 1.5f;
+
+    [Header("--- Movement Stats ----")]
+    [SerializeField] int faceTargetSpeed = 5;
+    [SerializeField] int FOV = 90;
+    [SerializeField] float angleToPlayer;
+    [SerializeField] int disruptDuration = 3;
+    [SerializeField] float roamRadius = 10f;
+
+    private Coroutine roamCoroutine;
+
+    [Header("---- Components ----")]
+    [SerializeField] GameObject player;
+    [SerializeField] GameObject bullet;
+    [SerializeField] Transform headPos;
+    [SerializeField] Transform shootPos;
+    [SerializeField] Renderer model;
+    [SerializeField] GameObject partsPrefab;
+    [SerializeField] NavMeshAgent navAgent;
+    [SerializeField] Animator animator;
+
+    private Vector3 playerDir;
+    private Color origColor;
+
+    void Start()
+    {
+        gm = GameManager.instance;
+        player = gm.player;
+
+        origColor = model.material.color;
+        navAgent = GetComponent<NavMeshAgent>();
+
+        if (animator != null)
+        {
+            animator.SetBool("IsMoving", false); // Initial animation state
+        }
+    }
+
+    void Update()
+    {
+        if (isDisrupted) return;
+
+        if (playerInRange && !CanSeePlayer())
+        {
+            if (navAgent.remainingDistance < 0.1f && roamCoroutine == null)
+            {
+                roamCoroutine = StartCoroutine(Roaming());
+            }
+        }
+        else if (!playerInRange)
+        {
+            if (navAgent.remainingDistance < 0.1f && roamCoroutine == null)
+            {
+                roamCoroutine = StartCoroutine(Roaming());
+            }
+        }
+    }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.CompareTag("Player"))
+        {
+            playerInRange = true;
+        }
+    }
+
+    private void OnTriggerExit(Collider other)
+    {
+        if (other.CompareTag("Player"))
+        {
+            playerInRange = false;
+        }
+    }
+
+    void FaceTarget(Vector3 target)
+    {
+        Quaternion rot = Quaternion.LookRotation(new Vector3(target.x, 0, target.z));
+        transform.rotation = Quaternion.Lerp(transform.rotation, rot, Time.deltaTime * faceTargetSpeed);
+    }
+
+    IEnumerator Roaming()
+    {
+        if (navAgent.remainingDistance <= navAgent.stoppingDistance)
+        {
+            Vector3 randDirection = Random.insideUnitSphere * roamRadius;
+            randDirection += transform.position;
+
+            if (NavMesh.SamplePosition(randDirection, out NavMeshHit navHit, roamRadius, NavMesh.AllAreas))
+            {
+                navAgent.SetDestination(navHit.position);
+                if (animator != null)
+                {
+                    animator.SetBool("IsMoving", true);
+                }
+            }
+
+            yield return new WaitForSeconds(Random.Range(3, 8));
+
+            if (animator != null)
+            {
+                animator.SetBool("IsMoving", false);
+            }
+
+            roamCoroutine = null;
+        }
+    }
+
+    bool CanSeePlayer()
+    {
+        playerDir = player.transform.position + Vector3.up * 2.0f - headPos.position;
+        angleToPlayer = Vector3.Angle(playerDir, transform.forward);
+
+        if (Physics.Raycast(headPos.position, playerDir, out RaycastHit hit))
+        {
+            if (hit.collider.CompareTag("Player") && angleToPlayer <= FOV)
+            {
+                navAgent.SetDestination(player.transform.position);
+
+                if (navAgent.remainingDistance < navAgent.stoppingDistance)
+                {
+                    FaceTarget(playerDir);
+                }
+
+                if (!isShooting)
+                {
+                    StartCoroutine(Shoot());
+                }
+
+                if (animator != null)
+                {
+                    animator.SetBool("IsMoving", true);
+                }
+
+                return true;
+            }
+        }
+
+        if (animator != null)
+        {
+            animator.SetBool("IsMoving", false);
+        }
+
+        return false;
+    }
+
+    IEnumerator Shoot()
+    {
+        isShooting = true;
+
+        Instantiate(bullet, shootPos.position, transform.rotation);
+
+        yield return new WaitForSeconds(shootRate);
+        isShooting = false;
+    }
+
+    public void causeDisrupt()
+    {
+        StartCoroutine(Disrupted());
+    }
+
+    public void TakeDamage(float damageAmount)
+    {
+        HP -= damageAmount;
+        StartCoroutine(FlashRed());
+
+        if (HP <= 0)
+        {
+            Instantiate(partsPrefab, transform.position, Quaternion.identity);
+            Destroy(gameObject);
+        }
+    }
+
+    IEnumerator Disrupted()
+    {
+        isDisrupted = true;
+        model.material.color = Color.blue;
+
+        navAgent.isStopped = true;
+        isShooting = false;
+
+        yield return new WaitForSeconds(disruptDuration);
+
+        navAgent.isStopped = false;
+        model.material.color = origColor;
+        isDisrupted = false;
+    }
+
+    IEnumerator FlashRed()
+    {
+        model.material.color = Color.red;
+
+        yield return new WaitForSeconds(0.1f);
+        model.material.color = origColor;
+    }
+}
