@@ -8,33 +8,27 @@ public class EnemyDrone : MonoBehaviour, IDamageable, IDisrupt
 
     [Header("---- Bools ----")]
     public bool isDisrupted;
-    public bool isShooting;
-    public bool playerInRange;
+    public bool isExploding;
 
     [Header("---- Stats ----")]
-    [SerializeField] float HP = 100f;
-    [SerializeField] float shootRate = 1.5f;
+    [SerializeField] float HP = 50f;
+    [SerializeField] float explosionRange = 5f;
+    [SerializeField] float explosionDamage = 50f;
+    [SerializeField] float explosionDelay = 1f;
 
     [Header("--- Movement Stats ----")]
     [SerializeField] int faceTargetSpeed = 5;
-    [SerializeField] int FOV = 90;
-    [SerializeField] float angleToPlayer;
-    [SerializeField] int disruptDuration = 3;
     [SerializeField] float roamRadius = 10f;
 
     private Coroutine roamCoroutine;
 
     [Header("---- Components ----")]
     [SerializeField] GameObject player;
-    [SerializeField] GameObject bullet;
     [SerializeField] Transform headPos;
-    [SerializeField] Transform shootPos;
     [SerializeField] Renderer model;
-    [SerializeField] GameObject partsPrefab;
+    [SerializeField] GameObject explosionEffectPrefab;
     [SerializeField] NavMeshAgent navAgent;
-    [SerializeField] Animator animator;
 
-    private Vector3 playerDir;
     private Color origColor;
 
     void Start()
@@ -44,30 +38,25 @@ public class EnemyDrone : MonoBehaviour, IDamageable, IDisrupt
 
         origColor = model.material.color;
         navAgent = GetComponent<NavMeshAgent>();
-
-        if (animator != null)
-        {
-            animator.SetBool("IsMoving", false); // Initial animation state
-        }
     }
 
     void Update()
     {
-        if (isDisrupted) return;
+        if (isDisrupted || isExploding) return;
 
-        if (playerInRange && !CanSeePlayer())
+        float distanceToPlayer = Vector3.Distance(transform.position, player.transform.position);
+
+        if (distanceToPlayer <= explosionRange)
         {
-            if (navAgent.remainingDistance < 0.1f && roamCoroutine == null)
-            {
-                roamCoroutine = StartCoroutine(Roaming());
-            }
+            StartCoroutine(Explode());
         }
-        else if (!playerInRange)
+        else if (navAgent.remainingDistance < 0.1f && roamCoroutine == null)
         {
-            if (navAgent.remainingDistance < 0.1f && roamCoroutine == null)
-            {
-                roamCoroutine = StartCoroutine(Roaming());
-            }
+            roamCoroutine = StartCoroutine(Roaming());
+        }
+        else
+        {
+            navAgent.SetDestination(player.transform.position);
         }
     }
 
@@ -75,22 +64,8 @@ public class EnemyDrone : MonoBehaviour, IDamageable, IDisrupt
     {
         if (other.CompareTag("Player"))
         {
-            playerInRange = true;
+            StartCoroutine(Explode());
         }
-    }
-
-    private void OnTriggerExit(Collider other)
-    {
-        if (other.CompareTag("Player"))
-        {
-            playerInRange = false;
-        }
-    }
-
-    void FaceTarget(Vector3 target)
-    {
-        Quaternion rot = Quaternion.LookRotation(new Vector3(target.x, 0, target.z));
-        transform.rotation = Quaternion.Lerp(transform.rotation, rot, Time.deltaTime * faceTargetSpeed);
     }
 
     IEnumerator Roaming()
@@ -103,74 +78,41 @@ public class EnemyDrone : MonoBehaviour, IDamageable, IDisrupt
             if (NavMesh.SamplePosition(randDirection, out NavMeshHit navHit, roamRadius, NavMesh.AllAreas))
             {
                 navAgent.SetDestination(navHit.position);
-                if (animator != null)
-                {
-                    animator.SetBool("IsMoving", true);
-                }
             }
 
             yield return new WaitForSeconds(Random.Range(3, 8));
-
-            if (animator != null)
-            {
-                animator.SetBool("IsMoving", false);
-            }
-
             roamCoroutine = null;
         }
     }
 
-    bool CanSeePlayer()
+    IEnumerator Explode()
     {
-        playerDir = player.transform.position + Vector3.up * 2.0f - headPos.position;
-        angleToPlayer = Vector3.Angle(playerDir, transform.forward);
+        isExploding = true;
+        navAgent.isStopped = true;
 
-        if (Physics.Raycast(headPos.position, playerDir, out RaycastHit hit))
+        model.material.color = Color.red;
+
+        yield return new WaitForSeconds(explosionDelay);
+
+        if (explosionEffectPrefab != null)
         {
-            if (hit.collider.CompareTag("Player") && angleToPlayer <= FOV)
+            Instantiate(explosionEffectPrefab, transform.position, Quaternion.identity);
+        }
+
+        Collider[] colliders = Physics.OverlapSphere(transform.position, explosionRange);
+        foreach (Collider hit in colliders)
+        {
+            if (hit.CompareTag("Player"))
             {
-                navAgent.SetDestination(player.transform.position);
-
-                if (navAgent.remainingDistance < navAgent.stoppingDistance)
+                IDamageable damageable = hit.GetComponent<IDamageable>();
+                if (damageable != null)
                 {
-                    FaceTarget(playerDir);
+                    damageable.TakeDamage(explosionDamage);
                 }
-
-                if (!isShooting)
-                {
-                    StartCoroutine(Shoot());
-                }
-
-                if (animator != null)
-                {
-                    animator.SetBool("IsMoving", true);
-                }
-
-                return true;
             }
         }
 
-        if (animator != null)
-        {
-            animator.SetBool("IsMoving", false);
-        }
-
-        return false;
-    }
-
-    IEnumerator Shoot()
-    {
-        isShooting = true;
-
-        Instantiate(bullet, shootPos.position, transform.rotation);
-
-        yield return new WaitForSeconds(shootRate);
-        isShooting = false;
-    }
-
-    public void causeDisrupt()
-    {
-        StartCoroutine(Disrupted());
+        Destroy(gameObject);
     }
 
     public void TakeDamage(float damageAmount)
@@ -180,9 +122,13 @@ public class EnemyDrone : MonoBehaviour, IDamageable, IDisrupt
 
         if (HP <= 0)
         {
-            Instantiate(partsPrefab, transform.position, Quaternion.identity);
-            Destroy(gameObject);
+            StartCoroutine(Explode());
         }
+    }
+
+    public void causeDisrupt()
+    {
+        StartCoroutine(Disrupted());
     }
 
     IEnumerator Disrupted()
@@ -191,9 +137,8 @@ public class EnemyDrone : MonoBehaviour, IDamageable, IDisrupt
         model.material.color = Color.blue;
 
         navAgent.isStopped = true;
-        isShooting = false;
 
-        yield return new WaitForSeconds(disruptDuration);
+        yield return new WaitForSeconds(3);
 
         navAgent.isStopped = false;
         model.material.color = origColor;
@@ -206,5 +151,11 @@ public class EnemyDrone : MonoBehaviour, IDamageable, IDisrupt
 
         yield return new WaitForSeconds(0.1f);
         model.material.color = origColor;
+    }
+
+    private void OnDrawGizmosSelected()
+    {
+        Gizmos.color = Color.red;
+        Gizmos.DrawWireSphere(transform.position, explosionRange);
     }
 }
