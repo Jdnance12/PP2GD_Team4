@@ -15,7 +15,13 @@ public class RoomManager : MonoBehaviour
         // Deactivate all of the "next" rooms initially
         foreach(var doorRooms in nextRooms)
         {
-            foreach (GameObject room in doorRooms.rooms) room.SetActive(false);
+            foreach (GameObject room in doorRooms.rooms)
+            {
+                if (room != null) // check if null (no next room) (boss room?)
+                {
+                    room.SetActive(false);
+                }
+            }
         }
         
         if (healthStationRoom != null)
@@ -26,6 +32,12 @@ public class RoomManager : MonoBehaviour
 
     public void ActivateNextRoom(int doorIndex)
     {
+        if(doorIndex < 0 || doorIndex >= nextRooms.Count)
+        {
+            // should cover any weird error from out of bounds entries.
+            Debug.LogError("Invalid door index");
+            return;
+        }
         // Randomly select the next room version
         int randomRoom = Random.Range(0, nextRooms[doorIndex].rooms.Count);
         nextRooms[doorIndex].rooms[randomRoom].SetActive(true);

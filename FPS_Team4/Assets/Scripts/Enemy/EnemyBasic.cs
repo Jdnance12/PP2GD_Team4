@@ -37,6 +37,8 @@ public class EnemyBasic : MonoBehaviour, IDamageable, IDisrupt
     [SerializeField] GameObject damageTextPos;
     [SerializeField] NavMeshAgent navAgent;
 
+    private float shootDamage; // this holds the modified value for damage
+
     private Vector3 playerDir;
 
     Color origColor;
@@ -149,7 +151,12 @@ public class EnemyBasic : MonoBehaviour, IDamageable, IDisrupt
     {
         isShooting = true;
 
-        Instantiate(bullet, shootPos.position, transform.rotation);
+        GameObject newBullet = Instantiate(bullet, shootPos.position, transform.rotation);
+        Bullet bulletComponent = newBullet.GetComponent<Bullet>();
+        if(bulletComponent != null )
+        {
+            bulletComponent.SetDamage(shootDamage);
+        }
 
         yield return new WaitForSeconds(shootRate);
         isShooting = false;
@@ -192,5 +199,11 @@ public class EnemyBasic : MonoBehaviour, IDamageable, IDisrupt
 
         yield return new WaitForSeconds(0.1f); //Turns red for 1 second
         model.material.color = origColor;
+    }
+
+    public void ApplyModifiers(float hpModifier, float damageModifier)
+    {
+        HP *= hpModifier; // apply modifier to existing hp
+        shootDamage *= damageModifier; // apply modifier to existing shootDamage
     }
 }
