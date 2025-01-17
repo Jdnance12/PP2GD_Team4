@@ -49,5 +49,9 @@ public static class SaveSystem
             Debug.LogWarning("Save file not found"); // Logs missing save file
             return null; // Returns null no file exists
         }
+    }   
+    public static bool DoesSaveFileExist() // Checks if save file exists at specified path
+    {
+        return File.Exists(SavePath); // Returns true if file exists
     }
 }
