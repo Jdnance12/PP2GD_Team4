@@ -100,6 +100,18 @@ public class GameManager : MonoBehaviour
                 GameUnPaused();
             }
         }
+
+        //MK Added - Start
+        if (Input.GetKeyDown(KeyCode.F5)) // Save game
+        {
+            SaveGame(); // Calls save method
+        }
+
+        if (Input.GetKeyDown(KeyCode.F9)) // Load game
+        {
+            LoadGame(); // Calls load method
+        }
+        //MK Added - End
     }
 
     public void ShowStartMenu()
