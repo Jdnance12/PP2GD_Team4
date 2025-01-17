@@ -204,6 +204,6 @@ public class EnemyBasic : MonoBehaviour, IDamageable, IDisrupt
     public void ApplyModifiers(float hpModifier, float damageModifier)
     {
         HP *= hpModifier; // apply modifier to existing hp
-        shootDamage *= damageModifier; // apply modifier to existing shootDamage
+        shootDamage = damageModifier; // apply modifier to existing shootDamage
     }
 }

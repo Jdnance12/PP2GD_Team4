@@ -5,7 +5,7 @@ using UnityEngine;
 public class Bullet : MonoBehaviour
 {
 
-    [SerializeField] public int baseDamage;
+    [SerializeField] public int damage;
 
     [SerializeField] Rigidbody rb;
 
@@ -26,7 +26,7 @@ public class Bullet : MonoBehaviour
         IDamageable damageable = other.gameObject.GetComponent<IDamageable>();
         if(damageable != null )
         {
-            damageable.TakeDamage(baseDamage);
+            damageable.TakeDamage(damage);
         }
 
         Destroy(gameObject);
@@ -34,6 +34,6 @@ public class Bullet : MonoBehaviour
 
     public void SetDamage(float damageModifier)
     {
-        baseDamage = Mathf.RoundToInt(baseDamage * damageModifier);
+        damage = Mathf.RoundToInt(damage * damageModifier);
     }
 }

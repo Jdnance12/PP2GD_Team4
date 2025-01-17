@@ -92,11 +92,11 @@ public class TurretEnemy : MonoBehaviour, IDamageable, IDisrupt
         if (empPrefab != null)
         {
             GameObject emp = Instantiate(empPrefab, firePoint.position, turretHead.rotation);
-            EMP empScript = emp.GetComponent<EMP>();
-            if (empScript != null)
-            {
-                empScript.SetDuration(empDuration);
-            }
+            //EMP empScript = emp.GetComponent<EMP>();
+            //if (empScript != null)
+            //{
+            //    empScript.SetDuration(empDuration);
+            //}
         }
         else if (bulletPrefab != null)
         {

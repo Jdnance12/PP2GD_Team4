@@ -13,7 +13,7 @@ GameObject:
   m_Name: DoorPrefab
   m_TagString: Untagged
   m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
+  m_NavMeshLayer: 1
   m_StaticEditorFlags: 0
   m_IsActive: 1
 --- !u!4 &7977630073296344682
@@ -149,7 +149,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 2147483647
   m_IsActive: 1
 --- !u!4 &7667455774840610300
 Transform:
@@ -246,7 +246,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 2147483647
   m_IsActive: 1
 --- !u!4 &8972531032199768591
 Transform:
@@ -373,9 +373,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   openPosition: {x: 1, y: 0, z: 0}
+  vOpenPosition: {x: 0, y: 0, z: 0}
   brokenPosition: {x: 0, y: 0, z: 0}
+  vBrokenPosition: {x: 0, y: 0, z: 0}
   slideSpeed: 1
+  isOpening: 0
   isBroken: 0
+  isBrokenAfter: 0
+  isVerticalDoor: 0
 --- !u!65 &1729820193919721079
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -387,7 +392,7 @@ BoxCollider:
   m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 1, y: 1, z: 30}
+  m_Size: {x: 1, y: 1, z: 10}
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &8323624134834011603
 GameObject:
@@ -406,7 +411,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 2147483647
   m_IsActive: 1
 --- !u!4 &6727336148625427876
 Transform:
