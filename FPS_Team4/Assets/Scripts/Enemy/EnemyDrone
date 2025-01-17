@@ -9,18 +9,22 @@ public class EnemyDrone : MonoBehaviour, IDamageable, IDisrupt
     [Header("---- Bools ----")]
     public bool isDisrupted;
     public bool isExploding;
+    public bool isChasingPlayer; // ADDED: Tracks whether the drone is actively chasing the player
 
     [Header("---- Stats ----")]
     [SerializeField] float HP = 50f;
     [SerializeField] float explosionRange = 5f;
     [SerializeField] float explosionDamage = 50f;
     [SerializeField] float explosionDelay = 1f;
+    [SerializeField] float attackDamage = 10f; // ADDED: Damage dealt to the player on attack
+    [SerializeField] float attackInterval = 1.5f; // ADDED: Interval between attacks
 
     [Header("--- Movement Stats ----")]
     [SerializeField] int faceTargetSpeed = 5;
     [SerializeField] float roamRadius = 10f;
 
     private Coroutine roamCoroutine;
+    private bool canAttack = true; // ADDED: Tracks whether the drone can attack
 
     [Header("---- Components ----")]
     [SerializeField] GameObject player;
@@ -50,13 +54,18 @@ public class EnemyDrone : MonoBehaviour, IDamageable, IDisrupt
         {
             StartCoroutine(Explode());
         }
+        else if (isChasingPlayer) // ADDED: Behavior when chasing the player
+        {
+            navAgent.SetDestination(player.transform.position);
+
+            if (distanceToPlayer <= navAgent.stoppingDistance)
+            {
+                AttackPlayer();
+            }
+        }
         else if (navAgent.remainingDistance < 0.1f && roamCoroutine == null)
         {
             roamCoroutine = StartCoroutine(Roaming());
-        }
-        else
-        {
-            navAgent.SetDestination(player.transform.position);
         }
     }
 
@@ -66,6 +75,37 @@ public class EnemyDrone : MonoBehaviour, IDamageable, IDisrupt
         {
             StartCoroutine(Explode());
         }
+    }
+
+    public void OnHackingPuzzleResult(bool success) // ADDED: Method to handle hacking puzzle result
+    {
+        if (!success)
+        {
+            EngagePlayer();
+        }
+    }
+
+    private void EngagePlayer() // ADDED: Activates the drone to chase the player
+    {
+        isChasingPlayer = true;
+        navAgent.isStopped = false;
+        Debug.Log("EnemyDrone is now chasing the player!");
+    }
+
+    private void AttackPlayer() // ADDED: Handles attacking the player
+    {
+        if (canAttack && player.TryGetComponent<IDamageable>(out IDamageable damageable))
+        {
+            damageable.TakeDamage(attackDamage);
+            Debug.Log("EnemyDrone attacked the player!");
+            canAttack = false;
+            Invoke(nameof(ResetAttack), attackInterval);
+        }
+    }
+
+    private void ResetAttack() // ADDED: Resets the attack cooldown
+    {
+        canAttack = true;
     }
 
     IEnumerator Roaming()
