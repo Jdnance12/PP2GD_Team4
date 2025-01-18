@@ -105,10 +105,17 @@ public class PlayerController : MonoBehaviour, IDamageable, IRecharge
 
         if (!gm.isPaused && !grappleHookCtrl.isGrappling)
         {
-            PlayerMovement();
-            AdjustToSlope();
-            Attack();
-            HandleCrouch();
+            if (gm.progressScript.playerCanMove)
+            {
+                PlayerMovement();
+                AdjustToSlope();
+                Attack();
+                HandleCrouch();
+            }
+            //PlayerMovement();
+            //AdjustToSlope();
+            //Attack();
+            //HandleCrouch();
         }
         if (isCrouching == false)
         {

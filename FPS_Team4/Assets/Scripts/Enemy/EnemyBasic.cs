@@ -14,7 +14,7 @@ public class EnemyBasic : MonoBehaviour, IDamageable, IDisrupt
     public bool playerInRange;
 
     [Header("---- Stats ----")]
-    [SerializeField] float HP;
+    [SerializeField] public float HP;
     [SerializeField] float shootRate;
 
     [Header("--- Movement Stats ----")]
@@ -37,7 +37,7 @@ public class EnemyBasic : MonoBehaviour, IDamageable, IDisrupt
     [SerializeField] GameObject damageTextPos;
     [SerializeField] NavMeshAgent navAgent;
 
-    private float shootDamage; // this holds the modified value for damage
+    public float shootDamage; // this holds the modified value for damage
 
     private Vector3 playerDir;
 

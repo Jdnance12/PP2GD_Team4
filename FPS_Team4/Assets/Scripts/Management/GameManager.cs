@@ -95,7 +95,7 @@ public class GameManager : MonoBehaviour
                 menuActive = menuPause;
                 menuActive.SetActive(true);
             }
-            else if (menuActive == menuPause && menuActive.activeSelf)
+            else if (menuActive == menuPause || menuActive.activeSelf)
             {
                 GameUnPaused();
             }

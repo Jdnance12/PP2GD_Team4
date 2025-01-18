@@ -1,155 +1,150 @@
 using System.Collections;
 using UnityEngine;
 
-public class TurretEnemy : MonoBehaviour, IDamageable, IDisrupt
+public class EnemyTurret : MonoBehaviour, IDamageable, IDisrupt
 {
-    [Header("---- Detection Stats ----")]
-    [SerializeField] float detectionRadius = 10f;
-    [SerializeField] float rotationSpeed = 30f;
-    [SerializeField] LayerMask detectionLayer;
+    public bool playerInRange;
+    public bool isShooting;
+    public bool isDisrupted;
 
-    [Header("---- Attack Stats ----")]
-    [SerializeField] float fireRate = 2f;
-    [SerializeField] float empDuration = 5f;
-    [SerializeField] float bulletDamage = 10f;
+    [SerializeField] GameManager gm;
+    [SerializeField] GameObject player;
+    [SerializeField] GameObject gunObject;
+    [SerializeField] GameObject partsPrefab;
+    [SerializeField] Renderer bodyRenderer;
+    [SerializeField] Renderer gunRenderer;
 
-    [Header("---- Components ----")]
-    [SerializeField] Transform turretHead;
-    [SerializeField] Transform firePoint;
-    [SerializeField] GameObject empPrefab;
     [SerializeField] GameObject bulletPrefab;
-    [SerializeField] Renderer turretRenderer;
+    [SerializeField] Transform bulletPos;
 
-    [Header("---- Health ----")]
-    [SerializeField] float HP = 100f;
+    [SerializeField] float HP;
+    [SerializeField] float faceTargetSpeed;
+    [SerializeField] int FOV;
+    [SerializeField] float angleToPlayer;
+    [SerializeField] float shootRate;
+    [SerializeField] float disruptDuration;
 
-    private GameObject player;
-    private bool isPlayerDetected = false;
-    private bool isShooting = false;
-    private bool isDisrupted = false;
+    private Color origBodyColor;
+    private Color origGunColor;
 
-    private Color origColor;
-
+    // Start is called before the first frame update
     void Start()
     {
-        player = GameManager.instance.player;
-        origColor = turretRenderer.material.color;
+        gm = GameManager.instance;
+        player = gm.player;
+
+        origBodyColor = bodyRenderer.material.color;
+        origGunColor = gunRenderer.material.color;
     }
 
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.CompareTag("Player"))
+        {
+            playerInRange = true;
+        }
+    }
+    private void OnTriggerExit(Collider other)
+    {
+        if (other.CompareTag("Player"))
+        {
+            playerInRange = false;
+        }
+    }
+
+    // Update is called once per frame
     void Update()
     {
-        if (isDisrupted) return;
-
-        DetectPlayer();
-
-        if (isPlayerDetected)
+        if (!isDisrupted)
         {
-            RotateTowardsPlayer();
-
-            if (!isShooting)
+            if (playerInRange)
             {
-                StartCoroutine(Shoot());
+                Vector3 playerDir = player.transform.position + Vector3.up * 2.0f - transform.position;
+                angleToPlayer = Vector3.Angle(playerDir, transform.forward);
+
+                RaycastHit hit;
+                if (Physics.Raycast(transform.position, playerDir, out hit))
+                {
+                    if (hit.collider.CompareTag("Player") && angleToPlayer <= FOV)
+                    {
+                        FaceTarget();
+
+                        if (!isShooting)
+                        {
+                            StartCoroutine(Shoot());
+                        }
+                    }
+                }
             }
         }
-        else
-        {
-            Patrol();
-        }
     }
 
-    void DetectPlayer()
+    void FaceTarget()
     {
-        Collider[] hits = Physics.OverlapSphere(transform.position, detectionRadius, detectionLayer);
+        //Rotate the Body
+        Vector3 playerDir = player.transform.position + Vector3.up * 2.0f - transform.position;
 
-        foreach (Collider hit in hits)
-        {
-            if (hit.CompareTag("Player"))
-            {
-                isPlayerDetected = true;
-                return;
-            }
-        }
+        Quaternion rot = Quaternion.LookRotation(new Vector3(playerDir.x, 0, playerDir.z));
+        transform.rotation = Quaternion.Lerp(transform.rotation, rot, Time.deltaTime * faceTargetSpeed);
 
-        isPlayerDetected = false;
+
+        Vector3 aimDir = player.transform.position + Vector3.up * 2.0f - gunObject.transform.position;
+
+        Quaternion gunRot = Quaternion.LookRotation(aimDir);
+        gunObject.transform.rotation = Quaternion.Lerp(gunObject.transform.rotation, gunRot, Time.deltaTime * faceTargetSpeed);
+
+        Vector3 limitRotation = gunObject.transform.localEulerAngles;
+        limitRotation.x = Mathf.Clamp(limitRotation.x, -30f, 30f);
     }
-
-    void RotateTowardsPlayer()
-    {
-        Vector3 direction = (player.transform.position - turretHead.position).normalized;
-        Quaternion lookRotation = Quaternion.LookRotation(new Vector3(direction.x, 0, direction.z));
-        turretHead.rotation = Quaternion.RotateTowards(turretHead.rotation, lookRotation, rotationSpeed * Time.deltaTime);
-    }
-
-    void Patrol()
-    {
-        turretHead.Rotate(Vector3.up * rotationSpeed * Time.deltaTime);
-    }
-
     IEnumerator Shoot()
     {
         isShooting = true;
 
-        if (empPrefab != null)
-        {
-            GameObject emp = Instantiate(empPrefab, firePoint.position, turretHead.rotation);
-            //EMP empScript = emp.GetComponent<EMP>();
-            //if (empScript != null)
-            //{
-            //    empScript.SetDuration(empDuration);
-            //}
-        }
-        else if (bulletPrefab != null)
-        {
-            GameObject bullet = Instantiate(bulletPrefab, firePoint.position, turretHead.rotation);
-            Bullet bulletScript = bullet.GetComponent<Bullet>();
-            if (bulletScript != null)
-            {
-                bulletScript.SetDamage(bulletDamage);
-            }
-        }
+        Instantiate(bulletPrefab, bulletPos.position, gunObject.transform.rotation);
 
-        yield return new WaitForSeconds(fireRate);
+        yield return new WaitForSeconds(shootRate);
         isShooting = false;
     }
 
-    public void TakeDamage(float damageAmount)
-    {
-        HP -= damageAmount;
-        StartCoroutine(FlashRed());
-
-        if (HP <= 0)
-        {
-            Destroy(gameObject);
-        }
-    }
 
     public void causeDisrupt()
     {
         StartCoroutine(Disrupted());
     }
+    public void TakeDamage(float damageAmount)
+    {
+        HP -= damageAmount;
+        StartCoroutine(flashRed()); // Call flash red when damage is taken
 
+        if (HP <= 0)
+        {
+            Instantiate(partsPrefab, transform.position, Quaternion.identity); // Drops the parts currency when the enemy is destoryed
+            Destroy(gameObject);
+        }
+    }
     IEnumerator Disrupted()
     {
         isDisrupted = true;
-        turretRenderer.material.color = Color.blue;
+        bodyRenderer.material.color = Color.blue;
+        gunRenderer.material.color = Color.blue;
 
-        yield return new WaitForSeconds(empDuration);
+        isShooting = false;
 
-        turretRenderer.material.color = origColor;
+        yield return new WaitForSeconds(disruptDuration);
+
+
+        bodyRenderer.material.color = origBodyColor;
+        gunRenderer.material.color = origGunColor;
         isDisrupted = false;
     }
-
-    IEnumerator FlashRed()
+    IEnumerator flashRed()
     {
-        turretRenderer.material.color = Color.red;
+        bodyRenderer.material.color = Color.red;
+        gunRenderer.material.color = Color.red;
 
-        yield return new WaitForSeconds(0.1f);
-        turretRenderer.material.color = origColor;
-    }
+        yield return new WaitForSeconds(0.1f); //Turns red for 1 second
 
-    private void OnDrawGizmosSelected()
-    {
-        Gizmos.color = Color.yellow;
-        Gizmos.DrawWireSphere(transform.position, detectionRadius);
+        bodyRenderer.material.color = origBodyColor;
+        gunRenderer.material.color = origGunColor;
     }
 }

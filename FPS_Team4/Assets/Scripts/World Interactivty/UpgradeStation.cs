@@ -41,7 +41,7 @@ public class UpgradeStation : MonoBehaviour
 
     private void Update()
     {
-        if(playerInRange && Input.GetKey(KeyCode.T))
+        if(playerInRange && Input.GetButton("Interact"))
         {
             OpenUpgradeMenu();
         }
@@ -50,7 +50,7 @@ public class UpgradeStation : MonoBehaviour
     private void OpenUpgradeMenu()
     {
         GameManager.instance.menuActive = upgradeMenu;
-        GameManager.instance.menuActive.gameObject.SetActive(true);
+        GameManager.instance.menuActive.SetActive(true);
         GameManager.instance.GamePaused();
     }
     public void CloseUpgradeMenu()

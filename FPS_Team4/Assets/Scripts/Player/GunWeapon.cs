@@ -5,6 +5,8 @@ using UnityEngine;
 
 public class GunWeapon : MonoBehaviour
 {
+    GameManager gameManager;
+
     [Header("---- Weapon Components ----")]
     [SerializeField] public Camera playerCamera;
     public GameObject upgradeObject;
@@ -38,6 +40,8 @@ public class GunWeapon : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        gameManager = GameManager.instance;
+
         playerCamera = Camera.main;
         upgradeObject = GameObject.Find("Game Manager");
         upgradeManager = upgradeObject.GetComponent<UpgradeManager>();
@@ -66,25 +70,28 @@ public class GunWeapon : MonoBehaviour
         Vector3 rayOrigin = playerCamera.transform.position;
         Vector3 rayDirection = GetShootDirection();
 
-        if (Physics.Raycast(rayOrigin, rayDirection, out hit, range))
+        if (gameManager.playerScript.gunActive)
         {
-            IDamageable damageable = hit.collider.GetComponent<IDamageable>();
-            if (damageable != null)
+            if (Physics.Raycast(rayOrigin, rayDirection, out hit, range))
             {
-                damageable.TakeDamage(currentDamage);
+                IDamageable damageable = hit.collider.GetComponent<IDamageable>();
+                if (damageable != null)
+                {
+                    damageable.TakeDamage(currentDamage);
+                }
+
+                GameObject muzzleFlash = Instantiate(muzzleFlashPrefab, muzzleFlashPoint.position, muzzleFlashPoint.rotation);
+                Destroy(muzzleFlash, muzzleFlashDuration);
+
+                GameObject effect = Instantiate(hitEffectPrefab, hit.point, Quaternion.LookRotation(hit.normal));
+                Destroy(effect, effectDuration);
             }
 
-            GameObject muzzleFlash = Instantiate(muzzleFlashPrefab, muzzleFlashPoint.position, muzzleFlashPoint.rotation);
-            Destroy(muzzleFlash, muzzleFlashDuration);
+            Debug.DrawRay(rayOrigin, rayDirection * range, Color.red, 1.0f);
 
-            GameObject effect = Instantiate(hitEffectPrefab, hit.point, Quaternion.LookRotation(hit.normal));
-            Destroy(effect, effectDuration);
+            // Apply visual recoil
+            StartCoroutine(ApplyRecoil());
         }
-
-        Debug.DrawRay(rayOrigin, rayDirection * range, Color.red, 1.0f);
-
-        // Apply visual recoil
-        StartCoroutine(ApplyRecoil());
     }
 
     private Vector3 GetShootDirection()
