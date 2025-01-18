@@ -12,26 +12,26 @@ public class EnemyDrone : MonoBehaviour, IDamageable, IDisrupt
     public bool isChasingPlayer;
 
     [Header("---- Stats ----")]
-    [SerializeField] float HP = 50f;
-    [SerializeField] float explosionRange = 5f;
-    [SerializeField] float explosionDamage = 50f;
-    [SerializeField] float explosionDelay = 1f;
-    [SerializeField] float attackDamage = 10f;
-    [SerializeField] float attackInterval = 1.5f; 
+    [SerializeField] private float HP = 50f;
+    [SerializeField] private float explosionRange = 5f;
+    [SerializeField] private float explosionDamage = 50f;
+    [SerializeField] private float explosionDelay = 1f;
+    [SerializeField] private float attackDamage = 10f;
+    [SerializeField] private float attackInterval = 1.5f;
 
     [Header("--- Movement Stats ----")]
-    [SerializeField] int faceTargetSpeed = 5;
-    [SerializeField] float roamRadius = 10f;
+    [SerializeField] private int faceTargetSpeed = 5;
+    [SerializeField] private float roamRadius = 10f;
 
     private Coroutine roamCoroutine;
     private bool canAttack = true;
 
     [Header("---- Components ----")]
-    [SerializeField] GameObject player;
-    [SerializeField] Transform headPos;
-    [SerializeField] Renderer model;
-    [SerializeField] GameObject explosionEffectPrefab;
-    [SerializeField] NavMeshAgent navAgent;
+    [SerializeField] private GameObject player;
+    [SerializeField] private Transform headPos;
+    [SerializeField] private Renderer model;
+    [SerializeField] private GameObject explosionEffectPrefab;
+    [SerializeField] private NavMeshAgent navAgent;
 
     private Color origColor;
 
@@ -56,12 +56,7 @@ public class EnemyDrone : MonoBehaviour, IDamageable, IDisrupt
         }
         else if (isChasingPlayer)
         {
-            navAgent.SetDestination(player.transform.position);
-
-            if (distanceToPlayer <= navAgent.stoppingDistance)
-            {
-                AttackPlayer();
-            }
+            ChasePlayer(distanceToPlayer);
         }
         else if (navAgent.remainingDistance < 0.1f && roamCoroutine == null)
         {
@@ -69,30 +64,17 @@ public class EnemyDrone : MonoBehaviour, IDamageable, IDisrupt
         }
     }
 
-    private void OnTriggerEnter(Collider other)
+    private void ChasePlayer(float distanceToPlayer)
     {
-        if (other.CompareTag("Player"))
+        navAgent.SetDestination(player.transform.position);
+
+        if (distanceToPlayer <= navAgent.stoppingDistance)
         {
-            StartCoroutine(Explode());
+            AttackPlayer();
         }
     }
 
-    public void OnHackingPuzzleResult(bool success)
-    {
-        if (!success)
-        {
-            EngagePlayer();
-        }
-    }
-
-    private void EngagePlayer()
-    {
-        isChasingPlayer = true;
-        navAgent.isStopped = false;
-        Debug.Log("EnemyDrone is now chasing the player!");
-    }
-
-    private void AttackPlayer() 
+    private void AttackPlayer()
     {
         if (canAttack && player.TryGetComponent<IDamageable>(out IDamageable damageable))
         {
@@ -110,19 +92,15 @@ public class EnemyDrone : MonoBehaviour, IDamageable, IDisrupt
 
     IEnumerator Roaming()
     {
-        if (navAgent.remainingDistance <= navAgent.stoppingDistance)
+        Vector3 randomPOS = Random.insideUnitSphere * roamRadius + transform.position;
+
+        if (NavMesh.SamplePosition(randomPOS, out NavMeshHit navHit, roamRadius, NavMesh.AllAreas))
         {
-            Vector3 randDirection = Random.insideUnitSphere * roamRadius;
-            randDirection += transform.position;
-
-            if (NavMesh.SamplePosition(randDirection, out NavMeshHit navHit, roamRadius, NavMesh.AllAreas))
-            {
-                navAgent.SetDestination(navHit.position);
-            }
-
-            yield return new WaitForSeconds(Random.Range(3, 8));
-            roamCoroutine = null;
+            navAgent.SetDestination(navHit.position);
         }
+
+        yield return new WaitForSeconds(Random.Range(3, 8));
+        roamCoroutine = null;
     }
 
     IEnumerator Explode()
@@ -131,7 +109,6 @@ public class EnemyDrone : MonoBehaviour, IDamageable, IDisrupt
         navAgent.isStopped = true;
 
         model.material.color = Color.red;
-
         yield return new WaitForSeconds(explosionDelay);
 
         if (explosionEffectPrefab != null)
@@ -142,13 +119,9 @@ public class EnemyDrone : MonoBehaviour, IDamageable, IDisrupt
         Collider[] colliders = Physics.OverlapSphere(transform.position, explosionRange);
         foreach (Collider hit in colliders)
         {
-            if (hit.CompareTag("Player"))
+            if (hit.CompareTag("Player") && hit.TryGetComponent<IDamageable>(out IDamageable damageable))
             {
-                IDamageable damageable = hit.GetComponent<IDamageable>();
-                if (damageable != null)
-                {
-                    damageable.TakeDamage(explosionDamage);
-                }
+                damageable.TakeDamage(explosionDamage);
             }
         }
 
@@ -177,7 +150,6 @@ public class EnemyDrone : MonoBehaviour, IDamageable, IDisrupt
         model.material.color = Color.blue;
 
         navAgent.isStopped = true;
-
         yield return new WaitForSeconds(3);
 
         navAgent.isStopped = false;
