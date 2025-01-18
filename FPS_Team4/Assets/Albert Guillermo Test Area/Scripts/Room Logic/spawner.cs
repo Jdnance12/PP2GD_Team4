@@ -12,9 +12,18 @@ public class spawner : MonoBehaviour
     [SerializeField] private float enemyDamageModifier = 1.0f;
     [SerializeField] private float spawnRadius = 5.0f; // radius for random spawns
 
+    [Header("---- Waypoint Info ----")]
+    [SerializeField] private WaypointManager waypointManager; // references the waypoint manager in the same room
+    Transform[] patrolWaypoints;
+
+    [Header("---- Boss Info ----")]
+    [SerializeField] private bool isBossSpawner = false; // toggle boss aspect
+    [SerializeField] private List<spawner> spawnersToDeactivate; // list of spawners to shut off once boss is defeated
+
     int spawnCount;
     bool startSpawning;
     bool isSpawning;
+    bool bossDefeated = false; // flag to track if boss is defeated
 
     // Start is called before the first frame update
     void Update()
@@ -30,6 +39,7 @@ public class spawner : MonoBehaviour
         if(other.CompareTag("Player"))
         {
             startSpawning = true;
+            patrolWaypoints = waypointManager.GetWaypoints();
         }
     }
 
@@ -43,12 +53,19 @@ public class spawner : MonoBehaviour
 
         GameObject newEnemy = Instantiate(enemyPrefab, randomPosition, spawnPositions[spawnIndex].rotation);
         EnemyBasic enemyBasic = newEnemy.GetComponent<EnemyBasic>();
+        EnemyPatrol enemyPatrol = newEnemy.GetComponent<EnemyPatrol>(); // get enemy patrol component
 
         if(enemyBasic != null)
         {
             enemyBasic.ApplyModifiers(enemyHpModifier, enemyDamageModifier);
             enemyBasic.OnDeath += OnEnemyDeath;
         }
+
+        if(enemyPatrol != null && patrolWaypoints != null)
+        {
+            enemyPatrol.waypoints = patrolWaypoints;
+        }
+
         spawnCount++;
         isSpawning = false;
     }
@@ -63,10 +80,24 @@ public class spawner : MonoBehaviour
 
     void OnEnemyDeath(EnemyBasic enemy)
     {
+        if(isBossSpawner)
+        {
+            bossDefeated = true;
+            DeactivateOtherSpawners();
+            return; // end this method if enemy is boss and is defeated
+        }
         spawnCount--;
         if (startSpawning && spawnCount < numToSpawn)
         {
             StartCoroutine(SpawnEnemies());
+        }
+    }
+
+    void DeactivateOtherSpawners()
+    {
+        foreach (var spawner in spawnersToDeactivate)
+        {
+            spawner.enabled = false;
         }
     }
 }

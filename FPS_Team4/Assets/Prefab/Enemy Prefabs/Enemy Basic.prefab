@@ -107,6 +107,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2774804460403872040}
   - component: {fileID: 2774804460403872044}
+  - component: {fileID: 4452178384162218766}
   - component: {fileID: 2774804460403872038}
   - component: {fileID: 2774804460403872037}
   - component: {fileID: 2774804460403872036}
@@ -167,6 +168,19 @@ MonoBehaviour:
   damageTextPrefab: {fileID: 8577355900656576830, guid: fa017e67f2df21441a57c83493bffb7b, type: 3}
   damageTextPos: {fileID: 0}
   navAgent: {fileID: 2774804460403872043}
+--- !u!114 &4452178384162218766
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2774804460403872035}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9062cc66430711e47bac0e5465e38384, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  waypoints: []
 --- !u!33 &2774804460403872038
 MeshFilter:
   m_ObjectHideFlags: 0
