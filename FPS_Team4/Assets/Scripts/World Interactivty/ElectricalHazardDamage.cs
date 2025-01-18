@@ -8,7 +8,7 @@ public class ElectricalHazardDamage : MonoBehaviour
     [Header("Hazard Settings")]
     [SerializeField] private float damagePerSecond = 40f; // Damage applied per second
     [SerializeField] private ParticleSystem[] hazardEffects; // Visual effects for sparks/arcs
-    [SerializeField] private AudioSource hazardSound; // Looping hazard sound
+    [SerializeField] private AudioSource hazardSound; // Looping hazard sound (FUTURE ITERATION)
 
     private bool isActive = true; // Tracks if damage system is active
 
