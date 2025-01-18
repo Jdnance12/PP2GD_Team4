@@ -1,0 +1,96 @@
+using UnityEngine;
+
+public class MountClimbController : MonoBehaviour
+{
+    public float climbSpeed = 5f; // Speed for climbing ladders
+    public float mountSpeed = 5f; // Speed for wall mounting
+    public float gravity = -9.8f; // Gravity to apply when not climbing
+
+    private CharacterController characterController;
+    private Vector3 movement;
+    private bool isClimbing = false;
+    private bool isMounting = false;
+
+    private void Start()
+    {
+        characterController = GetComponent<CharacterController>();
+    }
+
+    private void Update()
+    {
+        if (isClimbing)
+        {
+            HandleLadderClimbing();
+        }
+        else if (isMounting)
+        {
+            HandleWallMounting();
+        }
+        else
+        {
+            ApplyGravity();
+        }
+
+        characterController.Move(movement * Time.deltaTime);
+    }
+
+    private void HandleLadderClimbing()
+    {
+        float verticalInput = Input.GetAxis("Vertical");
+        movement = new Vector3(0, verticalInput * climbSpeed, 0);
+    }
+
+    private void HandleWallMounting()
+    {
+        if (Input.GetKey(KeyCode.W)) // Climb up the wall
+        {
+            movement = new Vector3(0, mountSpeed, 0);
+        }
+        else if (Input.GetKey(KeyCode.S)) // Slide down the wall
+        {
+            movement = new Vector3(0, -mountSpeed, 0);
+        }
+        else
+        {
+            movement = Vector3.zero; // Stay still on the wall
+        }
+    }
+
+    private void ApplyGravity()
+    {
+        if (!characterController.isGrounded)
+        {
+            movement.y += gravity * Time.deltaTime;
+        }
+        else
+        {
+            movement.y = 0; // Reset vertical movement when grounded
+        }
+    }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.CompareTag("Ladder"))
+        {
+            isClimbing = true;
+            movement = Vector3.zero; // Reset movement when entering climbing mode
+        }
+        else if (other.CompareTag("Wall"))
+        {
+            isMounting = true;
+            movement = Vector3.zero;
+        }
+    }
+
+    private void OnTriggerExit(Collider other)
+    {
+        if (other.CompareTag("Ladder"))
+        {
+            isClimbing = false;
+        }
+        else if (other.CompareTag("Wall"))
+        {
+            isMounting = false;
+        }
+    }
+}
