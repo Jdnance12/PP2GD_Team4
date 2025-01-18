@@ -8,6 +8,8 @@ public class EnemyBasic : MonoBehaviour, IDamageable, IDisrupt
 {
     private GameManager gm;
 
+    public event System.Action<EnemyBasic> OnDeath;
+
     [Header("---- Bools ----")]
     public bool isDisrupted;
     public bool isShooting;
@@ -175,6 +177,7 @@ public class EnemyBasic : MonoBehaviour, IDamageable, IDisrupt
 
         if (HP <= 0)
         {
+            OnDeath?.Invoke(this); // trigger OnDeath event
             Instantiate(partsPrefab, transform.position, Quaternion.identity); // Drops the parts currency when the enemy is destoryed
             Destroy(gameObject);
         }
