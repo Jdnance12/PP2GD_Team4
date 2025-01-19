@@ -72,8 +72,8 @@ public class GameManager : MonoBehaviour
         playerScript = player.GetComponent<PlayerController>();
 
         // Getting the Progress Manager
-        progressManager = GameObject.Find("Progression Manager");
-        progressScript = progressManager.GetComponent<Progression_Manager>();
+        //progressManager = GameObject.Find("Progression Manager");
+        //progressScript = progressManager.GetComponent<Progression_Manager>();
 
         // Getting the Upgrade Manager before setting it as false
         upgradeScript = GetComponent<UpgradeManager>();
