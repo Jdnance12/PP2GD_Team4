@@ -2095,7 +2095,6 @@ GameObject:
   - component: {fileID: 4886374820582020695}
   - component: {fileID: 4886374820582020693}
   - component: {fileID: 4886374820582020694}
-  - component: {fileID: 5225359389694889196}
   - component: {fileID: 4886374820582020692}
   - component: {fileID: 4886374820582020691}
   m_Layer: 0
@@ -2138,6 +2137,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 831cfcf053470b8409621b3c156c7b37, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  canMove: 1
   isSprinting: 0
   isFiring: 0
   isCrouching: 0
@@ -2147,7 +2147,7 @@ MonoBehaviour:
   currentHP: 0
   maxShield: 0
   currentShield: 0
-  speed: 7
+  speed: 12
   sprintMod: 2
   jumpMax: 1
   jumpCount: 0
@@ -2156,6 +2156,8 @@ MonoBehaviour:
   standHeight: 2
   crouchSpeed: 3.5
   standSpeed: 7
+  slopeForce: 5
+  slopeForceRayLength: 1.5
   fireRate: 0
   ignoreMask:
     serializedVersion: 2
@@ -2191,20 +2193,6 @@ CharacterController:
   m_SkinWidth: 0.08
   m_MinMoveDistance: 0.001
   m_Center: {x: 0, y: 2, z: 0}
---- !u!136 &5225359389694889196
-CapsuleCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5225359389694889197}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 0
-  m_Radius: 0.5
-  m_Height: 1
-  m_Direction: 1
-  m_Center: {x: 0, y: 0, z: 0}
 --- !u!120 &4886374820582020692
 LineRenderer:
   m_ObjectHideFlags: 0
@@ -3871,8 +3859,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6ee45ca359942134ab73f0af9f4f9ef3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  empActive: 0
-  radialActive: 0
+  empActive: 1
+  radialActive: 1
   upgradeObject: {fileID: 0}
   upgradeManager: {fileID: 0}
   radialPrefab: {fileID: 3437140984655938947, guid: 1b75d4d0643b3c549ba2dbfccb1aca5f, type: 3}

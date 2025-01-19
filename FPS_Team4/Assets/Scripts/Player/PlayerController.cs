@@ -5,6 +5,7 @@ using UnityEngine;
 public class PlayerController : MonoBehaviour, IDamageable, IRecharge
 {
     [Header("----- Bools -----")]
+    public bool canMove;
     public bool isSprinting = false;
     public bool isFiring;
     public bool isCrouching;
@@ -105,7 +106,7 @@ public class PlayerController : MonoBehaviour, IDamageable, IRecharge
 
         if (!gm.isPaused && !grappleHookCtrl.isGrappling)
         {
-            if (gm.progressScript.playerCanMove)
+            if (canMove == true)
             {
                 PlayerMovement();
                 AdjustToSlope();
