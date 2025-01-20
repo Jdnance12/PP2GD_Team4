@@ -18,7 +18,7 @@ public class PlayerTrigger : MonoBehaviour
         if (other.CompareTag("Player"))
         {
             gameManager.progressScript.firstBossKilled = true;
-            gameManager.progressScript.playerCanMove = true;
+            gameManager.playerScript.canMove = true;
             gameManager.progressScript.gunButton.SetActive(false);
             gameManager.progressScript.bladeButton.SetActive(true);
             gameManager.playerScript.gunActive = false;

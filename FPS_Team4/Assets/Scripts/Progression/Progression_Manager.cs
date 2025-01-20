@@ -27,7 +27,6 @@ public class Progression_Manager : MonoBehaviour
     public bool secondDialogueOpened;
     public bool secondDialogueClosed;
 
-    public bool playerCanMove;
     public bool playerInFallPos;
 
     [Header("---- Floats and Numbers ----")]
@@ -104,7 +103,7 @@ public class Progression_Manager : MonoBehaviour
         if (computerScript.playerInteracted == true && !firstDialogueOpened)
         {
             computerScript.aiFace.SetActive(true);
-            playerCanMove = false;
+            gameManager.playerScript.canMove = false;
 
             //gameManager.GamePaused();
             gameManager.menuActive = gameManager.aiDialogueTextImage;
@@ -123,7 +122,7 @@ public class Progression_Manager : MonoBehaviour
                 gameManager.menuActive.SetActive(false);
                 gameManager.menuActive = null;
                 firstDialogueClosed = true;
-                playerCanMove = true;
+                gameManager.playerScript.canMove = true;
             }
         }
         //Opens the Door
@@ -153,7 +152,7 @@ public class Progression_Manager : MonoBehaviour
         // Killing the Enemy triggers the explosion
         if (enemyStartRoom == null && !firstBossKilled)
         {
-            playerCanMove = false;
+            gameManager.playerScript.canMove = false;
 
             wallWhole.SetActive(false);
             wallBroken.SetActive(true);
