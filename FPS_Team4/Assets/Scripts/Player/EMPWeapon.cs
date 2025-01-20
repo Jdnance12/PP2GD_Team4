@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using TMPro;
 //using UnityEditor.Animations;
 using UnityEngine;
-//using UnityEngine.InputSystem.XR.Haptics;
+using UnityEngine.InputSystem.XR.Haptics;
 
 public class EMPWeapon : MonoBehaviour
 {
