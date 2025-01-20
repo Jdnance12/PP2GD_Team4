@@ -22,6 +22,8 @@ public class EnemyPatrol : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (waypoints.Length == 0) return; // if waypoints are empty, avoid dividing by zero
+
         if(navAgent.remainingDistance < navAgent.stoppingDistance)
         {
             currentWaypointIndex = (currentWaypointIndex + 1) % waypoints.Length; // move to next waypoint
