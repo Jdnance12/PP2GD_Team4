@@ -23,6 +23,11 @@ public class EnemyDrone : MonoBehaviour, IDamageable, IDisrupt
     [SerializeField] private int faceTargetSpeed = 5;
     [SerializeField] private float roamRadius = 10f;
 
+    [Header("---- Detection Settings ----")]
+    [SerializeField] private float detectionRange = 15f;
+    [SerializeField] private float fieldOfViewAngle = 90f;
+    [SerializeField] private LayerMask detectionMask;
+
     private Coroutine roamCoroutine;
     private bool canAttack = true;
 
@@ -48,15 +53,13 @@ public class EnemyDrone : MonoBehaviour, IDamageable, IDisrupt
     {
         if (isDisrupted || isExploding) return;
 
-        float distanceToPlayer = Vector3.Distance(transform.position, player.transform.position);
-
-        if (distanceToPlayer <= explosionRange)
+        if (DetectPlayer())
         {
-            StartCoroutine(Explode());
+            OnPlayerDetected();
         }
-        else if (isChasingPlayer)
+        else if (isChasingPlayer && !DetectPlayer())
         {
-            ChasePlayer(distanceToPlayer);
+            OnPlayerLost();
         }
         else if (navAgent.remainingDistance < 0.1f && roamCoroutine == null)
         {
@@ -64,13 +67,59 @@ public class EnemyDrone : MonoBehaviour, IDamageable, IDisrupt
         }
     }
 
-    private void ChasePlayer(float distanceToPlayer)
+    private bool DetectPlayer()
     {
-        navAgent.SetDestination(player.transform.position);
+        if (!player) return false;
 
-        if (distanceToPlayer <= navAgent.stoppingDistance)
+        // Calculate direction and distance to the player
+        Vector3 directionToPlayer = (player.transform.position - headPos.position).normalized;
+        float distanceToPlayer = Vector3.Distance(player.transform.position, headPos.position);
+
+        // Check distance and field of view
+        if (distanceToPlayer > detectionRange) return false;
+        float angleToPlayer = Vector3.Angle(directionToPlayer, transform.forward);
+        if (angleToPlayer > fieldOfViewAngle / 2) return false;
+
+        // Check for line of sight
+        if (Physics.Raycast(headPos.position, directionToPlayer, out RaycastHit hit, detectionRange, detectionMask))
         {
-            AttackPlayer();
+            if (hit.collider.CompareTag("Player"))
+            {
+                return true; // Player detected
+            }
+        }
+        return false; // Player not detected
+    }
+
+    private void OnPlayerDetected()
+    {
+        if (!isChasingPlayer)
+        {
+            isChasingPlayer = true;
+            navAgent.isStopped = false;
+            Debug.Log("Player detected! Chasing...");
+            AudioManager.instance.PlayEnemyDetectedMusic();
+        }
+    }
+
+    private void OnPlayerLost()
+    {
+        isChasingPlayer = false;
+        Debug.Log("Lost sight of player. Returning to roam.");
+        AudioManager.instance.PlayBackgroundMusic();
+        roamCoroutine = StartCoroutine(Roaming());
+    }
+
+    private void ChasePlayer()
+    {
+        if (isChasingPlayer)
+        {
+            navAgent.SetDestination(player.transform.position);
+
+            if (Vector3.Distance(transform.position, player.transform.position) <= navAgent.stoppingDistance)
+            {
+                AttackPlayer();
+            }
         }
     }
 
@@ -169,5 +218,9 @@ public class EnemyDrone : MonoBehaviour, IDamageable, IDisrupt
     {
         Gizmos.color = Color.red;
         Gizmos.DrawWireSphere(transform.position, explosionRange);
+
+        // Draw detection range
+        Gizmos.color = Color.yellow;
+        Gizmos.DrawWireSphere(transform.position, detectionRange);
     }
 }
