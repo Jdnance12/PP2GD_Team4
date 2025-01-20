@@ -323,8 +323,10 @@ MonoBehaviour:
   healStationTutorial: 0
   secondDialogueOpened: 0
   secondDialogueClosed: 0
+  lastMenu: 0
   playerInFallPos: 0
   explosionForce: 5
+  enemyCount: 0
   player: {fileID: 0}
   gunButton: {fileID: 0}
   bladeButton: {fileID: 0}
@@ -341,7 +343,11 @@ MonoBehaviour:
   explosionPos: {x: 0, y: 0, z: 0}
   healStationDoor: {fileID: 0}
   coreComputerObj: {fileID: 0}
-  enemyList: []
+  enemyList:
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
   letterDelay: 0.05
 --- !u!1 &5174988162352059858
 GameObject:

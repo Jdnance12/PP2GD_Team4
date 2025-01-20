@@ -393,8 +393,11 @@ public class PlayerController : MonoBehaviour, IDamageable, IRecharge
             //updatePlayerUI();
             StartCoroutine(flashSheildHItScreen());
         }
+        else if(maxShield <= 0)
+        {
+            currentHP -= damage;
+        }
 
-        currentHP -= damage;
         if(currentHP <= 0)
         {
             gm.YouLose();

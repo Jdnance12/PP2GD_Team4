@@ -70,8 +70,8 @@ public class Progression_Manager : MonoBehaviour
 
         gunButton = GameObject.Find("Gun Button");
         bladeButton = GameObject.Find("Blade Button");
-        gunButton.SetActive(true);
-        bladeButton.SetActive(false);
+        //gunButton.SetActive(true);
+        //bladeButton.SetActive(false);
 
         controlComputerObj = GameObject.Find("Control Computer"); // Finding the Control Computer
         computerScript = controlComputerObj.GetComponent<ControlComputer>(); // Accessing the Control Computers Script
