@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.18028378, g: 0.22571412, b: 0.30692285, a: 1}
+  m_IndirectSpecularColor: {r: 0.18028352, g: 0.22571376, b: 0.3069224, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -11202,6 +11202,21 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 3548218a95a87664098be27a2415182b, type: 3}
+--- !u!1 &8195424923683492165 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 221140721518455842, guid: 3548218a95a87664098be27a2415182b, type: 3}
+  m_PrefabInstance: {fileID: 8195424923683492164}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &8195424923683492166 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 221140721660964207, guid: 3548218a95a87664098be27a2415182b, type: 3}
+  m_PrefabInstance: {fileID: 8195424923683492164}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &8195424923683492167 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 221140723283029808, guid: 3548218a95a87664098be27a2415182b, type: 3}
+  m_PrefabInstance: {fileID: 8195424923683492164}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &8825873285287620445
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -11209,6 +11224,22 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 6538114320107035681, guid: d51a47ecaa70b5445aad61e802b012b9, type: 3}
+      propertyPath: nextRooms.Array.data[0].rooms.Array.size
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 6538114320107035681, guid: d51a47ecaa70b5445aad61e802b012b9, type: 3}
+      propertyPath: nextRooms.Array.data[0].rooms.Array.data[0]
+      value: 
+      objectReference: {fileID: 8195424923683492167}
+    - target: {fileID: 6538114320107035681, guid: d51a47ecaa70b5445aad61e802b012b9, type: 3}
+      propertyPath: nextRooms.Array.data[0].rooms.Array.data[1]
+      value: 
+      objectReference: {fileID: 8195424923683492166}
+    - target: {fileID: 6538114320107035681, guid: d51a47ecaa70b5445aad61e802b012b9, type: 3}
+      propertyPath: nextRooms.Array.data[0].rooms.Array.data[2]
+      value: 
+      objectReference: {fileID: 8195424923683492165}
     - target: {fileID: 6538114320107035682, guid: d51a47ecaa70b5445aad61e802b012b9, type: 3}
       propertyPath: m_RootOrder
       value: 10

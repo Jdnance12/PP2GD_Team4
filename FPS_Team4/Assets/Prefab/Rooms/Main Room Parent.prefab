@@ -249,6 +249,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8825873284502734944}
+  - component: {fileID: 8935102453279349887}
   - component: {fileID: 8825873284502734945}
   - component: {fileID: 8825873284502734947}
   m_Layer: 0
@@ -280,7 +281,7 @@ Transform:
   m_Father: {fileID: 6538114320107035682}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 90, z: 0}
---- !u!114 &8825873284502734945
+--- !u!114 &8935102453279349887
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -288,6 +289,29 @@ MonoBehaviour:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8825873284502734950}
   m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1d8c420e7bbc4e04bb5e57ca3474b3d3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  isLocked: 0
+  isBroken: 0
+  isOpening: 0
+  playerInRange: 0
+  leftDoor: {fileID: 8825873284569733609}
+  rightDoor: {fileID: 8825873285475430399}
+  closedPositionLeft: {fileID: 8825873284403337435}
+  closedPositionRight: {fileID: 8825873284634499577}
+  openPositionLeft: {fileID: 8825873285169399303}
+  openPositionRight: {fileID: 8825873285502998152}
+  speed: 0.25
+--- !u!114 &8825873284502734945
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8825873284502734950}
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: d7bbe026291d1a241b350c43813d1ac9, type: 3}
   m_Name: 
