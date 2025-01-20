@@ -8,8 +8,6 @@ public class spawner : MonoBehaviour
     [SerializeField] private int numToSpawn;
     [SerializeField] private int timeBetweenSpawns;
     [SerializeField] private Transform[] spawnPositions;
-    [SerializeField] private float enemyHpModifier = 1.0f;
-    [SerializeField] private float enemyDamageModifier = 1.0f;
     [SerializeField] private float spawnRadius = 5.0f; // radius for random spawns
 
     [Header("---- Waypoint Info ----")]
@@ -20,12 +18,24 @@ public class spawner : MonoBehaviour
     [SerializeField] private bool isBossSpawner = false; // toggle boss aspect
     [SerializeField] private List<spawner> spawnersToDeactivate; // list of spawners to shut off once boss is defeated
 
+    [Header("---- Modifier info ----")]
+    [SerializeField] private float enemyHpModifier = 1.0f;
+    [SerializeField] private float enemyDamageModifier = 1.0f;
+    [SerializeField] private bool bossModifierApplied = false;
+    [SerializeField] private bool spawnerModifierApplied = false;
+
     int spawnCount;
     bool startSpawning;
     bool isSpawning;
     bool bossDefeated = false; // flag to track if boss is defeated
 
+    private GameManager gameManager; // reference to gamemanager
+
     // Start is called before the first frame update
+    private void Start()
+    {
+        gameManager = GameManager.instance;
+    }
     void Update()
     {
         if(startSpawning && spawnCount < numToSpawn && !isSpawning)
@@ -51,22 +61,37 @@ public class spawner : MonoBehaviour
         int spawnIndex = Random.Range(0, spawnPositions.Length);
         Vector3 randomPosition = GetRandomPosition(spawnPositions[spawnIndex].position, spawnRadius);
 
-        GameObject newEnemy = Instantiate(enemyPrefab, randomPosition, spawnPositions[spawnIndex].rotation);
-        EnemyBasic enemyBasic = newEnemy.GetComponent<EnemyBasic>();
-        EnemyPatrol enemyPatrol = newEnemy.GetComponent<EnemyPatrol>(); // get enemy patrol component
-
-        if(enemyBasic != null)
+        if (enemyPrefab != null)
         {
-            enemyBasic.ApplyModifiers(enemyHpModifier, enemyDamageModifier);
-            enemyBasic.OnDeath += OnEnemyDeath;
+            GameObject newEnemy = Instantiate(enemyPrefab, randomPosition, spawnPositions[spawnIndex].rotation);
+            EnemyBasic enemyBasic = newEnemy?.GetComponent<EnemyBasic>();
+            EnemyPatrol enemyPatrol = newEnemy?.GetComponent<EnemyPatrol>(); // get enemy patrol component
+
+            if (enemyBasic != null)
+            {
+                float bossHpModifier = 1.0f + (gameManager.bossKillCount * 0.5f);
+                float bossDamageModifier = 1.0f + (gameManager.bossKillCount * 0.5f);
+                bossModifierApplied = gameManager.bossKillCount > 0;
+                spawnerModifierApplied = enemyHpModifier != 1.0f || enemyDamageModifier != 1.0f;
+
+                enemyBasic.ApplyModifiers(enemyHpModifier, enemyDamageModifier, bossHpModifier, bossDamageModifier);
+                enemyBasic.bossModifierApplied = bossModifierApplied;
+                enemyBasic.spawnerModifierApplied = spawnerModifierApplied;
+                enemyBasic.OnDeath += OnEnemyDeath;
+            }
+
+            if (enemyPatrol != null && patrolWaypoints != null)
+            {
+                enemyPatrol.waypoints = patrolWaypoints;
+            }
+
+            spawnCount++;
+        }
+        else
+        {
+            Debug.LogError("Enemy prefab is not assigned.");
         }
 
-        if(enemyPatrol != null && patrolWaypoints != null)
-        {
-            enemyPatrol.waypoints = patrolWaypoints;
-        }
-
-        spawnCount++;
         isSpawning = false;
     }
 

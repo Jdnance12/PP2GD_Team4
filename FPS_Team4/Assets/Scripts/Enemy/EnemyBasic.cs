@@ -14,10 +14,14 @@ public class EnemyBasic : MonoBehaviour, IDamageable, IDisrupt
     public bool isDisrupted;
     public bool isShooting;
     public bool playerInRange;
+   
 
     [Header("---- Stats ----")]
     [SerializeField] public float HP;
     [SerializeField] float shootRate;
+
+    [SerializeField] public bool bossModifierApplied; // track if boss modifier is applied
+    [SerializeField] public bool spawnerModifierApplied; // track if spawner modifier is applied
 
     [Header("--- Movement Stats ----")]
     [SerializeField] int faceTargetSpeed;
@@ -204,9 +208,11 @@ public class EnemyBasic : MonoBehaviour, IDamageable, IDisrupt
         model.material.color = origColor;
     }
 
-    public void ApplyModifiers(float hpModifier, float damageModifier)
+    public void ApplyModifiers(float hpModifier, float damageModifier, float bossHpModifier, float bossDamageModifier)
     {
-        HP *= hpModifier; // apply modifier to existing hp
-        shootDamage = damageModifier; // apply modifier to existing shootDamage
+        HP *= (hpModifier * bossHpModifier); // apply modifier to existing hp
+        shootDamage = (damageModifier * bossDamageModifier); // apply modifier to existing shootDamage
     }
+
+
 }

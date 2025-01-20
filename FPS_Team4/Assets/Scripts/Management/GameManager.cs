@@ -55,6 +55,9 @@ public class GameManager : MonoBehaviour
     public int partsCount;
     public int nodeCount;
 
+    [Header("---- Boss Counter ----")]
+    [SerializeField] public int bossKillCount = 0; // counter for boss kill count
+
     // Start is called before the first frame update
     void Awake()
     {
@@ -223,4 +226,9 @@ public class GameManager : MonoBehaviour
         menuActive.SetActive(true); // Display pause menu
     }
     //MK Added - End
+
+    public void IncrementBossKillCount()
+    {
+        bossKillCount++;
+    }
 }
