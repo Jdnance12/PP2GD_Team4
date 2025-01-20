@@ -395,6 +395,10 @@ public class PlayerController : MonoBehaviour, IDamageable, IRecharge
         }
 
         currentHP -= damage;
+        if(currentHP <= 0)
+        {
+            gm.YouLose();
+        }
         updatePlayerUI();
         StartCoroutine(flashDamageScreen());
     }

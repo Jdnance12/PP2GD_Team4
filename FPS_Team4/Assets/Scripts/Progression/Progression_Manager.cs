@@ -53,6 +53,7 @@ public class Progression_Manager : MonoBehaviour
     //[SerializeField] GameObject playerFallPos;
     [SerializeField] public GameObject coreComputerObj;
     CoreComputer coreComputerScript;
+    [SerializeField] List<EnemyBasic> enemyList;
 
     [Header("---- AI Dialogue ----")]
     public float letterDelay;
@@ -205,9 +206,16 @@ public class Progression_Manager : MonoBehaviour
                 gameManager.menuActive.SetActive(false);
                 gameManager.menuActive = null;
                 secondDialogueClosed = true;
-                tutorialActive = false;
+                //tutorialActive = false;
+
+                foreach (EnemyBasic enemy in enemyList)
+                {
+                    enemy.gameObject.SetActive(true);
+                }
             }
         }
+
+        //When all enemies are killed open last menu
     }
     public void GameProgression()
     {
