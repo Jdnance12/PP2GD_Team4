@@ -2,9 +2,9 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
-using UnityEditor.Animations;
+//using UnityEditor.Animations;
 using UnityEngine;
-//using UnityEngine.InputSystem.XR.Haptics;
+using UnityEngine.InputSystem.XR.Haptics;
 
 public class EMPWeapon : MonoBehaviour
 {
@@ -32,7 +32,7 @@ public class EMPWeapon : MonoBehaviour
     [SerializeField] public float maxDistance;
     [SerializeField] public float displayDuration;
 
-    [SerializeField] public AnimatorController playerAnim;
+    //[SerializeField] public AnimatorController playerAnim;
 
     // Start is called before the first frame update
     void Start()

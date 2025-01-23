@@ -7,6 +7,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 using UnityEngine.AI;
+using Unity.VisualScripting;
 
 public class Progression_Manager : MonoBehaviour
 {
@@ -26,6 +27,7 @@ public class Progression_Manager : MonoBehaviour
     public bool healStationTutorial;
     public bool secondDialogueOpened;
     public bool secondDialogueClosed;
+    public bool lastMenu;
 
     public bool playerInFallPos;
 
@@ -33,6 +35,7 @@ public class Progression_Manager : MonoBehaviour
     public float explosionForce;
 
     [Header("---- Tutorial Start Room Game Objects ----")]
+    public int enemyCount;
     [SerializeField] GameObject player;
     [SerializeField] public GameObject gunButton;
     [SerializeField] public GameObject bladeButton;
@@ -53,6 +56,7 @@ public class Progression_Manager : MonoBehaviour
     //[SerializeField] GameObject playerFallPos;
     [SerializeField] public GameObject coreComputerObj;
     CoreComputer coreComputerScript;
+    [SerializeField] List<GameObject> enemyList;
 
     [Header("---- AI Dialogue ----")]
     public float letterDelay;
@@ -66,8 +70,8 @@ public class Progression_Manager : MonoBehaviour
 
         gunButton = GameObject.Find("Gun Button");
         bladeButton = GameObject.Find("Blade Button");
-        gunButton.SetActive(true);
-        bladeButton.SetActive(false);
+        //gunButton.SetActive(true);
+        //bladeButton.SetActive(false);
 
         controlComputerObj = GameObject.Find("Control Computer"); // Finding the Control Computer
         computerScript = controlComputerObj.GetComponent<ControlComputer>(); // Accessing the Control Computers Script
@@ -204,9 +208,25 @@ public class Progression_Manager : MonoBehaviour
             {
                 gameManager.menuActive.SetActive(false);
                 gameManager.menuActive = null;
+                //tutorialActive = false;
+
+                foreach (GameObject enemy in enemyList)
+                {
+                    enemy.gameObject.SetActive(true);
+                }
                 secondDialogueClosed = true;
-                tutorialActive = false;
             }
+        }
+
+        //When all enemies are killed open last menu
+        if(secondDialogueClosed == true && lastMenu == false)
+        {
+            gameManager.menuActive = gameManager.menuMisc;
+            gameManager.miscBodyText.text = "The AI has taken over every thing and has shut me out of the system. Only way I'm going to fix this now is by getting my captians access keys to wipe the system. I'm sure they've been corrupted to.... Let's do this.";
+            gameManager.menuActive.SetActive(true);
+            gameManager.GamePaused();
+            lastMenu = true;
+            tutorialActive = false;
         }
     }
     public void GameProgression()

@@ -19,8 +19,8 @@ public class PlayerTrigger : MonoBehaviour
         {
             gameManager.progressScript.firstBossKilled = true;
             gameManager.playerScript.canMove = true;
-            gameManager.progressScript.gunButton.SetActive(false);
-            gameManager.progressScript.bladeButton.SetActive(true);
+            //gameManager.progressScript.gunButton.SetActive(false);
+            //gameManager.progressScript.bladeButton.SetActive(true);
             gameManager.playerScript.gunActive = false;
             
         }
