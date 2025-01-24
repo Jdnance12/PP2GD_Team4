@@ -11,184 +11,193 @@ public class WallTerminalController : MonoBehaviour
     [SerializeField] private GameObject hackingCanvas; // Canvas displayed during hacking
     [SerializeField] private TMP_Text hackingPrompt; // Dynamic text prompt for player
     [SerializeField] private GameObject turretPrefab; // Turret to activate on hacking failure
+    [SerializeField] private GameObject enemyPrefab; // Basic enemy to spawn on hacking failure
+    [SerializeField] private Transform enemySpawnPoint; // Spawn location for the enemy
 
     private bool isPlayerInRange = false; // Tracks if player is near terminal
     private bool isHacked = false; // Tracks if terminal is already hacked
     private bool isHackingFailed = false; // Tracks if hacking failed
-    private bool isHackingActive = false; // Tracks if the hacking sequence is active
-    private bool hasGeneratedLetters = false; // Tracks if letters were successfully generated
-    private List<char> alphabet = new List<char>() { 'b', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'r', 's', 'u', 'v', 'x', 'y', 'z' }; // Simplified alphabet list
+    private bool isHackingActive = false; // Tracks if hacking is active
+    private bool isInInstructionPhase = false; // Tracks if player is in instruction phase
+    private bool isInputPhaseActive = false; // Tracks if input phase is active
     private List<char> targetLetters = new List<char>(); // Stores target letters
-    private Coroutine hackingCoroutine; // Tracks ongoing hacking coroutine
-    private int currentChallengeIndex = 0; // Tracks the current challenge index
+    private int currentChallengeIndex = 0; // Tracks current challenge index
+    private float hackingTimer = 4f; // Timer for hack duration
+    private bool playerExitedDuringPhase = false; // Tracks if player exited during hacking
+    private bool isTerminalLocked = false; // Tracks if terminal is locked
 
     private void Start()
     {
         if (hackingCanvas != null)
-            hackingCanvas.SetActive(true); // Ensure hacking Canvas is always visible
+            hackingCanvas.SetActive(true); // Show hacking canvas initially
 
         if (hackingPrompt != null)
-            hackingPrompt.text = ""; // Clear the text at the start
+            hackingPrompt.text = ""; // Clear text at start
 
         if (turretPrefab != null)
-            turretPrefab.SetActive(false); // Ensure turret starts deactivated
+            turretPrefab.SetActive(false); // Ensure turret starts inactive
+
+        if (enemyPrefab != null)
+            enemyPrefab.SetActive(false); // Ensure enemy is disabled initially
     }
 
     private void Update()
     {
-        if (isPlayerInRange && Input.GetKeyDown(KeyCode.T) && !isHacked && !isHackingFailed)
+        if (isPlayerInRange && Input.GetKeyDown(KeyCode.T) && !isHacked && !isTerminalLocked)
         {
-            if (!isHackingActive) // Ensure hacking only starts once per session
+            if (!isHackingActive && !isInInstructionPhase && !isInputPhaseActive) // Ensure correct phase order
             {
-                StartCoroutine(PreparationDelay()); // Add delay for smoother transition
+                StartInstructionPhase(); // Start instruction phase
+            }
+            else if (isInInstructionPhase) // Move from instruction to preparation phase
+            {
+                StartCoroutine(StartPreparationPhase()); // Activate preparation phase
             }
         }
 
-        if (isHackingActive && targetLetters.Count > 0) // Check for active hacking session
+        if (isInputPhaseActive && targetLetters.Count > 0) // Check if input phase is active
         {
-            CheckPlayerInput(); // Check player input for correct or wrong keys
+            hackingTimer -= Time.deltaTime; // Countdown timer
+            if (playerExitedDuringPhase) // Check if player exited
+            {
+                ResetTerminal(); // Reset terminal if player exits
+                return;
+            }
+
+            if (hackingTimer <= 0f) // Timer expires
+            {
+                TriggerHackingFailure(); // Handle hacking failure
+            }
+            else
+            {
+                CheckPlayerInput(); // Handle player's key input
+            }
         }
     }
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.CompareTag("Player")) // Detect if player enters terminal range
+        if (other.CompareTag("Player")) // Detect player entering terminal range
         {
             isPlayerInRange = true; // Mark player as in range
-            if (!isHacked && !isHackingFailed)
+            playerExitedDuringPhase = false; // Reset exit tracker
+
+            if (isTerminalLocked) // Check if terminal is locked
             {
-                hackingPrompt.text = "Press T to interact with terminal."; // Initial interaction prompt
+                hackingPrompt.text = "Terminal Locked for 10 seconds!"; // Notify player of lock
+                return; // Exit early
+            }
+
+            if (!isHacked && !isHackingFailed && !isHackingActive) // Ensure terminal is ready
+            {
+                hackingPrompt.text = "Press T to interact with terminal."; // Prompt player to interact
             }
         }
     }
 
     private void OnTriggerExit(Collider other)
     {
-        if (other.CompareTag("Player")) // Detect if player leaves terminal range
+        if (other.CompareTag("Player")) // Detect player exiting terminal range
         {
             isPlayerInRange = false; // Mark player as out of range
-            hackingPrompt.text = ""; // Reset interaction prompt
+            hackingPrompt.text = ""; // Clear interaction prompt
+            if (isHackingActive || isInputPhaseActive || isInInstructionPhase) // If hacking is in progress
+            {
+                playerExitedDuringPhase = true; // Mark player exited during phase
+                ResetTerminal(); // Reset the terminal immediately
+            }
         }
     }
 
-    private IEnumerator PreparationDelay()
+    private void StartInstructionPhase()
     {
-        if (isHackingActive) yield break; // Prevent multiple triggers
-        ResetHackingState(); // Ensure the state is reset before starting
+        ResetHackingState(); // Reset previous hacking state
         isHackingActive = true; // Mark hacking as active
-        hackingPrompt.text = "Prepare for hacking..."; // Notify player of preparation
-        yield return new WaitForSeconds(1.5f); // Delay before starting instructions
+        isInInstructionPhase = true; // Mark instruction phase active
 
-        GenerateRandomLetters(); // Generate the three random letters
-        Debug.Log($"Generated letters valid: {hasGeneratedLetters}, Count: {targetLetters.Count}"); // Debugging log
-        if (!hasGeneratedLetters || targetLetters.Count == 0)
-        {
-            Debug.LogError("Failed to generate target letters. Aborting hacking sequence.");
-            isHackingActive = false; // Reset state on failure
-            yield break; // Stop here if no letters were generated
-        }
-
-        hackingPrompt.text = "To bypass the barrier, press the correct letters as they appear. Press T when ready."; // Update prompt
-        yield return new WaitUntil(() => Input.GetKeyDown(KeyCode.T)); // Wait for the second T press
-
-        hackingCoroutine = StartCoroutine(HackingSequence()); // Start the hacking sequence
+        hackingPrompt.text = "To bypass the barrier, press the correct letters as they appear. The letters appear in a random order. If the hack isn't complete in 4 seconds after the first letter appears countermeasures will be activated to the hack and its location.\n\nPress T to proceed."; // Show detailed instructions
     }
 
-    private IEnumerator HackingSequence()
+    private IEnumerator StartPreparationPhase()
     {
-        float totalTimer = 4f; // Total time allowed for hacking
-        currentChallengeIndex = 0; // Reset challenge index
+        isInInstructionPhase = false; // End instruction phase
+        hackingPrompt.text = "Prepare for hacking..."; // Show preparation message
+        yield return new WaitForSeconds(2f); // Wait 2 seconds for preparation
 
-        if (targetLetters.Count == 0) // Ensure target letters exist
+        if (playerExitedDuringPhase) // Reset terminal if player exits during preparation
         {
-            Debug.LogError("No target letters generated. Exiting sequence.");
+            ResetTerminal();
             yield break;
         }
 
-        hackingPrompt.text = $"Press {targetLetters[currentChallengeIndex]}"; // Show the first challenge letter
+        StartInputPhase(); // Transition to input phase
+    }
 
-        while (totalTimer > 0)
+    private void StartInputPhase()
+    {
+        isInputPhaseActive = true; // Mark input phase as active
+        hackingTimer = 4f; // Reset hacking timer
+
+        GenerateRandomLetters(); // Generate the random letters for hacking
+        if (targetLetters.Count == 0) // If no letters generated, abort process
         {
-            if (isHacked) yield break; // Stop timer if hacking succeeds
-
-            totalTimer -= Time.deltaTime;
-
-            if (currentChallengeIndex >= targetLetters.Count) // All challenges completed
-            {
-                CompleteHacking(); // Trigger success
-                yield break; // Exit the coroutine
-            }
-
-            yield return null; // Wait for next frame
+            Debug.LogError("Failed to generate target letters."); // Log error
+            isHackingActive = false; // Reset active state
+            isInputPhaseActive = false; // Reset input phase
+            return; // Stop process
         }
 
-        if (!isHacked) ActivateTurret(); // Only activate turret if hacking failed
+        hackingPrompt.text = $"Press {targetLetters[0]}"; // Display first letter
+        Debug.Log($"Generated letters: {string.Join(", ", targetLetters)}"); // Log letters
     }
 
     private void GenerateRandomLetters()
     {
-        targetLetters.Clear(); // Clear any existing letters
-        hasGeneratedLetters = false; // Reset generated flag
+        targetLetters.Clear(); // Clear previous letters
+        char[] validLetters = { 'h', 'j', 'k', 'l' }; // Set valid letters
+        HashSet<char> uniqueLetters = new HashSet<char>();
 
-        HashSet<char> uniqueLetters = new HashSet<char>(); // Ensure unique letters are selected
-
-        while (uniqueLetters.Count < 3) // Ensure three unique letters are generated
+        while (uniqueLetters.Count < 4) // Ensure 4 unique letters are generated
         {
-            char randomLetter = alphabet[Random.Range(0, alphabet.Count)]; // Pick a random letter from the alphabet
+            char randomLetter = validLetters[Random.Range(0, validLetters.Length)];
             uniqueLetters.Add(randomLetter);
         }
 
-        targetLetters.AddRange(uniqueLetters);
-
-        if (targetLetters.Count == 3)
-        {
-            hasGeneratedLetters = true; // Mark as successfully generated
-            Debug.Log($"Generated letters: {string.Join(", ", targetLetters)}"); // Log generated letters
-        }
-        else
-        {
-            Debug.LogError("Letter generation failed unexpectedly."); // Fallback error log
-        }
+        targetLetters.AddRange(uniqueLetters); // Add generated letters
     }
 
     private void CheckPlayerInput()
     {
-        if (currentChallengeIndex >= targetLetters.Count) return; // Prevent out-of-bounds access
+        if (currentChallengeIndex >= targetLetters.Count) return; // Prevent out-of-bounds errors
 
-        if (Input.anyKeyDown) // Ensure only one key press is handled per frame
+        if (Input.anyKeyDown) // Check if any key is pressed
         {
-            foreach (KeyCode key in System.Enum.GetValues(typeof(KeyCode)))
+            foreach (KeyCode key in System.Enum.GetValues(typeof(KeyCode))) // Loop through keys
             {
                 if (Input.GetKeyDown(key))
                 {
-                    char pressedChar = key.ToString().ToLower()[0]; // Convert KeyCode to lowercase char
-                    char expectedChar = targetLetters[currentChallengeIndex]; // Get expected char
+                    char pressedChar = key.ToString().ToLower()[0]; // Convert to lowercase
+                    char expectedChar = targetLetters[currentChallengeIndex]; // Get expected letter
 
-                    Debug.Log($"Pressed: {pressedChar}, Expected: {expectedChar}"); // Debug input and expected value
-
-                    if (pressedChar == expectedChar) // Check if input matches
+                    if (pressedChar == expectedChar) // Check match
                     {
-                        Debug.Log($"Correct key pressed: {pressedChar}");
-                        currentChallengeIndex++; // Move to next challenge
-
+                        currentChallengeIndex++; // Advance to next letter
+                        hackingTimer = 4f; // Reset the timer for the next letter
                         if (currentChallengeIndex < targetLetters.Count)
                         {
                             hackingPrompt.text = $"Press {targetLetters[currentChallengeIndex]}"; // Update prompt
                         }
                         else
                         {
-                            CompleteHacking(); // All letters completed successfully
-                            StopHackingCoroutine(); // Stop coroutine
+                            CompleteHacking(); // Hacking successful
                         }
                     }
                     else
                     {
-                        Debug.Log($"Wrong key pressed! Expected: {expectedChar}, but got: {pressedChar}");
-                        ActivateTurret(); // Trigger failure
-                        StopHackingCoroutine(); // Stop coroutine
+                        TriggerHackingFailure(); // Handle failure on incorrect key
                     }
 
-                    break; // Stop after processing one keypress
+                    break; // Stop after handling one key
                 }
             }
         }
@@ -196,62 +205,77 @@ public class WallTerminalController : MonoBehaviour
 
     private void CompleteHacking()
     {
-        if (isHackingFailed) return; // Prevent success logic if already failed
+        if (isHackingFailed) return; // Skip if already failed
 
-        hackingPrompt.text = "Hacking successful! Barrier deactivated permanently!"; // Show success message
-        linkedBarrier?.PermanentlyDisableBarrier(); // Disable the linked barrier
-        isHacked = true; // Mark terminal as permanently hacked
+        hackingPrompt.text = "Hacking successful! Barrier deactivated permanently!"; // Success message
+
+        // Trigger the deactivation process of the linked barrier
+        if (linkedBarrier != null)
+        {
+            linkedBarrier.SetBarrierState(EnergyBarrierController.BarrierState.Deactivating); // Start deactivation process
+        }
+
+        isHacked = true; // Mark as hacked
         isHackingActive = false; // Reset hacking state
-        targetLetters.Clear(); // Clear the challenges
-        turretPrefab?.SetActive(false); // Ensure turret is deactivated
-        StopHackingCoroutine(); // Stop active hacking
+        isInputPhaseActive = false; // End input phase
+        targetLetters.Clear(); // Clear challenges
+        turretPrefab?.SetActive(false); // Deactivate turret
     }
 
-    private void ActivateTurret()
+    private void TriggerHackingFailure()
     {
-        if (isHacked || !isHackingFailed) return; // Prevent turret activation on success
-
-        Debug.Log("Hacking failed! Timer expired or wrong key pressed.");
-        turretPrefab?.SetActive(true); // Activate the turret
-        hackingPrompt.text = "Hacking failed! Turret activated!"; // Show failure message
         isHackingFailed = true; // Mark hacking as failed
-        StopHackingCoroutine(); // Stop active hacking
-        StartCoroutine(ResetTerminalAfterDelay(5f)); // Reset terminal after delay
+        isInputPhaseActive = false; // End input phase
+        isTerminalLocked = true; // Lock the terminal
+
+        if (enemyPrefab != null) // Enable the enemy on failure
+        {
+            enemyPrefab.SetActive(true); // Activate the enemy prefab
+            enemyPrefab.transform.position = enemySpawnPoint.position; // Set enemy position
+            enemyPrefab.transform.rotation = enemySpawnPoint.rotation; // Set enemy rotation
+        }
+
+        if (turretPrefab != null)
+        {
+            turretPrefab.SetActive(true); // Activate turret
+        }
+
+        StartCoroutine(DisplayFailureMessages()); // Start failure sequence
+    }
+
+    private IEnumerator DisplayFailureMessages()
+    {
+        hackingPrompt.color = Color.red; // Change text color to red
+
+        hackingPrompt.text = "Hacking failed! Turret activated."; // Display failure message
+        yield return new WaitForSeconds(5f); // Display for 5 seconds
+
+        hackingPrompt.text = "Terminal Locked for 10 seconds!"; // Notify player of lock
+        yield return new WaitForSeconds(10f); // Lock duration
+
+        isTerminalLocked = false; // Unlock terminal
+        hackingPrompt.color = Color.white; // Reset text color to white
+        ResetTerminal(); // Reset terminal state
+    }
+
+    private void ResetTerminal()
+    {
+        ResetHackingState(); // Reset all hacking states
+        if (isPlayerInRange && !isHacked && !isTerminalLocked) // Show interaction prompt if player is near and not hacked
+        {
+            hackingPrompt.text = "Press T to interact with terminal."; // Reset interaction prompt
+        }
     }
 
     private void ResetHackingState()
     {
-        targetLetters.Clear(); // Clear previous challenges
-        currentChallengeIndex = 0; // Reset challenge index
-        isHackingFailed = false; // Reset hacking failed state
-        isHackingActive = false; // Ensure hacking is inactive initially
-        hasGeneratedLetters = false; // Reset generated letters flag
-    }
-
-    private IEnumerator ResetTerminalAfterDelay(float delay)
-    {
-        yield return new WaitForSeconds(delay); // Wait for reset delay
-        if (!isHacked) // Only reset if terminal isnt permanently hacked
-        {
-            ResetHackingState(); // Reset the hacking state
-            if (isPlayerInRange) // Only show prompt if player is still in range
-            {
-                hackingPrompt.text = "Press T to interact with terminal."; // Reset prompt
-            }
-            else
-            {
-                hackingPrompt.text = ""; // Clear the prompt if player has left the range
-            }
-            turretPrefab?.SetActive(false); // Deactivate turret
-        }
-    }
-
-    private void StopHackingCoroutine()
-    {
-        if (hackingCoroutine != null) // Check if coroutine exists
-        {
-            StopCoroutine(hackingCoroutine); // Stop active coroutine
-            hackingCoroutine = null; // Clear reference
-        }
+        targetLetters.Clear(); // Clear challenges
+        currentChallengeIndex = 0; // Reset index
+        isHackingFailed = false; // Reset failed state
+        isHackingActive = false; // Reset hacking state
+        isInInstructionPhase = false; // Reset instruction phase
+        isInputPhaseActive = false; // Reset input phase
+        hackingTimer = 4f; // Reset timer
+        playerExitedDuringPhase = false; // Reset player exit flag
     }
 }
