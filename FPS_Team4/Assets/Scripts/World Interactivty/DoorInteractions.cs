@@ -7,7 +7,7 @@ public class DoorInteractions : MonoBehaviour
     GameManager gameManager;
 
     [Header("---- Bools ----")]
-    public bool isLocked = false;
+    [SerializeField] public bool isLocked = false;
     public bool isBroken = false;
     public bool isOpening = false;
     public bool playerInRange = false;
@@ -38,17 +38,19 @@ public class DoorInteractions : MonoBehaviour
     {
         gameManager = GameManager.instance;
         leftDoorMat = leftDoor.GetComponent<Renderer>();
+        rightDoorMat = rightDoor.GetComponent<Renderer>();
         unlockedColor = new Color(0, 0, 1);
         lockedColor = new Color(1, 0, 0);
         brokenColor = new Color(0, 0, 0);
 
-
+        // Set initial color based on locked/broken state
+        UpdateDoorColor();
     }
 
     // Update is called once per frame
     void Update()
     {
-        if(!isLocked || !isBroken)
+        if(!isLocked && !isBroken)
         {
             if (playerInRange)
             {
@@ -89,5 +91,31 @@ public class DoorInteractions : MonoBehaviour
         leftDoor.transform.position = Vector3.Lerp(leftDoor.transform.position, closedPositionLeft.position, t);
         rightDoor.transform.position = Vector3.Lerp(rightDoor.transform.position, closedPositionRight.position, t);
         
+    }
+    
+    public void UnlockDoor()
+    {
+        isLocked = false;
+        UpdateDoorColor();
+        Debug.Log("Door unlocked!");
+    }
+
+    private void UpdateDoorColor()
+    {
+        if(isBroken)
+        {
+            leftDoorMat.material.color = brokenColor;
+            rightDoorMat.material.color = brokenColor;
+        }
+        else if (isLocked)
+        {
+            leftDoorMat.material.color = lockedColor;
+            rightDoorMat.material.color = lockedColor;
+        }
+        else
+        {
+            leftDoorMat.material.color = unlockedColor;
+            rightDoorMat.material.color = unlockedColor;
+        }
     }
 }

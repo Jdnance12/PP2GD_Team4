@@ -11,6 +11,8 @@ public class Bullet : MonoBehaviour
 
     [SerializeField] int speed;
     [SerializeField] int destroyTime;
+
+    private bool isEnemyBullet = false; // Flag to indicate a bullet is an Enemy bullet.
     private void Start()
     {
         rb.velocity = transform.forward * speed;
@@ -20,6 +22,12 @@ public class Bullet : MonoBehaviour
     {
         if (other.isTrigger)
         {
+            return;
+        }
+
+        if(isEnemyBullet && other.CompareTag("Enemy"))
+        {
+            // Ignore collision with other enemies
             return;
         }
 
@@ -35,5 +43,10 @@ public class Bullet : MonoBehaviour
     public void SetDamage(float damageModifier)
     {
         damage = Mathf.RoundToInt(damage * damageModifier);
+    }
+
+    public void SetIsEnemyBullet(bool isEnemy)
+    {
+        isEnemyBullet = isEnemy;
     }
 }
