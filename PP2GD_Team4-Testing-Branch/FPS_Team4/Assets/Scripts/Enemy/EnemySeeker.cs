@@ -1,7 +1,7 @@
 using System.Collections;
 using UnityEngine;
 
-public class EnemySeeker : MonoBehaviour
+public class EnemySeeker : MonoBehaviour, IDamageable
 {
     [Header("Seeker Settings")]
     public float moveSpeed = 5f;

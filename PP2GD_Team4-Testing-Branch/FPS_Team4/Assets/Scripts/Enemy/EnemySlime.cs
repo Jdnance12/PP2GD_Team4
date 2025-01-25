@@ -1,7 +1,7 @@
 using System.Collections;
 using UnityEngine;
 
-public class EnemySlime : MonoBehaviour
+public class EnemySlime : MonoBehaviour, IDamageable
 {
     [Header("Slime Settings")]
     public float hopForce = 5f;
