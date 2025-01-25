@@ -7,8 +7,8 @@ public class LeverInteract : MonoBehaviour
     [Header("References")]
     [SerializeField] private LeverNotification leverNotification; // Notification system for the player
     [SerializeField] private Transform leverTransform; // Transform for the lever arm
-    [SerializeField] private ElectricalHazardNotification hazardNotification; // Notification system for hazards
-    [SerializeField] private ElectricalHazardDamage hazardDamage; // Damage system for hazards
+
+    [Header("Hazard Components")]
     [SerializeField] private ElectricalHazardManager hazardManager; // Reference to the local manager
 
     [Header("Lever Settings")]
@@ -19,7 +19,7 @@ public class LeverInteract : MonoBehaviour
 
     private void Start()
     {
-        // Initialize the levers position to up
+        // Initialize the lever's position to up
         leverTransform.localRotation = Quaternion.Euler(
             leverUpRotation,
             leverTransform.localRotation.eulerAngles.y,
@@ -38,17 +38,15 @@ public class LeverInteract : MonoBehaviour
 
     public void ToggleLever()
     {
-        isLeverUp = !isLeverUp; // Toggle lever state between up and down
-
-        // Update the levers rotation based on its new state
+        isLeverUp = !isLeverUp; // Toggle lever state
         leverTransform.localRotation = Quaternion.Euler(
             isLeverUp ? leverUpRotation : leverDownRotation,
             leverTransform.localRotation.eulerAngles.y,
             leverTransform.localRotation.eulerAngles.z
         );
 
-        // Toggle all hazards dynamically through manager
-        bool isActive = isLeverUp; // Hazards are active when lever is up
-        ElectricalHazardManager.Instance.ToggleHazardsInGroup(transform.parent, isActive); // Manage hazards locally
+        // Use groupTag instead of the hierarchy
+        string groupTag = "LeverBase"; // Replace with the correct tag for this lever group
+        ElectricalHazardManager.Instance.ToggleHazardsInGroup(groupTag, isLeverUp); // Toggle hazards by group
     }
 }

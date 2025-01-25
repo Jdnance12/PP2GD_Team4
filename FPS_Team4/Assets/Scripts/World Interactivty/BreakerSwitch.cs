@@ -9,11 +9,17 @@ public class BreakerSwitch : MonoBehaviour
     [SerializeField] private ElectricalHazardNotification notificationSystem; // Notification script
     [SerializeField] private ElectricalHazardDamage damageSystem; // Damage script
 
-    private bool isSystemActive = true; // Tracks if system is active
+    [Header("Group Settings")]
+    [SerializeField] private string groupTag; // Identifier for the hazard group this switch controls
+
+    private bool isSystemActive = true; // Tracks if the system is active
 
     public void ToggleBreaker()
     {
         isSystemActive = !isSystemActive; // Toggle system state
-        ElectricalHazardManager.Instance.ToggleHazardsInGroup(transform.parent, isSystemActive); // Group-specific toggle
+        Debug.Log($"Breaker toggled. New state: {isSystemActive}"); // Log state toggle
+
+        // Use the groupTag to toggle hazards
+        ElectricalHazardManager.Instance.ToggleHazardsInGroup(groupTag, isSystemActive); // Group-specific toggle
     }
 }

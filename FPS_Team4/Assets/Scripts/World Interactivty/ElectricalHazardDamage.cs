@@ -10,14 +10,15 @@ public class ElectricalHazardDamage : MonoBehaviour
     [SerializeField] private ParticleSystem[] hazardEffects; // Visual effects for sparks/arcs
     [SerializeField] private AudioSource hazardSound; // Looping hazard sound (FUTURE ITERATION)
 
+    [Header("Group Settings")]
+    [SerializeField] private string groupTag; // Identifier for the hazard group
+
     private bool isActive = true; // Tracks if damage system is active
 
     private void Start()
     {
-        ElectricalHazardManager.Instance.RegisterHazard(this); // Register with manager
-        ToggleHazard(isActive); // Initialize hazard state
+        ElectricalHazardManager.Instance.RegisterHazard(this); // Register this hazard with the manager
     }
-
 
     private void OnTriggerStay(Collider other)
     {
@@ -33,11 +34,10 @@ public class ElectricalHazardDamage : MonoBehaviour
     public void ToggleHazard(bool state)
     {
         isActive = state; // Enable or disable hazard system
-
         foreach (var effect in hazardEffects)
         {
             if (state) effect.Play(); // Play effects if active
-            else effect.Stop(); // Stop effects if inactive
+            else effect.Stop(true, ParticleSystemStopBehavior.StopEmittingAndClear); // Stop and clear particles
         }
 
         if (hazardSound != null)
@@ -46,4 +46,6 @@ public class ElectricalHazardDamage : MonoBehaviour
             else hazardSound.Stop(); // Stop sound if inactive
         }
     }
+
+    public string GetGroupTag() => groupTag; // Getter for the group tag
 }
