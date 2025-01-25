@@ -162,6 +162,7 @@ public class EnemyBasic : MonoBehaviour, IDamageable, IDisrupt
         if(bulletComponent != null )
         {
             bulletComponent.SetDamage(shootDamage);
+            bulletComponent.SetIsEnemyBullet(true); // Mark bullet as an enemy bullet so it ignores other enemies
         }
 
         yield return new WaitForSeconds(shootRate);

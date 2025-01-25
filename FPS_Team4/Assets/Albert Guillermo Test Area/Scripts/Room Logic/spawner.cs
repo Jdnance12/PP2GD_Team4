@@ -112,10 +112,11 @@ public class spawner : MonoBehaviour
             return; // end this method if enemy is boss and is defeated
         }
         spawnCount--;
-        if (startSpawning && spawnCount < numToSpawn)
-        {
-            StartCoroutine(SpawnEnemies());
-        }
+        // This was causing issues with the spawn rate
+        //if (startSpawning && spawnCount < numToSpawn)
+        //{
+        //    StartCoroutine(SpawnEnemies());
+        //}
     }
 
     void DeactivateOtherSpawners()

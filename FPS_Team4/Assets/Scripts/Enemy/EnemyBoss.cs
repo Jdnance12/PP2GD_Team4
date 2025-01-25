@@ -52,23 +52,26 @@ public class EnemyBoss : MonoBehaviour, IDamageable
     // Update is called once per frame
     void Update()
     {
-        if (!isDisrupted)
+        if (gameObject != null)
         {
-            if (playerInRange && !CanSeePlayer())
+            if (!isDisrupted)
             {
-                if (navAgent.remainingDistance < 0.01f)
+                if (playerInRange && !CanSeePlayer())
                 {
-                    StartCoroutine(Roaming());
+                    if (navAgent.remainingDistance < 0.01f)
+                    {
+                        StartCoroutine(Roaming());
+                    }
                 }
-            }
-            else if (!playerInRange)
-            {
-                if (navAgent.remainingDistance < 0.01f)
+                else if (!playerInRange)
                 {
-                    StartCoroutine(Roaming());
+                    if (navAgent.remainingDistance < 0.01f)
+                    {
+                        StartCoroutine(Roaming());
+                    }
                 }
+                StartCoroutine(Roaming());
             }
-            StartCoroutine(Roaming());
         }
     }
 
@@ -172,7 +175,7 @@ public class EnemyBoss : MonoBehaviour, IDamageable
         {
             GameManager.instance.IncrementBossKillCount(); // increment boss kill count
             Instantiate(partsPrefab, transform.position, Quaternion.identity); // Drops the parts currency when the enemy is destoryed
-            Instantiate(nodePrefab, transform.position, Quaternion.identity);
+            //Instantiate(nodePrefab, transform.position, Quaternion.identity);
             Destroy(gameObject);
         }
     }
