@@ -9,6 +9,7 @@ public class LeverInteract : MonoBehaviour
     [SerializeField] private Transform leverTransform; // Transform for the lever arm
     [SerializeField] private ElectricalHazardNotification hazardNotification; // Notification system for hazards
     [SerializeField] private ElectricalHazardDamage hazardDamage; // Damage system for hazards
+    [SerializeField] private ElectricalHazardManager hazardManager; // Reference to the local manager
 
     [Header("Lever Settings")]
     public float leverUpRotation = 30f; // Lever rotation when in up position
@@ -39,16 +40,15 @@ public class LeverInteract : MonoBehaviour
     {
         isLeverUp = !isLeverUp; // Toggle lever state between up and down
 
-        // Update the lever's rotation based on its new state
+        // Update the levers rotation based on its new state
         leverTransform.localRotation = Quaternion.Euler(
             isLeverUp ? leverUpRotation : leverDownRotation,
             leverTransform.localRotation.eulerAngles.y,
             leverTransform.localRotation.eulerAngles.z
         );
 
-        // Toggle hazard systems based on lever state
+        // Toggle all hazards dynamically through manager
         bool isActive = isLeverUp; // Hazards are active when lever is up
-        hazardNotification.ToggleNotification(isActive); // Enable or disable notifications
-        hazardDamage.ToggleHazard(isActive); // Enable or disable damage
+        ElectricalHazardManager.Instance.ToggleHazardsInGroup(transform.parent, isActive); // Manage hazards locally
     }
 }

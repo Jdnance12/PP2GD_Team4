@@ -14,8 +14,10 @@ public class ElectricalHazardDamage : MonoBehaviour
 
     private void Start()
     {
+        ElectricalHazardManager.Instance.RegisterHazard(this); // Register with manager
         ToggleHazard(isActive); // Initialize hazard state
     }
+
 
     private void OnTriggerStay(Collider other)
     {

@@ -14,7 +14,6 @@ public class BreakerSwitch : MonoBehaviour
     public void ToggleBreaker()
     {
         isSystemActive = !isSystemActive; // Toggle system state
-        notificationSystem.ToggleNotification(isSystemActive); // Toggle notifications
-        damageSystem.ToggleHazard(isSystemActive); // Toggle hazard effects and damage
+        ElectricalHazardManager.Instance.ToggleHazardsInGroup(transform.parent, isSystemActive); // Group-specific toggle
     }
 }
