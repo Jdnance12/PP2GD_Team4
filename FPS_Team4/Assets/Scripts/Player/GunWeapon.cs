@@ -166,4 +166,28 @@ public class GunWeapon : MonoBehaviour
 
         playerArm.localPosition = armOriginalPosition;
     }
+    public void DisableWeapon()
+    {
+        // Stop any ongoing firing coroutine
+        if (isFiring)
+        {
+            isFiring = false;
+            StopCoroutine(FireCoroutine());
+        }
+
+        // Stop audio
+        if (audioSource != null)
+        {
+            audioSource.Stop();
+        }
+    }
+
+    public void EnableWeapon()
+    {
+        // Enable audio
+        if (audioSource != null)
+        {
+            audioSource.enabled = true;
+        }
+    }
 }

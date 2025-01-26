@@ -8,6 +8,8 @@ public class DoorController_Camera : MonoBehaviour
     public GameObject inText;
     public string doorOpenAnimationName, doorCloseAnimationName;
 
+    public float autoCloseDelay = 5.0f;
+
     // Start is called before the first frame update
     void Update()
     {
@@ -37,13 +39,17 @@ public class DoorController_Camera : MonoBehaviour
                 {
                     if(doorAnim.GetCurrentAnimatorStateInfo(0).IsName(doorOpenAnimationName))
                     {
+                        Debug.Log("Door is closing");
                         doorAnim.ResetTrigger("open");
                         doorAnim.SetTrigger("close");
+                        StopCoroutine(AutoCloseDoor(doorAnim));
                     }
                     if(doorAnim.GetCurrentAnimatorStateInfo(0).IsName(doorCloseAnimationName))
                     {
+                        Debug.Log("Door is opening");
                         doorAnim.ResetTrigger("close");
                         doorAnim.SetTrigger("open");
+                        StartCoroutine(AutoCloseDoor(doorAnim));
                     }
                 }
             }
@@ -57,6 +63,18 @@ public class DoorController_Camera : MonoBehaviour
         {
             inText.SetActive(false);
             //Debug.Log("inText set to inactive");
+        }
+    }
+
+    private IEnumerator AutoCloseDoor(Animator doorAnim)
+    {
+        Debug.Log("AutoCloseDoor coroutine started");
+        yield return new WaitForSeconds(autoCloseDelay);
+        if (doorAnim.GetCurrentAnimatorStateInfo(0).IsName(doorOpenAnimationName))
+        {
+            Debug.Log("Closing the door automatically");
+            doorAnim.ResetTrigger("open");
+            doorAnim.SetTrigger("close");
         }
     }
 }

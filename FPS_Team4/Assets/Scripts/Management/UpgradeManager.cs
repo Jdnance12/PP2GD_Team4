@@ -172,6 +172,8 @@ public class UpgradeManager : MonoBehaviour
     {
         if (playerCurrency >= gunDmgCost && gunDmgUpCount < 4)
         {
+            // Check if this is the first upgrade
+            bool isFirstUpgrade = (gunDmgUpCount == 0);
 
             //Update Player Currency
             SubtractPartsCount(gunDmgCost);
@@ -184,6 +186,12 @@ public class UpgradeManager : MonoBehaviour
             gunDmgUpCount++;
 
             UpdateAmounts();
+
+            // Re-enable gun if this is the first upgrade
+            //if (isFirstUpgrade)
+            //{
+            //    GameManager.instance.player.GetComponent<GunWeapon>().EnableWeapon();
+            //}
         }
     }
     public void BladeDmgUpgrade()

@@ -158,6 +158,8 @@ public class Progression_Manager : MonoBehaviour
         {
             gameManager.playerScript.canMove = false;
 
+            
+
             wallWhole.SetActive(false);
             wallBroken.SetActive(true);
             CharacterController controller = player.GetComponent<CharacterController>();
@@ -176,6 +178,8 @@ public class Progression_Manager : MonoBehaviour
                 "Press E and select it. You have enemies in the area searching for you.";
             gameManager.menuActive.SetActive(true);
             bladeTutorial = true;
+            // Disable weapon firing
+            //GameManager.instance.player.GetComponent<GunWeapon>().DisableWeapon();
         }
         // When all hall enemies are killed trigger misc. menu to show heal station tutorial
         if(hallenemiesKilled == true && healStationTutorial == false)
