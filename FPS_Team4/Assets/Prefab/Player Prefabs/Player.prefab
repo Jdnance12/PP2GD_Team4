@@ -1099,6 +1099,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3144466397479215342}
   - component: {fileID: 3144466397479215339}
+  - component: {fileID: 8810039591580637163}
   - component: {fileID: 3144466397479215340}
   - component: {fileID: 3144466397479215341}
   m_Layer: 0
@@ -1143,6 +1144,22 @@ MonoBehaviour:
   lockMin: -85
   lockMax: 85
   invertY: 0
+--- !u!114 &8810039591580637163
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3144466397479215343}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6197086b4a1f6bd4d896c0e4c61a0549, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  interactionDistance: 0
+  inText: {fileID: 0}
+  doorOpenAnimationName: 
+  doorCloseAnimationName: 
 --- !u!20 &3144466397479215340
 Camera:
   m_ObjectHideFlags: 0
@@ -3875,7 +3892,6 @@ MonoBehaviour:
   waveSpeed: 50
   maxDistance: 20
   displayDuration: 0.1
-  playerAnim: {fileID: 9100000, guid: 68ee68fa9015d7046aab4b5d550a4ad5, type: 2}
 --- !u!1 &9054159138899995058
 GameObject:
   m_ObjectHideFlags: 0
