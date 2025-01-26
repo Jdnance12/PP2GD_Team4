@@ -5,59 +5,66 @@ using UnityEngine;
 
 public static class HazardRegistry
 {
-    public static List<GameObject> HazardSites = new List<GameObject>(); // Central hazard list
-
+    private static Dictionary<string, List<GameObject>> siteHazards = new Dictionary<string, List<GameObject>>(); // Stores hazards by site
 
     public static void RegisterHazard(GameObject hazardSite)
     {
-        if (!HazardSites.Contains(hazardSite)) // Prevent duplicates
-        {
-            HazardSites.Add(hazardSite); // Add new hazard site
-            Debug.Log($"Registered Hazard: {hazardSite.name}. Total hazards: {HazardSites.Count}"); // Log registration
-        }
+        string siteName = GetParentSiteName(hazardSite); // Get the parent site name
+
+    if (siteName == null)
+    {
+        Debug.LogWarning($"Hazard {hazardSite.name} has no valid parent site!"); // Warn if no parent site
+        return;
+    }
+
+    if (!siteHazards.ContainsKey(siteName))
+    {
+        siteHazards[siteName] = new List<GameObject>(); // Create a new list for this site
+    }
+
+    if (!siteHazards[siteName].Contains(hazardSite)) // Prevent duplicates
+    {
+        siteHazards[siteName].Add(hazardSite); // Add hazard to the site
+        Debug.Log($"Registered Hazard: {hazardSite.name} under {siteName}. Total hazards: {siteHazards[siteName].Count}");
+    }
     }
 
     public static void UnregisterHazard(GameObject hazardSite)
     {
-        if (HazardSites.Contains(hazardSite)) // Check if hazard exists
+        string siteName = GetParentSiteName(hazardSite); // Get the parent site name
+
+        if (siteName != null && siteHazards.ContainsKey(siteName))
         {
-            HazardSites.Remove(hazardSite); // Remove hazard site
-            Debug.Log($"Unregistered Hazard: {hazardSite.name}. Total hazards: {HazardSites.Count}"); // Log unregistration
+            siteHazards[siteName].Remove(hazardSite); // Remove hazard from the site
+            Debug.Log($"Unregistered Hazard: {hazardSite.name} under {siteName}. Remaining hazards: {siteHazards[siteName].Count}");
+
+            if (siteHazards[siteName].Count == 0)
+            {
+                siteHazards.Remove(siteName); // Remove site if no hazards remain
+            }
         }
     }
 
-    // Check for duplicate tags among registered hazards
-    public static void ValidateUniqueTags()
+    public static List<GameObject> GetHazardsBySite(string siteName)
     {
-        Dictionary<string, List<GameObject>> tagMap = new Dictionary<string, List<GameObject>>();
-
-        // Group hazards by tags
-        foreach (var hazard in HazardSites)
+        if (siteHazards.ContainsKey(siteName))
         {
-            string tag = hazard.tag;
-
-            if (!tagMap.ContainsKey(tag))
-            {
-                tagMap[tag] = new List<GameObject>();
-            }
-
-            tagMap[tag].Add(hazard);
+            return siteHazards[siteName]; // Return hazards for the site
         }
 
-        // Log duplicate tags
-        foreach (var entry in tagMap)
+        Debug.LogWarning($"No hazards found for site {siteName}"); // Warn if no hazards found
+        return new List<GameObject>();
+    }
+
+    public static string GetParentSiteName(GameObject hazard)
+    {
+        Transform current = hazard.transform; // Start from the hazards transform
+
+        while (current.parent != null) // Go up the hierarchy to find the root parent
         {
-            if (entry.Value.Count > 1) // More than one object with the same tag
-            {
-                Debug.LogWarning($"Duplicate Tag Detected: {entry.Key}. Objects sharing this tag:");
-
-                foreach (var obj in entry.Value)
-                {
-                    Debug.LogWarning($" - {obj.name} (Position: {obj.transform.position})");
-                }
-
-                Debug.LogWarning($"Please assign unique tags for these objects for each site. It is coded to only look for unique tags for each Base.");
-            }
+            current = current.parent;
         }
+
+        return current.name; // Return the root objects name
     }
 }

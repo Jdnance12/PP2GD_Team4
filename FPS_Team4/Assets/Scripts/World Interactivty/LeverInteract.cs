@@ -7,6 +7,7 @@ public class LeverInteract : MonoBehaviour
     [Header("References")]
     [SerializeField] private LeverNotification leverNotification; // Notification system for the player
     [SerializeField] private Transform leverTransform; // Transform for the lever arm
+    [SerializeField] private AudioSource clickSound; // Audio source for the click sound
 
     [Header("Lever Settings")]
     public float leverUpRotation = 30f; // Lever rotation when in up position
@@ -44,11 +45,18 @@ public class LeverInteract : MonoBehaviour
             leverTransform.localRotation.eulerAngles.z
         );
 
-        // Toggle all hazards
-        bool isActive = isLeverUp; // Hazards are active when lever is up
-        foreach (var hazardSite in HazardRegistry.HazardSites)
+        // Play the click sound for both on and off states
+        if (clickSound != null)
         {
-            hazardSite.GetComponent<HazardSite>()?.ToggleHazard(isActive); // Toggle hazard site
+            clickSound.Play(); // Play the sound
+            Debug.Log("Click sound played.");
+        }
+        // Get the top-level parent name using HazardRegistry
+        string parentSiteName = HazardRegistry.GetParentSiteName(gameObject);
+
+        foreach (var hazard in HazardRegistry.GetHazardsBySite(parentSiteName))
+        {
+            hazard.GetComponent<HazardSite>()?.ToggleHazard(isLeverUp); // Toggle hazard state
         }
     }
 }

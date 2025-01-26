@@ -19,7 +19,6 @@ public class HazardSite : MonoBehaviour
         }
 
         HazardRegistry.RegisterHazard(gameObject); // Register this hazard site
-        Debug.Log($"Hazard registered: {gameObject.name}"); // Log registration
     }
 
     private void OnDestroy()

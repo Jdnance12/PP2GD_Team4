@@ -8,6 +8,14 @@ public class ElectricalHazardNotification : MonoBehaviour
     [Header("UI Elements")]
     [SerializeField] private TMP_Text hazardNotificationText; // Text for hazard notification
     [SerializeField] private GameObject notificationCanvas; // Parent canvas for notifications
+
+    [Header("Audio Settings")]
+    [SerializeField] private AudioSource sparksAudio; // Audio source for sparks
+    [SerializeField] private AudioSource boltsAudio; // Audio source for bolts
+    [SerializeField] private AudioSource sparksAudio1; // Audio source for additional sparks
+    [SerializeField] private AudioSource boltsAudio1; // Audio source for additional bolts
+
+    [Header("Visial Warning Settings")]
     public float displayDuration = 2f; // Duration for notification visibility
     public float pulseDuration = 0.5f; // Pulse animation duration
     public int pulseCount = 3; // Number of pulses
@@ -93,6 +101,23 @@ public class ElectricalHazardNotification : MonoBehaviour
         if (!isActive && hazardNotificationText != null)
         {
             hazardNotificationText.gameObject.SetActive(false); // Hide notification if deactivated
+        }
+
+        if (state) // Notification is active
+        {
+            sparksAudio?.Play(); // Start sparks sound
+            sparksAudio1?.PlayDelayed(0.2f); // Start additional sparks sound with delay
+            boltsAudio?.PlayDelayed(0.5f); // Start bolts sound with delay
+            boltsAudio1?.PlayDelayed(0.7f); // Start additional bolts sound with delay
+            Debug.Log("Electrical sounds playing.");
+        }
+        else // Notification is inactive
+        {
+            sparksAudio?.Stop(); // Stop sparks sound
+            sparksAudio1?.Stop(); // Stop additional sparks sound
+            boltsAudio?.Stop(); // Stop bolts sound
+            boltsAudio1?.Stop(); // Stop additional bolts sound
+            Debug.Log("Electrical sounds stopped.");
         }
     }
 }

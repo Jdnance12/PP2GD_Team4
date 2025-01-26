@@ -8,7 +8,7 @@ public class ElectricalHazardDamage : MonoBehaviour
     [Header("Hazard Settings")]
     [SerializeField] private float damagePerSecond = 40f; // Damage applied per second
     [SerializeField] private ParticleSystem[] hazardEffects; // Visual effects for sparks/arcs
-    [SerializeField] private AudioSource hazardSound; // Looping hazard sound
+    // [SerializeField] private AudioSource hazardSound; // Looping hazard sound
     [SerializeField] private Collider hazardCollider; // Hazard trigger collider
 
     private bool isActive = true; // Tracks if damage system is active
@@ -56,19 +56,19 @@ public class ElectricalHazardDamage : MonoBehaviour
             }
         }
 
-        if (hazardSound != null) // Toggle sound
-        {
-            if (state)
-            {
-                hazardSound.Play(); // Play sound
-                Debug.Log($"Sound {hazardSound.clip.name} played."); // Log sound activation
-            }
-            else
-            {
-                hazardSound.Stop(); // Stop sound
-                Debug.Log("Sound stopped."); // Log sound deactivation
-            }
-        }
+        // if (hazardSound != null) // Toggle sound
+        // {
+        //     if (state)
+        //     {
+        //         hazardSound.Play(); // Play sound
+        //         Debug.Log($"Sound {hazardSound.clip.name} played."); // Log sound activation
+        //     }
+        //     else
+        //     {
+        //         hazardSound.Stop(); // Stop sound
+        //         Debug.Log("Sound stopped."); // Log sound deactivation
+        //     }
+        // }
 
         // Toggle collider
         if (hazardCollider != null)
