@@ -52,17 +52,17 @@ public class ElectricalHazardManager : MonoBehaviour
     {
         Debug.Log($"Toggling hazards for group: {groupTag}, State: {state}"); // Log group toggle
 
-        foreach (var hazard in hazards)
-        {
-            if (hazard.GetGroupTag() == groupTag) // Match hazards by groupTag
-            {
-                Debug.Log($"Toggling hazard: {hazard.name} to state {state}"); // Log toggling hazard
-                hazard.ToggleHazard(state); // Toggle hazard
-            }
-            else
-            {
-                Debug.Log($"Hazard {hazard.name} does NOT belong to group {groupTag}"); // Log hazard mismatch
-            }
-        }
+        // foreach (var hazard in hazards)
+        // {
+        //     if (hazard.GetGroupTag() == groupTag) // Match hazards by groupTag
+        //     {
+        //         Debug.Log($"Toggling hazard: {hazard.name} to state {state}"); // Log toggling hazard
+        //         hazard.ToggleHazard(state); // Toggle hazard
+        //     }
+        //     else
+        //     {
+        //         Debug.Log($"Hazard {hazard.name} does NOT belong to group {groupTag}"); // Log hazard mismatch
+        //     }
+        // }
     }
 }

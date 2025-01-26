@@ -7,9 +7,8 @@ public class LeverInteract : MonoBehaviour
     [Header("References")]
     [SerializeField] private LeverNotification leverNotification; // Notification system for the player
     [SerializeField] private Transform leverTransform; // Transform for the lever arm
-
-    [Header("Hazard Components")]
-    [SerializeField] private ElectricalHazardManager hazardManager; // Reference to the local manager
+    [SerializeField] private ElectricalHazardNotification hazardNotification; // Notification system for hazards
+    [SerializeField] private ElectricalHazardDamage hazardDamage; // Damage system for hazards
 
     [Header("Lever Settings")]
     public float leverUpRotation = 30f; // Lever rotation when in up position
@@ -19,7 +18,7 @@ public class LeverInteract : MonoBehaviour
 
     private void Start()
     {
-        // Initialize the lever's position to up
+        // Initialize the levers position to up
         leverTransform.localRotation = Quaternion.Euler(
             leverUpRotation,
             leverTransform.localRotation.eulerAngles.y,
@@ -38,15 +37,18 @@ public class LeverInteract : MonoBehaviour
 
     public void ToggleLever()
     {
-        isLeverUp = !isLeverUp; // Toggle lever state
+        isLeverUp = !isLeverUp; // Toggle lever state between up and down
+
+        // Update the levers rotation based on its new state
         leverTransform.localRotation = Quaternion.Euler(
             isLeverUp ? leverUpRotation : leverDownRotation,
             leverTransform.localRotation.eulerAngles.y,
             leverTransform.localRotation.eulerAngles.z
         );
 
-        // Use groupTag instead of the hierarchy
-        string groupTag = "LeverBase"; // Replace with the correct tag for this lever group
-        ElectricalHazardManager.Instance.ToggleHazardsInGroup(groupTag, isLeverUp); // Toggle hazards by group
+        // Toggle hazard systems based on lever state
+        bool isActive = isLeverUp; // Hazards are active when lever is up
+        hazardNotification.ToggleNotification(isActive); // Enable or disable notifications
+        hazardDamage.ToggleHazard(isActive); // Enable or disable damage
     }
 }
