@@ -8,17 +8,32 @@ public class ElectricalHazardNotification : MonoBehaviour
     [Header("UI Elements")]
     [SerializeField] private TMP_Text hazardNotificationText; // Text for hazard notification
     [SerializeField] private GameObject notificationCanvas; // Parent canvas for notifications
+
+    [Header("Audio Settings")]
+    [SerializeField] private AudioSource sparksAudio; // Audio source for sparks
+    [SerializeField] private AudioSource boltsAudio; // Audio source for bolts
+    [SerializeField] private AudioSource sparksAudio1; // Audio source for additional sparks
+    [SerializeField] private AudioSource boltsAudio1; // Audio source for additional bolts
+
+    [Header("Visial Warning Settings")]
     public float displayDuration = 2f; // Duration for notification visibility
     public float pulseDuration = 0.5f; // Pulse animation duration
     public int pulseCount = 3; // Number of pulses
 
     private bool isPlayerInRange = false; // Tracks if player is in notification range
     private bool isActive = true; // Tracks if notification system is active
+    private Coroutine pulseCoroutine; // Reference to the active PulseText coroutine
 
     private void Start()
     {
         notificationCanvas.SetActive(true); // Keeps canvas active
         hazardNotificationText.gameObject.SetActive(false); // Starts with notification hidden
+        HazardRegistry.RegisterHazard(gameObject); // Add this hazard to the registry
+    }
+
+    private void OnDestroy()
+    {
+        HazardRegistry.UnregisterHazard(gameObject); // Remove this hazard when destroyed
     }
 
     private void OnTriggerEnter(Collider other)
@@ -28,7 +43,12 @@ public class ElectricalHazardNotification : MonoBehaviour
         isPlayerInRange = true; // Player entered range
         hazardNotificationText.gameObject.SetActive(true); // Show notification
         hazardNotificationText.text = "Danger: High Voltage Hazard! System Meltdown Risk!"; // Set notification text
-        StartCoroutine(PulseText()); // Start text pulse animation
+
+        // Ensure only one PulseText coroutine is running
+        if (pulseCoroutine == null)
+        {
+            pulseCoroutine = StartCoroutine(PulseText()); // Start the pulse animation
+        }
     }
 
     private void OnTriggerExit(Collider other)
@@ -37,6 +57,14 @@ public class ElectricalHazardNotification : MonoBehaviour
 
         isPlayerInRange = false; // Player exited range
         hazardNotificationText.gameObject.SetActive(false); // Hide notification
+
+        // Stop the PulseText coroutine if active
+        if (pulseCoroutine != null)
+        {
+            StopCoroutine(pulseCoroutine); // Stop the pulse animation
+            pulseCoroutine = null; // Clear the reference
+            hazardNotificationText.transform.localScale = Vector3.one; // Reset text scale to default
+        }
     }
 
     private IEnumerator PulseText()
@@ -63,6 +91,7 @@ public class ElectricalHazardNotification : MonoBehaviour
             }
         }
 
+        pulseCoroutine = null; // Clear the reference after the animation completes
         hazardNotificationText.transform.localScale = originalScale; // Reset scale
     }
 
@@ -72,6 +101,23 @@ public class ElectricalHazardNotification : MonoBehaviour
         if (!isActive && hazardNotificationText != null)
         {
             hazardNotificationText.gameObject.SetActive(false); // Hide notification if deactivated
+        }
+
+        if (state) // Notification is active
+        {
+            sparksAudio?.Play(); // Start sparks sound
+            sparksAudio1?.PlayDelayed(0.2f); // Start additional sparks sound with delay
+            boltsAudio?.PlayDelayed(0.5f); // Start bolts sound with delay
+            boltsAudio1?.PlayDelayed(0.7f); // Start additional bolts sound with delay
+            Debug.Log("Electrical sounds playing.");
+        }
+        else // Notification is inactive
+        {
+            sparksAudio?.Stop(); // Stop sparks sound
+            sparksAudio1?.Stop(); // Stop additional sparks sound
+            boltsAudio?.Stop(); // Stop bolts sound
+            boltsAudio1?.Stop(); // Stop additional bolts sound
+            Debug.Log("Electrical sounds stopped.");
         }
     }
 }

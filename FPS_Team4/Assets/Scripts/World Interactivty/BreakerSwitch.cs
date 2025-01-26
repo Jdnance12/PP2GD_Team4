@@ -5,16 +5,25 @@ using UnityEngine;
 
 public class BreakerSwitch : MonoBehaviour
 {
-    [Header("Electrical Hazard Components")]
-    [SerializeField] private ElectricalHazardNotification notificationSystem; // Notification script
-    [SerializeField] private ElectricalHazardDamage damageSystem; // Damage script
-
-    private bool isSystemActive = true; // Tracks if system is active
+    private bool isSystemActive = true; // Tracks if the system is active
 
     public void ToggleBreaker()
     {
         isSystemActive = !isSystemActive; // Toggle system state
-        notificationSystem.ToggleNotification(isSystemActive); // Toggle notifications
-        damageSystem.ToggleHazard(isSystemActive); // Toggle hazard effects and damage
+        Debug.Log($"Breaker toggled. New state: {isSystemActive}"); // Log state toggle
+
+        string parentSiteName = transform.parent.name; // Get the parent site name
+
+        if (string.IsNullOrEmpty(parentSiteName)) // Check if parent name exists
+        {
+            Debug.LogWarning($"Breaker {name} has no parent site."); // Log warning
+            return;
+        }
+
+        foreach (var hazard in HazardRegistry.GetHazardsBySite(parentSiteName))
+        {
+            hazard.GetComponent<HazardSite>()?.ToggleHazard(isSystemActive); // Toggle hazard state
+            Debug.Log($"Toggled hazard: {hazard.name} under site: {parentSiteName}. State: {isSystemActive}");
+        }
     }
 }
