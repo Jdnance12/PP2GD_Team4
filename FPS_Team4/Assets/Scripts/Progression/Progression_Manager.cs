@@ -187,6 +187,7 @@ public class Progression_Manager : MonoBehaviour
                 "The heal station heals you to max health. The repair station allows you to upgrade your current weapons and fix any broken tools you have.";
             gameManager.menuActive.SetActive(true);
             healStationTutorial = true;
+            healStationDoor.GetComponent<BoxCollider>().enabled = false;
         }
 
         if(coreComputerScript.playerInteracted && !secondDialogueOpened)

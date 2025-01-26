@@ -37,6 +37,10 @@ public class GunWeapon : MonoBehaviour
     private Vector3 armOriginalPosition;
     private Quaternion armOriginalRotation;
 
+    [Header("---- Audio ----")]
+    [SerializeField] AudioSource audioSource;
+    [SerializeField] AudioClip[] laserSounds;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -56,6 +60,11 @@ public class GunWeapon : MonoBehaviour
         }
 
         //currentDamage = upgradeManager.GetUpgradedGunDamage();
+
+        if (audioSource == null)
+        {
+            audioSource = gameObject.AddComponent<AudioSource>();
+        }
     }
 
     // Update is called once per frame
@@ -88,6 +97,17 @@ public class GunWeapon : MonoBehaviour
             }
 
             Debug.DrawRay(rayOrigin, rayDirection * range, Color.red, 1.0f);
+
+            // Play a random shooting sound
+            if (audioSource != null && laserSounds.Length > 0)
+            {
+                int randomIndex = UnityEngine.Random.Range(0, laserSounds.Length);
+                audioSource.PlayOneShot(laserSounds[randomIndex]);
+            }
+            else
+            {
+                Debug.LogWarning("AudioSource or laserSounds not properly assigned.");
+            }
 
             // Apply visual recoil
             StartCoroutine(ApplyRecoil());

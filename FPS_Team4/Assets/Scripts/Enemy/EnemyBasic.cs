@@ -43,6 +43,10 @@ public class EnemyBasic : MonoBehaviour, IDamageable, IDisrupt
     [SerializeField] GameObject damageTextPos;
     [SerializeField] NavMeshAgent navAgent;
 
+    [Header("---- Audio ----")]
+    [SerializeField] AudioSource audioSource;
+    [SerializeField] AudioClip[] laserSounds;
+
     public float shootDamage; // this holds the modified value for damage
 
     private Vector3 playerDir;
@@ -57,6 +61,18 @@ public class EnemyBasic : MonoBehaviour, IDamageable, IDisrupt
 
         origColor = model.material.color; // To get the original color so flash red will revert back to it.
         navAgent = GetComponent<NavMeshAgent>();
+
+        //// Debug logs to confirm initialization
+        //Debug.Log(gameObject.name + ": AudioSource assigned: " + (audioSource != null));
+        //Debug.Log(gameObject.name + ": Player assigned: " + (player != null));
+        //Debug.Log(gameObject.name + ": Bullet assigned: " + (bullet != null));
+        //Debug.Log(gameObject.name + ": Shoot position assigned: " + (shootPos != null));
+        //Debug.Log(gameObject.name + ": Laser sounds array length: " + laserSounds.Length);
+
+        if (audioSource == null)
+        {
+            audioSource = gameObject.AddComponent<AudioSource>();
+        }
     }
 
     // Update is called once per frame
@@ -158,11 +174,19 @@ public class EnemyBasic : MonoBehaviour, IDamageable, IDisrupt
         isShooting = true;
 
         GameObject newBullet = Instantiate(bullet, shootPos.position, transform.rotation);
+        Debug.Log(gameObject.name + ": Bullet instantiated at position: " + shootPos.position);
         Bullet bulletComponent = newBullet.GetComponent<Bullet>();
         if(bulletComponent != null )
         {
             bulletComponent.SetDamage(shootDamage);
             bulletComponent.SetIsEnemyBullet(true); // Mark bullet as an enemy bullet so it ignores other enemies
+            Debug.Log(gameObject.name + ": Bullet damage set to: " + bulletComponent.damage);
+        }
+
+        if (audioSource != null && laserSounds.Length > 0)
+        {
+            int randomIndex = Random.Range(0, laserSounds.Length);
+            audioSource.PlayOneShot(laserSounds[randomIndex]);
         }
 
         yield return new WaitForSeconds(shootRate);

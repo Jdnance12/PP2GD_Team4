@@ -15,7 +15,21 @@ public class Bullet : MonoBehaviour
     private bool isEnemyBullet = false; // Flag to indicate a bullet is an Enemy bullet.
     private void Start()
     {
-        rb.velocity = transform.forward * speed;
+        if (rb == null)
+        {
+            rb = GetComponent<Rigidbody>();
+        }
+        if (rb != null)
+        {
+            rb.velocity = transform.forward * speed;
+            rb.collisionDetectionMode = CollisionDetectionMode.Continuous;
+            Debug.Log("Bullet velocity set to: " + rb.velocity);
+        }
+        else
+        {
+            Debug.LogWarning("Rigidbody not found on bullet.");
+        }
+        
         Destroy(gameObject, destroyTime);
     }
     private void OnTriggerEnter(Collider other)
@@ -34,7 +48,12 @@ public class Bullet : MonoBehaviour
         IDamageable damageable = other.gameObject.GetComponent<IDamageable>();
         if(damageable != null )
         {
+            Debug.Log("Bullet hit: " + other.gameObject.name);
             damageable.TakeDamage(damage);
+        }
+        else
+        {
+            Debug.Log("Bullet hit non-damagable object: " + other.gameObject.name);
         }
 
         Destroy(gameObject);

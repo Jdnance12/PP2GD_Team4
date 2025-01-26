@@ -64,6 +64,8 @@ public class PlayerController : MonoBehaviour, IDamageable, IRecharge
     [SerializeField] GameObject skillMenu;
     private GunWeapon gunScript;
 
+    
+
     // Start is called before the first frame update
     void Start()
     {

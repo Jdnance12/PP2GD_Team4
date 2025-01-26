@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 892560995}
   - component: {fileID: 892560997}
+  - component: {fileID: 640924084}
   m_Layer: 0
   m_Name: Player Render Camera
   m_TagString: Untagged
@@ -75,6 +76,66 @@ Camera:
   m_OcclusionCulling: 1
   m_StereoConvergence: 10
   m_StereoSeparation: 0.022
+--- !u!114 &640924084
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 892560994}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 948f4100a11a5c24981795d21301da5c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  volumeTrigger: {fileID: 892560995}
+  volumeLayer:
+    serializedVersion: 2
+    m_Bits: 256
+  stopNaNPropagation: 1
+  finalBlitToCameraTarget: 0
+  antialiasingMode: 0
+  temporalAntialiasing:
+    jitterSpread: 0.75
+    sharpness: 0.25
+    stationaryBlending: 0.95
+    motionBlending: 0.85
+  subpixelMorphologicalAntialiasing:
+    quality: 2
+  fastApproximateAntialiasing:
+    fastMode: 0
+    keepAlpha: 0
+  fog:
+    enabled: 1
+    excludeSkybox: 1
+  debugLayer:
+    lightMeter:
+      width: 512
+      height: 256
+      showCurves: 1
+    histogram:
+      width: 512
+      height: 256
+      channel: 3
+    waveform:
+      exposure: 0.12
+      height: 256
+    vectorscope:
+      size: 256
+      exposure: 0.12
+    overlaySettings:
+      linearDepth: 0
+      motionColorIntensity: 4
+      motionGridSize: 64
+      colorBlindnessType: 0
+      colorBlindnessStrength: 1
+  m_Resources: {fileID: 11400000, guid: d82512f9c8e5d4a4d938b575d47f88d4, type: 2}
+  m_ShowToolkit: 0
+  m_ShowCustomSorter: 0
+  breakBeforeColorGrading: 0
+  m_BeforeTransparentBundles: []
+  m_BeforeStackBundles: []
+  m_AfterStackBundles: []
 --- !u!1 &24457864696766207
 GameObject:
   m_ObjectHideFlags: 0
@@ -1156,10 +1217,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6197086b4a1f6bd4d896c0e4c61a0549, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  interactionDistance: 0
+  interactionDistance: 10
   inText: {fileID: 0}
-  doorOpenAnimationName: 
-  doorCloseAnimationName: 
+  doorOpenAnimationName: openDoor2
+  doorCloseAnimationName: closeDoor2
 --- !u!20 &3144466397479215340
 Camera:
   m_ObjectHideFlags: 0
@@ -2164,8 +2225,8 @@ MonoBehaviour:
   currentHP: 0
   maxShield: 0
   currentShield: 0
-  speed: 12
-  sprintMod: 2
+  speed: 15
+  sprintMod: 1.5
   jumpMax: 1
   jumpCount: 0
   jumpSpeed: 20
@@ -2402,6 +2463,7 @@ GameObject:
   m_Component:
   - component: {fileID: 5334183809448955665}
   - component: {fileID: 5334183809448955664}
+  - component: {fileID: 8688586088050080353}
   m_Layer: 0
   m_Name: Gun Weapon Object
   m_TagString: Untagged
@@ -2453,6 +2515,114 @@ MonoBehaviour:
   recoilAmount: 0.1
   recoilSpeed: 10
   recoilReturnSpeed: 5
+  audioSource: {fileID: 8688586088050080353}
+  laserSounds:
+  - {fileID: 8300000, guid: 1ae0346020feb4940babf9a8c607507b, type: 3}
+  - {fileID: 8300000, guid: c60d07bc40407f84a95d760bfd17e493, type: 3}
+  - {fileID: 8300000, guid: d4e7769416097c24fa3c2ca8ecf327ca, type: 3}
+  - {fileID: 8300000, guid: fc16d662ccc0cb6419d0ea7ecf880f93, type: 3}
+  - {fileID: 8300000, guid: f5c1c63c4ef3a304d8bb9adf07bd390f, type: 3}
+  - {fileID: 8300000, guid: 1529c73f4c2237946bf63a46b28513a1, type: 3}
+  - {fileID: 8300000, guid: 0598d9ff4a217dc47a73584c9050f7ce, type: 3}
+  - {fileID: 8300000, guid: 1e7f633e684f9ec4e826037f8a261d4b, type: 3}
+  - {fileID: 8300000, guid: 805bc7d5b6a3bc749b32b0444dfa1499, type: 3}
+  - {fileID: 8300000, guid: 9dca39e9140bfb148a9bb6aef5fafe59, type: 3}
+--- !u!82 &8688586088050080353
+AudioSource:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5334183809448955678}
+  m_Enabled: 1
+  serializedVersion: 4
+  OutputAudioMixerGroup: {fileID: 0}
+  m_audioClip: {fileID: 0}
+  m_PlayOnAwake: 0
+  m_Volume: 0.2
+  m_Pitch: 1
+  Loop: 0
+  Mute: 0
+  Spatialize: 0
+  SpatializePostEffects: 0
+  Priority: 128
+  DopplerLevel: 1
+  MinDistance: 1
+  MaxDistance: 500
+  Pan2D: 0
+  rolloffMode: 0
+  BypassEffects: 0
+  BypassListenerEffects: 0
+  BypassReverbZones: 0
+  rolloffCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 1
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  panLevelCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  spreadCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  reverbZoneMixCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
 --- !u!1 &5359787554890971969
 GameObject:
   m_ObjectHideFlags: 0
