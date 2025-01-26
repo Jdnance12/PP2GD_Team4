@@ -14,11 +14,18 @@ public class ElectricalHazardNotification : MonoBehaviour
 
     private bool isPlayerInRange = false; // Tracks if player is in notification range
     private bool isActive = true; // Tracks if notification system is active
+    private Coroutine pulseCoroutine; // Reference to the active PulseText coroutine
 
     private void Start()
     {
         notificationCanvas.SetActive(true); // Keeps canvas active
         hazardNotificationText.gameObject.SetActive(false); // Starts with notification hidden
+        HazardRegistry.RegisterHazard(gameObject); // Add this hazard to the registry
+    }
+
+    private void OnDestroy()
+    {
+        HazardRegistry.UnregisterHazard(gameObject); // Remove this hazard when destroyed
     }
 
     private void OnTriggerEnter(Collider other)
@@ -28,7 +35,12 @@ public class ElectricalHazardNotification : MonoBehaviour
         isPlayerInRange = true; // Player entered range
         hazardNotificationText.gameObject.SetActive(true); // Show notification
         hazardNotificationText.text = "Danger: High Voltage Hazard! System Meltdown Risk!"; // Set notification text
-        StartCoroutine(PulseText()); // Start text pulse animation
+
+        // Ensure only one PulseText coroutine is running
+        if (pulseCoroutine == null)
+        {
+            pulseCoroutine = StartCoroutine(PulseText()); // Start the pulse animation
+        }
     }
 
     private void OnTriggerExit(Collider other)
@@ -37,6 +49,14 @@ public class ElectricalHazardNotification : MonoBehaviour
 
         isPlayerInRange = false; // Player exited range
         hazardNotificationText.gameObject.SetActive(false); // Hide notification
+
+        // Stop the PulseText coroutine if active
+        if (pulseCoroutine != null)
+        {
+            StopCoroutine(pulseCoroutine); // Stop the pulse animation
+            pulseCoroutine = null; // Clear the reference
+            hazardNotificationText.transform.localScale = Vector3.one; // Reset text scale to default
+        }
     }
 
     private IEnumerator PulseText()
@@ -63,6 +83,7 @@ public class ElectricalHazardNotification : MonoBehaviour
             }
         }
 
+        pulseCoroutine = null; // Clear the reference after the animation completes
         hazardNotificationText.transform.localScale = originalScale; // Reset scale
     }
 
