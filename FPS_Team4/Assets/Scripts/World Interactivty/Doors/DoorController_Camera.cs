@@ -6,7 +6,6 @@ public class DoorController_Camera : MonoBehaviour
 {
     public float interactionDistance;
     public GameObject inText;
-    public string doorOpenAnimationName, doorCloseAnimationName;
 
     public float autoCloseDelay = 5.0f;
 
@@ -22,29 +21,47 @@ public class DoorController_Camera : MonoBehaviour
 
             if(hit.collider.gameObject.tag == "door")
             {
-                //Debug.Log("Door detected: " + hit.collider.gameObject.name);
+                Debug.Log("Door detected: " + hit.collider.gameObject.name);
 
-                GameObject doorParent = hit.collider.transform.parent.parent.gameObject;
-                //Debug.Log("Door parent: " + doorParent.name);
-                Animator doorAnim = doorParent.GetComponent<Animator>();
-                if(doorAnim == null)
+                // Traverse up the hierarchy to find the animator component regardless of it being on parent or grandparent object relative to door
+                Transform currentTransform = hit.collider.transform;
+                Animator doorAnim = null;
+                Door door = null;
+
+                // find the components
+                while (currentTransform != null)
                 {
-                    //Debug.LogWarning("No Animator component found on the door parent");
+                    doorAnim = currentTransform.GetComponent<Animator>();
+                    door = currentTransform.GetComponent<Door>();
+
+                    if (doorAnim != null && door != null)
+                    {
+                        break;
+                    }
+
+                    currentTransform = currentTransform.parent;
+                }
+
+                if(doorAnim == null || door == null)
+                {
+                    Debug.LogWarning("Animator or Door component not found on the door's parent hierarchy.");
                     inText.SetActive(false);
                     return;
                 }
+
                 inText.SetActive(true);
-                //Debug.Log("inText set to active");
-                if(Input.GetButton("Interact"))
+                Debug.Log("inText set to active");
+
+                if (Input.GetButton("Interact"))
                 {
-                    if(doorAnim.GetCurrentAnimatorStateInfo(0).IsName(doorOpenAnimationName))
+                    if (doorAnim.GetCurrentAnimatorStateInfo(0).IsName(door.doorOpenAnimationName))
                     {
                         Debug.Log("Door is closing");
                         doorAnim.ResetTrigger("open");
                         doorAnim.SetTrigger("close");
                         StopCoroutine(AutoCloseDoor(doorAnim));
                     }
-                    if(doorAnim.GetCurrentAnimatorStateInfo(0).IsName(doorCloseAnimationName))
+                    if (doorAnim.GetCurrentAnimatorStateInfo(0).IsName(door.doorCloseAnimationName))
                     {
                         Debug.Log("Door is opening");
                         doorAnim.ResetTrigger("close");
@@ -70,7 +87,8 @@ public class DoorController_Camera : MonoBehaviour
     {
         Debug.Log("AutoCloseDoor coroutine started");
         yield return new WaitForSeconds(autoCloseDelay);
-        if (doorAnim.GetCurrentAnimatorStateInfo(0).IsName(doorOpenAnimationName))
+        Door door = doorAnim.GetComponentInParent<Door>();
+        if (doorAnim.GetCurrentAnimatorStateInfo(0).IsName(door.doorOpenAnimationName))
         {
             Debug.Log("Closing the door automatically");
             doorAnim.ResetTrigger("open");

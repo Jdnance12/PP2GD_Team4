@@ -164,9 +164,10 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5454184239038128192}
+  - component: {fileID: 7974089492819486541}
+  - component: {fileID: 1002956930251511600}
   - component: {fileID: 1002956930251511601}
   - component: {fileID: 3374587040948923546}
-  - component: {fileID: 1002956930251511600}
   m_Layer: 0
   m_Name: Hinge Door
   m_TagString: Untagged
@@ -191,6 +192,41 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 90, z: 0}
+--- !u!114 &7974089492819486541
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4682326369388378874}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 36d95b68282ed724384317a58801c0a5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  doorOpenAnimationName: 
+  doorCloseAnimationName: 
+--- !u!95 &1002956930251511600
+Animator:
+  serializedVersion: 5
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4682326369388378874}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 5d2dd13a4a63169439e15a612c097777, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
 --- !u!205 &1002956930251511601
 LODGroup:
   m_ObjectHideFlags: 0
@@ -228,27 +264,6 @@ MeshCollider:
   m_Convex: 0
   m_CookingOptions: 30
   m_Mesh: {fileID: -1219197344667350564, guid: d45903501610cde428af33374f8d4a65, type: 3}
---- !u!95 &1002956930251511600
-Animator:
-  serializedVersion: 5
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4682326369388378874}
-  m_Enabled: 1
-  m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: 5d2dd13a4a63169439e15a612c097777, type: 2}
-  m_CullingMode: 0
-  m_UpdateMode: 0
-  m_ApplyRootMotion: 0
-  m_LinearVelocityBlending: 0
-  m_StabilizeFeet: 0
-  m_WarningMessage: 
-  m_HasTransformHierarchy: 1
-  m_AllowConstantClipSamplingOptimization: 1
-  m_KeepAnimatorStateOnDisable: 0
-  m_WriteDefaultValuesOnDisable: 0
 --- !u!1 &6341063118695232875
 GameObject:
   m_ObjectHideFlags: 0
