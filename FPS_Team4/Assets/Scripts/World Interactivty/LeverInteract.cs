@@ -7,8 +7,7 @@ public class LeverInteract : MonoBehaviour
     [Header("References")]
     [SerializeField] private LeverNotification leverNotification; // Notification system for the player
     [SerializeField] private Transform leverTransform; // Transform for the lever arm
-    [SerializeField] private ElectricalHazardNotification hazardNotification; // Notification system for hazards
-    [SerializeField] private ElectricalHazardDamage hazardDamage; // Damage system for hazards
+    [SerializeField] private AudioSource clickSound; // Audio source for the click sound
 
     [Header("Lever Settings")]
     public float leverUpRotation = 30f; // Lever rotation when in up position
@@ -37,18 +36,27 @@ public class LeverInteract : MonoBehaviour
 
     public void ToggleLever()
     {
-        isLeverUp = !isLeverUp; // Toggle lever state between up and down
+        isLeverUp = !isLeverUp; // Toggle lever state
 
-        // Update the lever's rotation based on its new state
+        // Update the lever's rotation
         leverTransform.localRotation = Quaternion.Euler(
             isLeverUp ? leverUpRotation : leverDownRotation,
             leverTransform.localRotation.eulerAngles.y,
             leverTransform.localRotation.eulerAngles.z
         );
 
-        // Toggle hazard systems based on lever state
-        bool isActive = isLeverUp; // Hazards are active when lever is up
-        hazardNotification.ToggleNotification(isActive); // Enable or disable notifications
-        hazardDamage.ToggleHazard(isActive); // Enable or disable damage
+        // Play the click sound for both on and off states
+        if (clickSound != null)
+        {
+            clickSound.Play(); // Play the sound
+            Debug.Log("Click sound played.");
+        }
+        // Get the top-level parent name using HazardRegistry
+        string parentSiteName = HazardRegistry.GetParentSiteName(gameObject);
+
+        foreach (var hazard in HazardRegistry.GetHazardsBySite(parentSiteName))
+        {
+            hazard.GetComponent<HazardSite>()?.ToggleHazard(isLeverUp); // Toggle hazard state
+        }
     }
 }
