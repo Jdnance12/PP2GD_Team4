@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class UnlockDoor : MonoBehaviour
 {
-    [SerializeField] private DoorInteractions doorToUnlock;
+    [SerializeField] private Door doorToUnlock;
     private bool playerInRange = false;
 
     // Update is called once per frame

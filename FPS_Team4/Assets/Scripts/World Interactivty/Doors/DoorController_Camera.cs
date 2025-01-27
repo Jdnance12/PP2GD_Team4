@@ -1,11 +1,13 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class DoorController_Camera : MonoBehaviour
 {
     public float interactionDistance;
     public GameObject inText;
+    public Text lockedStatus;
 
     public float autoCloseDelay = 5.0f;
 
@@ -46,14 +48,32 @@ public class DoorController_Camera : MonoBehaviour
                 {
                     Debug.LogWarning("Animator or Door component not found on the door's parent hierarchy.");
                     inText.SetActive(false);
+                    lockedStatus.gameObject.SetActive(false);
                     return;
                 }
 
                 inText.SetActive(true);
                 Debug.Log("inText set to active");
 
+                // Check to see if door is locked
+                if (door.IsLocked())
+                {
+                    Debug.Log("Door is Locked");
+                    inText.SetActive(false);
+                    lockedStatus.text = "Door is Locked! Unlock it behind you!";
+                    lockedStatus.gameObject.SetActive(true);
+                }
+                else
+                {
+                    lockedStatus.gameObject.SetActive(false);
+                }
+
                 if (Input.GetButton("Interact"))
                 {
+                    if (door.IsLocked())
+                    {
+                        return;
+                    }
                     if (doorAnim.GetCurrentAnimatorStateInfo(0).IsName(door.doorOpenAnimationName))
                     {
                         Debug.Log("Door is closing");
