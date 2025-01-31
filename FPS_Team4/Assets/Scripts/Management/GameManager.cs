@@ -103,6 +103,20 @@ public class GameManager : MonoBehaviour
                 GameUnPaused();
             }
         }
+        //MK Added - Start
+            if (Application.isFocused) // Always keep the cursor locked when game is active
+            {
+                if (!isPaused) 
+                {
+                    LockCursor(); // Lock cursor when game is focused and not paused
+                }
+                else 
+                {
+                    Cursor.lockState = CursorLockMode.Confined; // Keep cursor within window when paused
+                    Cursor.visible = true;
+                }
+            }
+        //MK Added - End
     }
 
     public void ShowStartMenu()
@@ -123,14 +137,23 @@ public class GameManager : MonoBehaviour
     {
         isPaused = false;
         Time.timeScale = timeScaleOriginal;
-        Cursor.visible = false;
-        Cursor.lockState = CursorLockMode.Locked;
+        //MK Added - Start
+        LockCursor(); // Re-lock cursor immediately when unpausing
+        //MK Added - End
         if (menuActive != null)
         {
             menuActive.SetActive(false);
             menuActive = null;
         }
     }
+
+    //MK Added - Start
+    void LockCursor()
+    {
+        Cursor.lockState = CursorLockMode.Locked; // Forces mouse lock to center of screen
+        Cursor.visible = false; // Hides cursor
+    }
+    //MK Added - End
 
     public void ShowSettingsMenu()
     {
