@@ -138,16 +138,28 @@ public class GameManager : MonoBehaviour
         isPaused = false;
         Time.timeScale = timeScaleOriginal;
         //MK Added - Start
-        LockCursor(); // Re-lock cursor immediately when unpausing
+        Cursor.lockState = CursorLockMode.Locked; // Locks cursor to center
+        Cursor.visible = false; // Hides cursor
         //MK Added - End
         if (menuActive != null)
         {
             menuActive.SetActive(false);
             menuActive = null;
         }
+        //MK Added - Start
+        playerScript.canMove = true; // Ensures player movement resumes from Resume button
+        //MK Added - End
     }
 
     //MK Added - Start
+    public void PauseGameWithoutLockingCursor()
+    {
+        isPaused = true;
+        Time.timeScale = 0;
+        Cursor.visible = true;
+        Cursor.lockState = CursorLockMode.None; // Unlocks cursor for clicking
+    }
+
     void LockCursor()
     {
         Cursor.lockState = CursorLockMode.Locked; // Forces mouse lock to center of screen
