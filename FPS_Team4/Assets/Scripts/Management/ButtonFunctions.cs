@@ -11,14 +11,17 @@ public class ButtonFunctions : MonoBehaviour
 {   
     public void Resume()
     {
-        GameManager.instance.GameUnPaused();
-        //MK Added - Start
-        DestroyWarning(); // Immediately hides warning text
-        //MK Added - End
+        if (!GameManager.instance.isGameOver) //MK Added - Prevents Resume during game over
+        {
+            GameManager.instance.GameUnPaused();
+            //MK Added - Start
+            DestroyWarning(); // Immediately hides warning text
+            //MK Added - End
+        }
     }
     public void Restart()
     {
-        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+        GameManager.instance.RestartGame(); //MK Added - Uses RestartGame function
         GameManager.instance.GameUnPaused();
         //MK Added - Start
         DestroyWarning(); // Immediately hides warning text
@@ -26,14 +29,16 @@ public class ButtonFunctions : MonoBehaviour
     }
     public void PlayButton()
     {
-        GameManager.instance.menuActive.SetActive(false);
-        GameManager.instance.GameUnPaused();
-        //MK Added - Start
-        DestroyWarning(); // Immediately hides warning text
-        //MK Added - End
-        GameManager.instance.menuActive = null;
+        if (!GameManager.instance.isGameOver) //MK Added - Prevents Play during game over
+        {
+            GameManager.instance.menuActive.SetActive(false);
+            GameManager.instance.GameUnPaused();
+            //MK Added - Start
+            DestroyWarning(); // Immediately hides warning text
+            //MK Added - End
+            GameManager.instance.menuActive = null;
+        }
     }
-    
     //MK Added - Start
     private GameObject dynamicWarningObject; // Tracks warning text object
     public void LoadButton()

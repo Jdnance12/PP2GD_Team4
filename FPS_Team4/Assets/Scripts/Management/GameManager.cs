@@ -4,6 +4,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.Rendering;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement; //MK Added - Prevents Escape exploit
 
 public class GameManager : MonoBehaviour
 {
@@ -11,6 +12,7 @@ public class GameManager : MonoBehaviour
 
     [Header("---- Bools ----")]
     public bool isPaused;
+    public bool isGameOver = false; //MK Added - Prevents Escape exploit
 
     [Header("---- Game Objects ----")]
     public GameObject player;
@@ -90,7 +92,7 @@ public class GameManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetButtonDown("Cancel"))
+        if (!isGameOver && Input.GetButtonDown("Cancel")) //MK Changed - Blocks Escape during game over
         {
             if (menuActive == null)
             {
@@ -135,20 +137,23 @@ public class GameManager : MonoBehaviour
 
     public void GameUnPaused()
     {
-        isPaused = false;
-        Time.timeScale = timeScaleOriginal;
-        //MK Added - Start
-        Cursor.lockState = CursorLockMode.Locked; // Locks cursor to center
-        Cursor.visible = false; // Hides cursor
-        //MK Added - End
-        if (menuActive != null)
+        if (!isGameOver) //MK Added - Prevents unpausing if game over
         {
-            menuActive.SetActive(false);
-            menuActive = null;
+            isPaused = false;
+            Time.timeScale = timeScaleOriginal;
+            //MK Added - Start
+            Cursor.lockState = CursorLockMode.Locked; // Locks cursor to center
+            Cursor.visible = false; // Hides cursor
+            //MK Added - End
+            if (menuActive != null)
+            {
+                menuActive.SetActive(false);
+                menuActive = null;
+            }
+            //MK Added - Start
+            playerScript.canMove = true; // Ensures player movement resumes from Resume button
+            //MK Added - End
         }
-        //MK Added - Start
-        playerScript.canMove = true; // Ensures player movement resumes from Resume button
-        //MK Added - End
     }
 
     //MK Added - Start
@@ -158,6 +163,12 @@ public class GameManager : MonoBehaviour
         Time.timeScale = 0;
         Cursor.visible = true;
         Cursor.lockState = CursorLockMode.None; // Unlocks cursor for clicking
+    }
+
+    public void RestartGame()
+    {
+        isGameOver = false; //Reset game over state
+        SceneManager.LoadScene(SceneManager.GetActiveScene().name); // Restart game
     }
 
     void LockCursor()
@@ -193,6 +204,7 @@ public class GameManager : MonoBehaviour
         menuActive = menuLose;
         menuActive.SetActive(true);
         GamePaused();
+        isGameOver = true; //MK Added - Blocks Escape key until restart
     }
 
     public void WeaponMenuUnPaused()
