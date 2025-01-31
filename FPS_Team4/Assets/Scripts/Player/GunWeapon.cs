@@ -71,6 +71,12 @@ public class GunWeapon : MonoBehaviour
     void Update()
     {
         currentDamage = upgradeManager.GetUpgradedGunDamage();
+        //MK Added - Start
+        if (gameManager.isPaused && isFiring) // Stop firing when game is paused
+        {
+            StopFiring(); // Ensures weapon stops firing when the menu is opened
+        }
+        //MK Added - End
     }
 
     public void Shoot()
@@ -166,7 +172,9 @@ public class GunWeapon : MonoBehaviour
 
         playerArm.localPosition = armOriginalPosition;
     }
-    public void DisableWeapon()
+    //MK Changed - Start
+    public void StopFiring()
+    //MK Changed - End
     {
         // Stop any ongoing firing coroutine
         if (isFiring)
@@ -181,6 +189,12 @@ public class GunWeapon : MonoBehaviour
             audioSource.Stop();
         }
     }
+    //MK Added - Start
+    public void DisableWeapon()
+    {
+        StopFiring(); // Ensure firing stops when weapon is disabled
+    }
+    //MK Added - End
 
     public void EnableWeapon()
     {
