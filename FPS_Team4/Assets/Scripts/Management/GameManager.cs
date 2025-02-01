@@ -278,4 +278,15 @@ public class GameManager : MonoBehaviour
     {
         bossKillCount++;
     }
+
+    // MK - ADDED START
+    public void AlertEnemiesToPlayer(Vector3 playerPosition)
+    {
+        EnemyBasic[] enemies = FindObjectsOfType<EnemyBasic>(); // Find all active enemies
+        foreach (EnemyBasic enemy in enemies)
+        {
+            enemy.SetTarget(playerPosition); // Alert each enemy to player location
+        }
+    }
+    // MK - ADDED END
 }

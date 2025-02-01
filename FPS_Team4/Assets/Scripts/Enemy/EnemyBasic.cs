@@ -193,6 +193,12 @@ public class EnemyBasic : MonoBehaviour, IDamageable, IDisrupt
         isShooting = false;
     }
 
+    // MK - ADDED START
+    public void SetTarget(Vector3 playerPosition)
+    {
+        navAgent.SetDestination(playerPosition); // Forces enemy to chase player
+    }
+    // MK - ADDED END
 
     // Damage and Disruption
     public void causeDisrupt()
@@ -204,7 +210,11 @@ public class EnemyBasic : MonoBehaviour, IDamageable, IDisrupt
         HP -= damageAmount;
         StartCoroutine(flashRed()); // Call flash red when damage is taken
 
-        if (HP <= 0)
+        if (HP > 0) // MK - CHANGED: Alert enemies only if they are still alive
+        {
+            SetTarget(player.transform.position); // MK - ADDED: Enemy chases player when hit
+        }
+        else
         {
             OnDeath?.Invoke(this); // trigger OnDeath event
             Instantiate(partsPrefab, transform.position, Quaternion.identity); // Drops the parts currency when the enemy is destoryed
