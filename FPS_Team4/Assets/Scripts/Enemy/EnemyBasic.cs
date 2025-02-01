@@ -30,6 +30,10 @@ public class EnemyBasic : MonoBehaviour, IDamageable, IDisrupt
     [SerializeField] int disruptDuration;
     [SerializeField] float roamRadius;
 
+    // MK - ADDED START
+    [SerializeField] private float stoppingDistance = 7.0f; // Distance at which enemy stops before reaching player
+    // MK - ADDED END
+
     private Coroutine co;
 
     [Header("---- Components ----")]
@@ -147,14 +151,19 @@ public class EnemyBasic : MonoBehaviour, IDamageable, IDisrupt
         RaycastHit hit;
         if (Physics.Raycast(headPos.position, playerDir, out hit))
         {
-
             if (hit.collider.CompareTag("Player") && angleToPlayer <= FOV)
             {
-                navAgent.SetDestination(player.transform.position);
+                navAgent.stoppingDistance = stoppingDistance; // MK - ADDED: Adjusts stopping distance dynamically
+                navAgent.SetDestination(player.transform.position); // Moves toward player
 
-                if (navAgent.remainingDistance < navAgent.stoppingDistance)
+                if (navAgent.remainingDistance <= stoppingDistance) // MK - CHANGED: Ensure enemy stops
                 {
+                    navAgent.isStopped = true; // MK - ADDED: Halts movement when within attack range
                     FaceTarget(playerDir);
+                }
+                else
+                {
+                    navAgent.isStopped = false; // MK - ADDED: Allows movement when not within stopping distance
                 }
 
                 if (!isShooting)
@@ -197,6 +206,7 @@ public class EnemyBasic : MonoBehaviour, IDamageable, IDisrupt
     public void SetTarget(Vector3 playerPosition)
     {
         navAgent.SetDestination(playerPosition); // Forces enemy to chase player
+        navAgent.stoppingDistance = stoppingDistance; // MK - ADDED: Enemy stops short of the player
     }
     // MK - ADDED END
 
