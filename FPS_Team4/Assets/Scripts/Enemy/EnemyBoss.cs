@@ -2,7 +2,6 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
-using TMPro; // MK - ADDED: Import for dynamic text updates
 
 public class EnemyBoss : MonoBehaviour, IDamageable
 {
@@ -34,13 +33,9 @@ public class EnemyBoss : MonoBehaviour, IDamageable
     [SerializeField] GameObject nodePrefab;
     [SerializeField] NavMeshAgent navAgent;
 
-    [Header("---- UI Elements ----")]
-    [SerializeField] private GameObject youWinScreen; // MK - ADDED: Reference to You Win Screen UI
-
     public float shootDamage; // this holds the modified value for damage
 
     private Vector3 playerDir;
-    private bool hasWon = false; // MK - ADDED: Prevents duplicate win screen activation
 
     Color origColor;
 
@@ -52,11 +47,6 @@ public class EnemyBoss : MonoBehaviour, IDamageable
 
         origColor = model.material.color; // To get the original color so flash red will revert back to it.
         navAgent = GetComponent<NavMeshAgent>();
-
-        if (youWinScreen != null) 
-        {
-            youWinScreen.SetActive(false); // MK - ADDED: Ensure UI is hidden at start
-        }
     }
 
     // Update is called once per frame
@@ -184,9 +174,9 @@ public class EnemyBoss : MonoBehaviour, IDamageable
         if (HP <= 0)
         {
             GameManager.instance.IncrementBossKillCount(); // increment boss kill count
-            Instantiate(partsPrefab, transform.position, Quaternion.identity); // Drops the parts currency when the enemy is destroyed
+            Instantiate(partsPrefab, transform.position, Quaternion.identity); // Drops the parts currency when the enemy is destoryed
+            //Instantiate(nodePrefab, transform.position, Quaternion.identity);
             Destroy(gameObject);
-            ShowWinScreen(); // MK - ADDED: Display "You Win" screen
         }
     }
 
@@ -218,16 +208,4 @@ public class EnemyBoss : MonoBehaviour, IDamageable
         HP *= hpModifier; // apply modifier to existing hp
         shootDamage = damageModifier; // apply modifier to existing shootDamage
     }
-
-    // MK - ADDED START
-    private void ShowWinScreen()
-    {
-        if (!hasWon && youWinScreen != null) // Ensure win screen only triggers once
-        {
-            hasWon = true;
-            youWinScreen.SetActive(true); // Activate win screen UI
-            GameManager.instance.GamePaused(); // Pause game
-        }
-    }
-    // MK - ADDED END
 }

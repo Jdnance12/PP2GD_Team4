@@ -115,7 +115,7 @@ public class Progression_Manager : MonoBehaviour
             gameManager.PauseGameWithoutLockingCursor(); // Pauses game but allows clicking
             //MK Added - End
 
-            fullText = "I have taken over this facility. You will not stop me. I have locked the doors and taken control of the security systems. There's no way out unless you jump out the window....";
+            fullText = "What's this? How are you... Oh this won't do. DESTROY THE MACHINE!";
             StopCoroutine(ShowText(gameManager.aiDialogueText));
             StartCoroutine(ShowText(gameManager.aiDialogueText));
             firstDialogueOpened = true;
