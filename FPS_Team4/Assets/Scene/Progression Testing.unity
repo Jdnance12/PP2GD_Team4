@@ -3895,28 +3895,6 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 67d0e6648442e3d438f0abc96c3a702a, type: 3}
---- !u!114 &348197794 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 4886374820582020693, guid: 67d0e6648442e3d438f0abc96c3a702a, type: 3}
-  m_PrefabInstance: {fileID: 348197793}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 831cfcf053470b8409621b3c156c7b37, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!114 &348197795 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 8981535155524023084, guid: 67d0e6648442e3d438f0abc96c3a702a, type: 3}
-  m_PrefabInstance: {fileID: 348197793}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6ee45ca359942134ab73f0af9f4f9ef3, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &350920851
 GameObject:
   m_ObjectHideFlags: 0
@@ -22272,38 +22250,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 1759180632739013307, guid: 37551cddd914de1409693ac012b5eecd, type: 3}
-      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
-      value: 
-      objectReference: {fileID: 348197795}
-    - target: {fileID: 1759180632739013307, guid: 37551cddd914de1409693ac012b5eecd, type: 3}
-      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
-      value: WaveDisrupt
-      objectReference: {fileID: 0}
-    - target: {fileID: 1759180633303657349, guid: 37551cddd914de1409693ac012b5eecd, type: 3}
-      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
-      value: 
-      objectReference: {fileID: 348197794}
-    - target: {fileID: 1759180633303657349, guid: 37551cddd914de1409693ac012b5eecd, type: 3}
-      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
-      value: ToggleBlade
-      objectReference: {fileID: 0}
-    - target: {fileID: 1759180633594809580, guid: 37551cddd914de1409693ac012b5eecd, type: 3}
-      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
-      value: 
-      objectReference: {fileID: 348197795}
-    - target: {fileID: 1759180633594809580, guid: 37551cddd914de1409693ac012b5eecd, type: 3}
-      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
-      value: RadialDistrupt
-      objectReference: {fileID: 0}
-    - target: {fileID: 1759180634058926137, guid: 37551cddd914de1409693ac012b5eecd, type: 3}
-      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
-      value: 
-      objectReference: {fileID: 348197794}
-    - target: {fileID: 1759180634058926137, guid: 37551cddd914de1409693ac012b5eecd, type: 3}
-      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
-      value: ToggleGun
-      objectReference: {fileID: 0}
     - target: {fileID: 1759180634618259278, guid: 37551cddd914de1409693ac012b5eecd, type: 3}
       propertyPath: m_Name
       value: UI
