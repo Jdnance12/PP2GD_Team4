@@ -155,7 +155,7 @@ MonoBehaviour:
   isShooting: 0
   playerInRange: 0
   HP: 100
-  shootRate: 5
+  shootRate: 3
   bossModifierApplied: 0
   spawnerModifierApplied: 0
   faceTargetSpeed: 30
@@ -163,6 +163,9 @@ MonoBehaviour:
   angleToPlayer: 0
   disruptDuration: 5
   roamRadius: 20
+  stopDistance: 10
+  sidestepDistance: 1.5
+  sidestepRate: 1
   player: {fileID: 0}
   bullet: {fileID: 5453636543667666633, guid: 80736fc5ffc8df44ca1c48dc4ef698ba, type: 3}
   headPos: {fileID: 2774804460326927451}
@@ -441,15 +444,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4100656175363138, guid: b1ac58639a8706b4cb75835900929e16, type: 3}
       propertyPath: m_LocalScale.x
-      value: 0.3
+      value: 0.5
       objectReference: {fileID: 0}
     - target: {fileID: 4100656175363138, guid: b1ac58639a8706b4cb75835900929e16, type: 3}
       propertyPath: m_LocalScale.y
-      value: 0.3
+      value: 0.5
       objectReference: {fileID: 0}
     - target: {fileID: 4100656175363138, guid: b1ac58639a8706b4cb75835900929e16, type: 3}
       propertyPath: m_LocalScale.z
-      value: 0.3
+      value: 0.5
       objectReference: {fileID: 0}
     - target: {fileID: 4100656175363138, guid: b1ac58639a8706b4cb75835900929e16, type: 3}
       propertyPath: m_LocalPosition.x

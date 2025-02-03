@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.18028352, g: 0.22571376, b: 0.30692244, a: 1}
+  m_IndirectSpecularColor: {r: 0.18028352, g: 0.22571376, b: 0.3069224, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -7669,6 +7669,63 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 2147483647
   m_IsActive: 1
+--- !u!1001 &443175970736989247
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 3917136318774246349}
+    m_Modifications:
+    - target: {fileID: 3493118241463513817, guid: dba1dcc232c3fc24c810bd044feaf96d, type: 3}
+      propertyPath: m_Name
+      value: Pitfall
+      objectReference: {fileID: 0}
+    - target: {fileID: 3493118241463513818, guid: dba1dcc232c3fc24c810bd044feaf96d, type: 3}
+      propertyPath: m_RootOrder
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 3493118241463513818, guid: dba1dcc232c3fc24c810bd044feaf96d, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 114.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 3493118241463513818, guid: dba1dcc232c3fc24c810bd044feaf96d, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: -24.25
+      objectReference: {fileID: 0}
+    - target: {fileID: 3493118241463513818, guid: dba1dcc232c3fc24c810bd044feaf96d, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 28.25
+      objectReference: {fileID: 0}
+    - target: {fileID: 3493118241463513818, guid: dba1dcc232c3fc24c810bd044feaf96d, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3493118241463513818, guid: dba1dcc232c3fc24c810bd044feaf96d, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3493118241463513818, guid: dba1dcc232c3fc24c810bd044feaf96d, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3493118241463513818, guid: dba1dcc232c3fc24c810bd044feaf96d, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3493118241463513818, guid: dba1dcc232c3fc24c810bd044feaf96d, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3493118241463513818, guid: dba1dcc232c3fc24c810bd044feaf96d, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3493118241463513818, guid: dba1dcc232c3fc24c810bd044feaf96d, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: dba1dcc232c3fc24c810bd044feaf96d, type: 3}
 --- !u!23 &443258207734002608
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -125326,64 +125383,11 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 2147483647
   m_IsActive: 1
---- !u!65 &3917136317143242468
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3917136317143242470}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 1
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Size: {x: 350, y: 20, z: 350}
-  m_Center: {x: 0, y: 0, z: 0}
---- !u!4 &3917136317143242469
+--- !u!4 &3917136317143242469 stripped
 Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
+  m_CorrespondingSourceObject: {fileID: 3493118241463513818, guid: dba1dcc232c3fc24c810bd044feaf96d, type: 3}
+  m_PrefabInstance: {fileID: 443175970736989247}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3917136317143242470}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 114.5, y: -24.25, z: 28.25}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 3917136318774246349}
-  m_RootOrder: 3
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1 &3917136317143242470
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 3917136317143242469}
-  - component: {fileID: 3917136317143242475}
-  - component: {fileID: 3917136317143242468}
-  m_Layer: 0
-  m_Name: Pitfall
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!114 &3917136317143242475
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3917136317143242470}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1484921c02577e048a993bb99f7b8109, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &3917136317154576984
 GameObject:
   m_ObjectHideFlags: 0
@@ -148629,6 +148633,8 @@ MonoBehaviour:
   isPaused: 0
   player: {fileID: 0}
   playerScript: {fileID: 0}
+  progressManager: {fileID: 0}
+  progressScript: {fileID: 0}
   upgradeScript: {fileID: 0}
   playerHealthHitImage: {fileID: 4083406809910198677}
   playerShieldHitImage: {fileID: 4083406810100206163}
@@ -148645,11 +148651,13 @@ MonoBehaviour:
   menuMisc: {fileID: 1967535942}
   miscTitleText: {fileID: 756710900}
   miscBodyText: {fileID: 96732187}
+  nodeAmountText: {fileID: 0}
   upgradeMenuObject: {fileID: 4083406809056221886}
   gunReticule: {fileID: 4083406810384570907}
   bladeReticule: {fileID: 4083406808585341120}
   partsCount: 0
   nodeCount: 0
+  bossKillCount: 0
 --- !u!114 &4083406808851703525
 MonoBehaviour:
   m_ObjectHideFlags: 0

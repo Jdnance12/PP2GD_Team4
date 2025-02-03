@@ -29,8 +29,13 @@ public class EnemyBasic : MonoBehaviour, IDamageable, IDisrupt
     [SerializeField] float angleToPlayer;
     [SerializeField] int disruptDuration;
     [SerializeField] float roamRadius;
+    [SerializeField] float stopDistance = 10.0f;
+    [SerializeField] float sidestepDistance = 1.5f;
+    [SerializeField] float sidestepRate = 1.0f;
 
     private Coroutine co;
+    private Vector3 lastKnownPosition;
+    private bool isChasingLastKnownPosition;
 
     [Header("---- Components ----")]
     [SerializeField] GameObject player;
@@ -80,21 +85,35 @@ public class EnemyBasic : MonoBehaviour, IDamageable, IDisrupt
     {
         if (!isDisrupted)
         {
-            if (playerInRange && !CanSeePlayer())
+            if (CanSeePlayer())
             {
-                if(navAgent.remainingDistance < 0.01f)
+                // update last known position
+                lastKnownPosition = player.transform.position;
+
+                // stop chasing last known
+                isChasingLastKnownPosition = false;
+
+                // enemy can see player. start shooting
+                if (!isShooting)
+                {
+                    StartCoroutine(Shoot());
+                }
+            }
+            else if (isChasingLastKnownPosition)
+            {
+                // player is not in range or cant be seen
+                if (navAgent.remainingDistance < 0.1f)
                 {
                     StartCoroutine(Roaming());
                 }
             }
-            else if (!playerInRange)
+            else
             {
-                if (navAgent.remainingDistance < 0.01f)
+                if (navAgent.remainingDistance < 0.1f)
                 {
                     StartCoroutine(Roaming());
                 }
             }
-            StartCoroutine(Roaming());
         }
     }
     private void OnTriggerEnter(Collider other)
@@ -147,19 +166,39 @@ public class EnemyBasic : MonoBehaviour, IDamageable, IDisrupt
         RaycastHit hit;
         if (Physics.Raycast(headPos.position, playerDir, out hit))
         {
-
             if (hit.collider.CompareTag("Player") && angleToPlayer <= FOV)
             {
-                navAgent.SetDestination(player.transform.position);
-
-                if (navAgent.remainingDistance < navAgent.stoppingDistance)
+                float distanceToPlayer = Vector3.Distance(transform.position, player.transform.position);
+                float bufferRange = 1.0f;
+                //Debug.Log("The distance to player is :" + distanceToPlayer + ". Stop Distance: " + stopDistance);
+                if (distanceToPlayer > stopDistance + bufferRange)
                 {
+                    Vector3 moveToPosition = player.transform.position + (transform.position - player.transform.position).normalized * stopDistance;
+
+                    NavMeshHit navHit;
+                    if (NavMesh.SamplePosition(moveToPosition, out navHit, stopDistance, NavMesh.AllAreas))
+                    {
+                        navAgent.SetDestination(navHit.position);
+                        //Debug.Log("Moving towards player, Position: " + navHit.position);
+                    }
                     FaceTarget(playerDir);
                 }
-
-                if (!isShooting)
+                else if (distanceToPlayer < stopDistance - bufferRange)
                 {
-                    StartCoroutine(Shoot());
+                    Vector3 moveAwayDir = (transform.position - player.transform.position).normalized;
+                    Vector3 moveAwayTarget = player.transform.position + moveAwayDir * stopDistance;
+
+                    NavMeshHit navHit;
+                    if (NavMesh.SamplePosition(moveAwayTarget, out navHit, stopDistance, NavMesh.AllAreas))
+                    {
+                        navAgent.SetDestination(navHit.position);
+                        //Debug.Log("Moving away from Player, Position: " + navHit.position);
+                    }
+                    FaceTarget(playerDir);
+                }
+                else
+                {
+                    FaceTarget(playerDir);
                 }
                 return true;
             }
@@ -173,7 +212,28 @@ public class EnemyBasic : MonoBehaviour, IDamageable, IDisrupt
     {
         isShooting = true;
 
-        GameObject newBullet = Instantiate(bullet, shootPos.position, transform.rotation);
+        // sidestep logic
+        Vector3 sidestepDir = Vector3.Cross(Vector3.up, playerDir).normalized * sidestepDistance;
+        if (Random.value > 0.5f) // random move left or right
+        {
+            sidestepDir = -sidestepDir;
+        }
+        Vector3 sidestepTarget = transform.position + sidestepDir;
+
+        NavMeshHit navHit;
+        if (NavMesh.SamplePosition(sidestepTarget, out navHit, sidestepDistance, -1))
+        {
+            navAgent.SetDestination(sidestepTarget);
+
+            yield return new WaitForSeconds(0.1f);
+
+            FaceTarget(player.transform.position);
+        }
+
+        // calc direction towards center of mass
+        Vector3 bulletDirection = (player.transform.position + Vector3.up * 0.5f - shootPos.position).normalized;
+
+        GameObject newBullet = Instantiate(bullet, shootPos.position, Quaternion.LookRotation(bulletDirection));
         Debug.Log(gameObject.name + ": Bullet instantiated at position: " + shootPos.position);
         Bullet bulletComponent = newBullet.GetComponent<Bullet>();
         if(bulletComponent != null )
