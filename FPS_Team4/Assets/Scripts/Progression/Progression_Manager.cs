@@ -109,11 +109,9 @@ public class Progression_Manager : MonoBehaviour
             computerScript.aiFace.SetActive(true);
             gameManager.playerScript.canMove = false;
 
+            //gameManager.GamePaused();
             gameManager.menuActive = gameManager.aiDialogueTextImage;
             gameManager.menuActive.SetActive(true);
-            //MK Added - Start
-            gameManager.PauseGameWithoutLockingCursor(); // Pauses game but allows clicking
-            //MK Added - End
 
             fullText = "What's this? How are you... Oh this won't do. DESTROY THE MACHINE!";
             StopCoroutine(ShowText(gameManager.aiDialogueText));
@@ -128,6 +126,7 @@ public class Progression_Manager : MonoBehaviour
                 gameManager.menuActive.SetActive(false);
                 gameManager.menuActive = null;
                 firstDialogueClosed = true;
+                gameManager.playerScript.canMove = true;
             }
         }
         //Opens the Door
@@ -252,9 +251,7 @@ public class Progression_Manager : MonoBehaviour
         foreach(char letter in fullText.ToCharArray())
         {
             textObj.text += letter;
-            //MK Changed - Start
-            yield return new WaitForSecondsRealtime(0.05f); // Runs even when game is paused
-            //MK Changed - End
+            yield return new WaitForSeconds(letterDelay);
         }
         
     }
